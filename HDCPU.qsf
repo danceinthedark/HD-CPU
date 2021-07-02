@@ -49,3 +49,4 @@ set_global_assignment -name EDA_INPUT_DATA_FORMAT "VERILOG HDL" -section_id eda_
 set_global_assignment -name USE_GENERATED_PHYSICAL_CONSTRAINTS OFF -section_id eda_blast_fpga
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name VERILOG_FILE HDCPU.v
