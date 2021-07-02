@@ -55,10 +55,7 @@ module HDCPU(CLR,
                 else
                     ST0 <= ST0;
             end
-            else
-            begin
-                
-            end
+            
             case (SW)
                 3'b001:
                 begin

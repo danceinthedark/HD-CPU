@@ -1,5 +1,5 @@
 Analysis & Synthesis report for HDCPU
-Sat Jul 03 00:31:24 2021
+Sat Jul 03 00:33:26 2021
 Quartus II Version 9.1 Build 222 10/21/2009 SJ Full Version
 
 
@@ -41,7 +41,7 @@ applicable agreement for further details.
 +------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                           ;
 +-----------------------------+------------------------------------------+
-; Analysis & Synthesis Status ; Successful - Sat Jul 03 00:31:24 2021    ;
+; Analysis & Synthesis Status ; Successful - Sat Jul 03 00:33:26 2021    ;
 ; Quartus II Version          ; 9.1 Build 222 10/21/2009 SJ Full Version ;
 ; Revision Name               ; HDCPU                                    ;
 ; Top-level Entity Name       ; HDCPU                                    ;
@@ -182,7 +182,7 @@ Note: All latches listed above may not be present at the end of synthesis due to
 Info: *******************************************************************
 Info: Running Quartus II Analysis & Synthesis
     Info: Version 9.1 Build 222 10/21/2009 SJ Full Version
-    Info: Processing started: Sat Jul 03 00:31:23 2021
+    Info: Processing started: Sat Jul 03 00:33:26 2021
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off HDCPU -c HDCPU
 Info: Parallel compilation is enabled and will use 4 of the 4 processors detected
 Info: Found 1 design units, including 1 entities, in source file hdcpu.v
@@ -191,18 +191,18 @@ Info: Elaborating entity "HDCPU" for the top level hierarchy
 Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(53): variable "SST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
 Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(54): variable "SST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
 Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(56): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(65): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(66): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(67): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(62): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(63): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(64): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(73): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(74): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(75): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
 Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(76): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
 Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(77): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(78): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(79): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(80): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(97): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(98): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
 Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(100): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(101): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(103): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10270): Verilog HDL Case Statement warning at HDCPU.v(62): incomplete case statement has no default case item
+Warning (10270): Verilog HDL Case Statement warning at HDCPU.v(59): incomplete case statement has no default case item
 Warning (10240): Verilog HDL Always Construct warning at HDCPU.v(41): inferring latch(es) for variable "ST0", which holds its previous value in one or more paths through the always construct
 Warning (10240): Verilog HDL Always Construct warning at HDCPU.v(41): inferring latch(es) for variable "SST0", which holds its previous value in one or more paths through the always construct
 Info (10041): Inferred latch for "ST0" at HDCPU.v(41)
@@ -238,8 +238,8 @@ Info: Implemented 74 device resources after synthesis - the final resource count
 Info: Generated suppressed messages file G:/Datas/Develop/Codes/Github/HD-CPU/HDCPU.map.smsg
 Info: Quartus II Analysis & Synthesis was successful. 0 errors, 40 warnings
     Info: Peak virtual memory: 215 megabytes
-    Info: Processing ended: Sat Jul 03 00:31:24 2021
-    Info: Elapsed time: 00:00:01
+    Info: Processing ended: Sat Jul 03 00:33:26 2021
+    Info: Elapsed time: 00:00:00
     Info: Total CPU time (on all processors): 00:00:01
 
 

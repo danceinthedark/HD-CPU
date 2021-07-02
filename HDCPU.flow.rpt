@@ -1,5 +1,5 @@
 Flow report for HDCPU
-Sat Jul 03 00:31:28 2021
+Sat Jul 03 00:33:30 2021
 Quartus II Version 9.1 Build 222 10/21/2009 SJ Full Version
 
 
@@ -38,7 +38,7 @@ applicable agreement for further details.
 +--------------------------------------------------------------------+
 ; Flow Summary                                                       ;
 +-------------------------+------------------------------------------+
-; Flow Status             ; Successful - Sat Jul 03 00:31:28 2021    ;
+; Flow Status             ; Successful - Sat Jul 03 00:33:30 2021    ;
 ; Quartus II Version      ; 9.1 Build 222 10/21/2009 SJ Full Version ;
 ; Revision Name           ; HDCPU                                    ;
 ; Top-level Entity Name   ; HDCPU                                    ;
@@ -56,7 +56,7 @@ applicable agreement for further details.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 07/03/2021 00:31:23 ;
+; Start date & time ; 07/03/2021 00:33:26 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; HDCPU               ;
 +-------------------+---------------------+
@@ -67,7 +67,7 @@ applicable agreement for further details.
 +------------------------------------+---------------------------------+---------------+-------------+----------------------+
 ; Assignment Name                    ; Value                           ; Default Value ; Entity Name ; Section Id           ;
 +------------------------------------+---------------------------------+---------------+-------------+----------------------+
-; COMPILER_SIGNATURE_ID              ; 215938452202730.162524348316976 ; --            ; --          ; --                   ;
+; COMPILER_SIGNATURE_ID              ; 215938452202730.162524360605756 ; --            ; --          ; --                   ;
 ; EDA_DESIGN_ENTRY_SYNTHESIS_TOOL    ; Design Compiler                 ; <None>        ; --          ; --                   ;
 ; EDA_INPUT_DATA_FORMAT              ; Verilog Hdl                     ; --            ; --          ; eda_design_synthesis ;
 ; EDA_INPUT_VCC_NAME                 ; Vdd                             ; --            ; --          ; eda_design_synthesis ;
@@ -83,11 +83,11 @@ applicable agreement for further details.
 +-------------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name             ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +-------------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis    ; 00:00:01     ; 1.0                     ; 215 MB              ; 00:00:01                           ;
+; Analysis & Synthesis    ; 00:00:00     ; 1.0                     ; 215 MB              ; 00:00:01                           ;
 ; Fitter                  ; 00:00:00     ; 1.0                     ; 207 MB              ; 00:00:00                           ;
 ; Assembler               ; 00:00:00     ; 1.0                     ; 196 MB              ; 00:00:00                           ;
 ; Classic Timing Analyzer ; 00:00:00     ; 1.0                     ; 167 MB              ; 00:00:00                           ;
-; Total                   ; 00:00:01     ; --                      ; --                  ; 00:00:01                           ;
+; Total                   ; 00:00:00     ; --                      ; --                  ; 00:00:01                           ;
 +-------------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 
