@@ -37,23 +37,25 @@ module HDCPU(CLR,
     reg [3:0] S;
     reg [3:0] SEL;
     
-    reg ST0,SST0;
+    reg ST0  = 0;
+    reg SST0 = 0;
+    
     always @(negedge T3 or negedge CLR)
     begin
-        if (!T3)
+        if (!CLR) ST0 <= 0;
+        else if (!T3)
         begin
-            if (SST0 == 1'b1)//有SST0 == 1就立刻ST0 = 1
-                ST0 <= SST0;
-            else
-                ST0 <= ST0;
-        end
-        else if (!CLR) ST0 <= 0;
-        else begin
+        if (SST0 == 1'b1)//有SST0 == 1就立刻ST0 = 1
+            ST0 <= SST0;
+        else
+            ST0 <= ST0;
+    end
+    else begin
     end
     end
     
     
-    always @(SW,W, CLR,IR)//?是否需要把T3专门写成脉冲形式
+    always @(SW or W or CLR or IR)//?是否需要把T3专门写成脉冲形式
     begin
         {LDC, LDZ, CIN, M, ABUS,DRW, PCINC, LPC, LAR, PCADD, ARINC,SELCTL,MEMW, STOP, LIR, SBUS, MBUS, SHORT, LONG,S,SEL} = 0;
         
@@ -65,34 +67,34 @@ module HDCPU(CLR,
             case (SW)
                 3'b001:
                 begin
-                    LAR    = W[1] && !ST0;
-                    MEMW   = W[1] && ST0;
-                    ARINC  = W[1] && ST0;
-                    SBUS   = W[1];
-                    STOP   = W[1];
-                    SHORT  = W[1];
-                    SELCTL = W[1];
-                    SST0   = W[1];
+                    LAR    <= W[1] && !ST0;
+                    MEMW   <= W[1] && ST0;
+                    ARINC  <= W[1] && ST0;
+                    SBUS   <= W[1];
+                    STOP   <= W[1];
+                    SHORT  <= W[1];
+                    SELCTL <= W[1];
+                    SST0   <= W[1];
                 end
                 3'b010:
                 begin
-                    SBUS   = W[1]&&!ST0;
-                    LAR    = W[1]&&!ST0;
-                    SST0   = W[1]&&!ST0;
-                    MBUS   = W[1]&&ST0;
-                    ARINC  = W[1]&&ST0;
-                    STOP   = W[1];
-                    SHORT  = W[1];
-                    SELCTL = W[1];
+                    SBUS   <= W[1]&&!ST0;
+                    LAR    <= W[1]&&!ST0;
+                    SST0   <= W[1]&&!ST0;
+                    MBUS   <= W[1]&&ST0;
+                    ARINC  <= W[1]&&ST0;
+                    STOP   <= W[1];
+                    SHORT  <= W[1];
+                    SELCTL <= W[1];
                 end
                 3'b011:
                 begin
-                    SELCTL = W[1] || W[2];
-                    STOP   = W[1] || W[2];
-                    SEL[3] = W[2];
-                    SEL[2] = 0;
-                    SEL[1] = W[2];
-                    SEL[0] = W[1] || W[2];
+                    SELCTL <= W[1] || W[2];
+                    STOP   <= W[1] || W[2];
+                    SEL[3] <= W[2];
+                    SEL[2] <= 0;
+                    SEL[1] <= W[2];
+                    SEL[0] <= W[1] || W[2];
                 end
                 3'b100:
                 begin
@@ -151,9 +153,9 @@ module HDCPU(CLR,
                             MBUS = W[3];
                         end
                         4'b0110:begin//ST
-                            M    = W[2];
+                            M    = W[2] ||W[3];
                             S    = {1'b1,W[2],1'b1,W[2]};
-                            ABUS = W[2] | W[3];
+                            ABUS = W[2] || W[3];
                             LAR  = W[2];
                             LONG = W[2];
                             MEMW = W[3];
@@ -191,9 +193,7 @@ module HDCPU(CLR,
                             DRW  = W[2];
                             LDZ  = W[2];
                         end
-                        default:begin
-                            
-                        end
+                        default:S = 4'b0000;
                     endcase
                     //<---SW == 000的情况执行完毕
                 end
