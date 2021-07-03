@@ -38,29 +38,29 @@ module HDCPU(CLR,
     reg [3:0] SEL;
     
     reg ST0,SST0;
-    always @(SW,W, CLR, T3,IR)//?是否需要把T3专门写成脉冲形式
+    always @(negedge T3 or negedge CLR)
+    begin
+        if (!T3)
+        begin
+            if (SST0 == 1'b1)//有SST0 == 1就立刻ST0 = 1
+                ST0 <= SST0;
+            else
+                ST0 <= ST0;
+        end
+        else if (!CLR) ST0 <= 0;
+        else begin
+    end
+    end
+    
+    
+    always @(SW,W, CLR,IR)//?是否需要把T3专门写成脉冲形式
     begin
         {LDC, LDZ, CIN, M, ABUS,DRW, PCINC, LPC, LAR, PCADD, ARINC,SELCTL,MEMW, STOP, LIR, SBUS, MBUS, SHORT, LONG,S,SEL} = 0;
+        
         if (CLR == 0)
-        begin
-            ST0  <= 0;
             SST0 <= 0;
-        end
         else
         begin
-            if (T3 == 0)//ST0和SST0会在每个W的T3下降沿刷新
-            begin
-                if (SST0 == 1'b1)//有SST0 == 1就立刻ST0 = 1
-                    ST0 <= SST0;
-                    // else //SST0 == 1就在最后一个W把ST0 = 0
-                    // begin
-                    //     if ((W[1]&&SHORT)||(W[2]&&!LONG))//不应该涉及W[3]
-                    //         ST0 <= 0;
-                    //     else
-                    //         ST0 <= ST0;
-                    // end
-                
-            end
             
             case (SW)
                 3'b001:
@@ -109,87 +109,87 @@ module HDCPU(CLR,
                 3'b000:
                 begin
                     //开始执行SW == 000的情况--->
-                    LIR=W[1];
-                    PCINC=W[1];
+                    LIR   = W[1];
+                    PCINC = W[1];
                     case (IR)
                         4'b0001:begin//ADD
-                            S=4'b1001;
-                            CIN = W[2];
-                            ABUS=W[2];
-                            DRW=W[2];
-                            LDZ=W[2];
-                            LDC=W[2];    
+                            S    = 4'b1001;
+                            CIN  = W[2];
+                            ABUS = W[2];
+                            DRW  = W[2];
+                            LDZ  = W[2];
+                            LDC  = W[2];
                         end
                         4'b0010:begin//SUB
-                            S=4'b0110;
-                            ABUS=W[2];
-                            DRW=W[2];
-                            LDZ=W[2];
-                            LDC=W[2];
+                            S    = 4'b0110;
+                            ABUS = W[2];
+                            DRW  = W[2];
+                            LDZ  = W[2];
+                            LDC  = W[2];
                         end
                         4'b0011:begin//AND
-                            M=W[2];
-                            S=4'b1011;
-                            ABUS=W[2];
-                            DRW=W[2];
-                            LDZ=W[2];
+                            M    = W[2];
+                            S    = 4'b1011;
+                            ABUS = W[2];
+                            DRW  = W[2];
+                            LDZ  = W[2];
                         end
                         4'b0100:begin//INC
-                            S=4'b0000;
-                            ABUS=W[2];
-                            DRW=W[2];
-                            LDZ=W[2];
-                            LDC=W[2];
+                            S    = 4'b0000;
+                            ABUS = W[2];
+                            DRW  = W[2];
+                            LDZ  = W[2];
+                            LDC  = W[2];
                         end
                         4'b0101:begin//LD
-                            M=W[2];
-                            S=4'b1010;
-                            ABUS=W[2];
-                            LAR=W[2];
-                            LONG=W[2];
-                            DRW=W[3];
-                            MBUS=W[3];
+                            M    = W[2];
+                            S    = 4'b1010;
+                            ABUS = W[2];
+                            LAR  = W[2];
+                            LONG = W[2];
+                            DRW  = W[3];
+                            MBUS = W[3];
                         end
                         4'b0110:begin//ST
-                            M=W[2];
-                            S={1,W[2],1,W[2]};
-                            ABUS=W[2] | W[3];
-                            LAR=W[2];
-                            LONG=W[2];
-                            MEMW=W[3];
+                            M    = W[2];
+                            S    = {1'b1,W[2],1'b1,W[2]};
+                            ABUS = W[2] | W[3];
+                            LAR  = W[2];
+                            LONG = W[2];
+                            MEMW = W[3];
                         end
                         4'b0111://JC
-                            if (C==1) PCADD=W[2];
+                        if (C == 1) PCADD = W[2];
                         4'b1000://JZ
-                            if (Z==1) PCADD=W[2];
+                        if (Z == 1) PCADD = W[2];
                         4'b1001:begin//JMP
-                            M=W[2];
-                            S=4'b1111;
-                            ABUS=W[2];
-                            LPC=W[2];
+                            M    = W[2];
+                            S    = 4'b1111;
+                            ABUS = W[2];
+                            LPC  = W[2];
                         end
                         4'b1110:begin//STP
-                            STOP=W[2];
+                            STOP = W[2];
                         end
                         //额外指令
                         4'b1010:begin//OUT
-                            M=W[2];
-                            S=4'b1010;
-                            ABUS=W[2];
+                            M    = W[2];
+                            S    = 4'b1010;
+                            ABUS = W[2];
                         end
                         4'b1011:begin//XOR
-                            M=W[2];
-                            S=4'b0110;
-                            ABUS=W[2];
-                            DRW=W[2];
-                            LDZ=W[2];
+                            M    = W[2];
+                            S    = 4'b0110;
+                            ABUS = W[2];
+                            DRW  = W[2];
+                            LDZ  = W[2];
                         end
                         4'b1100:begin//OR
-                            M=W[2];
-                            S=4'b1110;
-                            ABUS=W[2];
-                            DRW=W[2];
-                            LDZ=W[2];
+                            M    = W[2];
+                            S    = 4'b1110;
+                            ABUS = W[2];
+                            DRW  = W[2];
+                            LDZ  = W[2];
                         end
                         default:begin
                             

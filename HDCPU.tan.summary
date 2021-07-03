@@ -6,7 +6,7 @@ Type           : Worst-case tpd
 Slack          : N/A
 Required Time  : None
 Actual Time    : 42.000 ns
-From           : W[2]
+From           : W[1]
 To             : ARINC
 From Clock     : --
 To Clock       : --
