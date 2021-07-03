@@ -147,7 +147,7 @@ module HDCPU(CLR,
                         4'b0110:begin//ST
                             M=W[2];
                             S={1,W[2],1,W[2]};
-                            ABUS=W[2] | W[3];
+                            ABUS=W[2] or W[3];
                             LAR=W[2];
                             LONG=W[2];
                             MEMW=W[3];
@@ -185,9 +185,7 @@ module HDCPU(CLR,
                             DRW=W[2];
                             LDZ=W[2];
                         end
-                        default:begin
-                            
-                        end
+                        default: 
                     endcase
                     //<---SW == 000的情况执行完毕
                 end
