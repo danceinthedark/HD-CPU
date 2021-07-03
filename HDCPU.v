@@ -45,10 +45,9 @@ module HDCPU(CLR,
         if (!CLR) ST0 <= 0;
         else if (!T3)
         begin
-        if (SST0 == 1'b1)//有SST0 == 1就立刻ST0 = 1
-            ST0 <= SST0;
-        else
-            ST0 <= ST0;
+        if (SST0 == 1'b1) ST0    = SST0;//有SST0 == 1就立刻ST0    = 1
+        else if (SW == 3'b100 && ST0 && W[2]) ST0 = 0;
+        else ST0    = ST0;
     end
     else begin
     end
@@ -98,6 +97,7 @@ module HDCPU(CLR,
                 end
                 3'b100:
                 begin
+                    
                     SBUS   <= W[1]||W[2];
                     SELCTL <= W[1]||W[2];
                     DRW    <= W[1]||W[2];
