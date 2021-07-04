@@ -129,11 +129,11 @@ PULSE                        : 61        : input  : TTL               :         
 TCK                          : 62        : input  : TTL               :         :           : N              
 RESERVED                     : 63        :        :                   :         :           :                
 RESERVED                     : 64        :        :                   :         :           :                
-flag[1]                      : 65        : output : TTL               :         :           : N              
+RESERVED                     : 65        :        :                   :         :           :                
 VCCIO                        : 66        : power  :                   : 5.0V    :           :                
 RESERVED                     : 67        :        :                   :         :           :                
-flag[2]                      : 68        : output : TTL               :         :           : N              
-flag[0]                      : 69        : output : TTL               :         :           : N              
+RESERVED                     : 68        :        :                   :         :           :                
+RESERVED                     : 69        :        :                   :         :           :                
 RESERVED                     : 70        :        :                   :         :           :                
 TDO                          : 71        : output : TTL               :         :           : N              
 GND                          : 72        : gnd    :                   :         :           :                

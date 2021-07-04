@@ -27,7 +27,7 @@ module HDCPU(
     output reg SBUS,
     output reg MBUS,
     output reg SHORT,
-    output reg LONG,
+    output reg LONG
     );
 
     reg ST0  = 0;
