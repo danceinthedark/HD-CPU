@@ -121,288 +121,287 @@ module HDCPU(
                                     SELF_PC = SELF_PC + 1;
                                 case (IR)
                                     4'b0001: begin // ADD
-                                        S    = 4'b1001;
-                                        CIN  = W[2];
-                                        ABUS = W[2];
-                                        DRW  = W[2];
-                                        LDZ  = W[2];
-                                        LDC  = W[2];
+                                        S    <= 4'b1001;
+                                        CIN  <= W[2];
+                                        ABUS <= W[2];
+                                        DRW  <= W[2];
+                                        LDZ  <= W[2];
+                                        LDC  <= W[2];
                                     end
                                     4'b0010: begin // SUB
-                                        S    = 4'b0110;
-                                        ABUS = W[2];
-                                        DRW  = W[2];
-                                        LDZ  = W[2];
-                                        LDC  = W[2];
+                                        S    <= 4'b0110;
+                                        ABUS <= W[2];
+                                        DRW  <= W[2];
+                                        LDZ  <= W[2];
+                                        LDC  <= W[2];
                                     end
                                     4'b0011: begin // AND
-                                        M    = W[2];
-                                        S    = 4'b1011;
-                                        ABUS = W[2];
-                                        DRW  = W[2];
-                                        LDZ  = W[2];
+                                        M    <= W[2];
+                                        S    <= 4'b1011;
+                                        ABUS <= W[2];
+                                        DRW  <= W[2];
+                                        LDZ  <= W[2];
                                     end
                                     4'b0100: begin // INC
-                                        S    = 4'b0000;
-                                        ABUS = W[2];
-                                        DRW  = W[2];
-                                        LDZ  = W[2];
-                                        LDC  = W[2];
+                                        S    <= 4'b0000;
+                                        ABUS <= W[2];
+                                        DRW  <= W[2];
+                                        LDZ  <= W[2];
+                                        LDC  <= W[2];
                                     end
                                     4'b0101: begin // LD
-                                        M    = W[2];
-                                        S    = 4'b1010;
-                                        ABUS = W[2];
-                                        LAR  = W[2];
-                                        LONG = W[2];
-                                        DRW  = W[3];
-                                        MBUS = W[3];
+                                        M    <= W[2];
+                                        S    <= 4'b1010;
+                                        ABUS <= W[2];
+                                        LAR  <= W[2];
+                                        LONG <= W[2];
+                                        DRW  <= W[3];
+                                        MBUS <= W[3];
                                     end
                                     4'b0110: begin // ST
-                                        M    = W[2] || W[3];
-                                        S    = { 1'b1, W[2], 1'b1, W[2] };
-                                        ABUS = W[2] || W[3];
-                                        LAR  = W[2];
-                                        LONG = W[2];
-                                        MEMW = W[3];
+                                        M    <= W[2] || W[3];
+                                        S    <= { 1'b1, W[2], 1'b1, W[2] };
+                                        ABUS <= W[2] || W[3];
+                                        LAR  <= W[2];
+                                        LONG <= W[2];
+                                        MEMW <= W[3];
                                     end
                                     4'b0111: // JC
                                         if (C == 1) begin
-                                            PCADD = W[2];
+                                            PCADD <= W[2];
                                             if(EI) begin
-                                                LONG = W[2];
-                                                ABUS = W[3];
-                                                SEL[3] = !W[3];
-                                                SEL[2] = !W[3];
-                                                S = 1100;
-                                                SELCTL = W[3];
-                                                CIN = W[3];
-                                                DRW = W[3];
-                                                LDZ = W[3];
-                                                LDC = W[3];
-                                                flag = 1;
+                                                LONG <= W[2];
+                                                ABUS <= W[3];
+                                                SEL[3] <= !W[3];
+                                                SEL[2] <= !W[3];
+                                                S <= 1100;
+                                                SELCTL <= W[3];
+                                                CIN <= W[3];
+                                                DRW <= W[3];
+                                                LDZ <= W[3];
+                                                LDC <= W[3];
+                                                flag <= 1;
                                             end
                                         end
                                     4'b1000: // JZ
                                         if (Z == 1) begin
-                                            PCADD = W[2];
+                                            PCADD <= W[2];
                                             if(EI) begin
-                                                LONG = W[2];
-                                                ABUS = W[3];
-                                                SEL[3] = !W[3];
-                                                SEL[2] = !W[3];
-                                                S = 1100;
-                                                SELCTL = W[3];
-                                                CIN = W[3];
-                                                DRW = W[3];
-                                                LDZ = W[3];
-                                                LDC = W[3];
-                                                flag = 1;
+                                                LONG <= W[2];
+                                                ABUS <= W[3];
+                                                SEL[3] <= !W[3];
+                                                SEL[2] <= !W[3];
+                                                S <= 1100;
+                                                SELCTL <= W[3];
+                                                CIN <= W[3];
+                                                DRW <= W[3];
+                                                LDZ <= W[3];
+                                                LDC <= W[3];
+                                                flag <= 1;
                                             end
                                         end
                                     4'b1001: begin // JMP
-                                        M    = W[2];
-                                        S    = 4'b1111;
-                                        ABUS = W[2];
-                                        LPC  = W[2];
+                                        M    <= W[2];
+                                        S    <= 4'b1111;
+                                        ABUS <= W[2];
+                                        LPC  <= W[2];
                                         // TODO: SELF_PC同步
                                     end
                                     // 额外指令
                                     4'b1010: begin // OUT
-                                        M    = W[2];
-                                        S    = 4'b1010;
-                                        ABUS = W[2];
+                                        M    <= W[2];
+                                        S    <= 4'b1010;
+                                        ABUS <= W[2];
                                     end
                                     4'b1011: begin // IRET
-                                        SHORT = W[1];
-                                        flag = 5;
+                                        SHORT <= W[1];
+                                        flag <= 5;
                                     end
                                     4'b1100: begin // OR
-                                        M    = W[2];
-                                        S    = 4'b1110;
-                                        ABUS = W[2];
-                                        DRW  = W[2];
-                                        LDZ  = W[2];
+                                        M    <= W[2];
+                                        S    <= 4'b1110;
+                                        ABUS <= W[2];
+                                        DRW  <= W[2];
+                                        LDZ  <= W[2];
                                     end
                                     4'b1101: begin // XOR
-                                        M    = W[2];
-                                        S    = 4'b0110;
-                                        ABUS = W[2];
-                                        DRW  = W[2];
-                                        LDZ  = W[2];
+                                        M    <= W[2];
+                                        S    <= 4'b0110;
+                                        ABUS <= W[2];
+                                        DRW  <= W[2];
+                                        LDZ  <= W[2];
                                     end
                                     4'b1110: begin // STP
-                                        STOP = W[2];
+                                        STOP <= W[2];
                                     end
-                                    default: S = 4'b0000;
+                                    default: S <= 4'b0000;
                                 endcase
                                 // <---SW == 000的情况执行完毕
                             end
                         end
                         // 将SELF_R0寄存器提取并保存至软件
                         3'b001: begin
-                            SELF_R0 = SELF_R0 << 1;
-                            SELF_R0 = SELF_R0 + C;
-                            SHORT = W[1];
+                            SELF_R0 <= SELF_R0 << 1 + C;
+                            SHORT <= W[1];
                             if (count < 7) begin
-                                count = count + 1;
-                                ABUS = W[1];
-                                SEL[3] = !W[1];
-                                SEL[2] = !W[1];
-                                S = 1100;
-                                SELCTL = W[1];
-                                CIN = W[1];
-                                DRW = W[1];
-                                LDZ = W[1];
-                                LDC = W[1];
+                                count <= count + 1;
+                                ABUS <= W[1];
+                                SEL[3] <= !W[1];
+                                SEL[2] <= !W[1];
+                                S <= 1100;
+                                SELCTL <= W[1];
+                                CIN <= W[1];
+                                DRW <= W[1];
+                                LDZ <= W[1];
+                                LDC <= W[1];
                             end
                             else begin
-                                flag = 2;
-                                count = 0;
+                                flag <= 2;
+                                count <= 0;
                             end
                         end
                         // 将SELF_PC提取至SELF_R0寄存器
                         3'b010: begin
                             if (count < 8) begin
-                                count = count + 1;
-                                ABUS = W[1];
-                                SEL[3] = !W[1];
-                                SEL[2] = !W[1];
-                                SELCTL = W[1];
-                                S = 1100;
-                                CIN = W[1];
-                                DRW = W[1];
-                                LDZ = W[1];
-                                LDC = W[1];
+                                count <= count + 1;
+                                ABUS <= W[1];
+                                SEL[3] <= !W[1];
+                                SEL[2] <= !W[1];
+                                SELCTL <= W[1];
+                                S <= 1100;
+                                CIN <= W[1];
+                                DRW <= W[1];
+                                LDZ <= W[1];
+                                LDC <= W[1];
                                 if (SELF_PC[8-count]) begin
-                                    SELCTL = W[2];
-                                    SEL[3] = !W[2];
-                                    SEL[2] = !W[2];
-                                    S = 0000;
-                                    ABUS = W[2];
-                                    DRW = W[2];
-                                    LDZ = W[2];
-                                    LDC = W[2];
+                                    SELCTL <= W[2];
+                                    SEL[3] <= !W[2];
+                                    SEL[2] <= !W[2];
+                                    S <= 0000;
+                                    ABUS <= W[2];
+                                    DRW <= W[2];
+                                    LDZ <= W[2];
+                                    LDC <= W[2];
                                 end
                                 else
-                                    SHORT = W[1];
+                                    SHORT <= W[1];
                             end
                             else begin
-                                count = 0;
-                                SELCTL = 1;
-                                SEL[3] = 0;
-                                SEL[2] = 0;
-                                SEL[1] = 0;
-                                SEL[0] = 0;
-                                M = W[1];
-                                S = W[1] ? 1010 : 1100;
-                                ABUS = W[1] || W[3];
-                                LAR = W[1];
-                                MBUS = W[2];
-                                DRW = W[2] || W[3];
-                                LONG = W[2];
-                                CIN = W[3];
-                                LDZ = W[3];
-                                LDC = W[3];
+                                count <= 0;
+                                SELCTL <= 1;
+                                SEL[3] <= 0;
+                                SEL[2] <= 0;
+                                SEL[1] <= 0;
+                                SEL[0] <= 0;
+                                M <= W[1];
+                                S <= W[1] ? 1010 : 1100;
+                                ABUS <= W[1] || W[3];
+                                LAR <= W[1];
+                                MBUS <= W[2];
+                                DRW <= W[2] || W[3];
+                                LONG <= W[2];
+                                CIN <= W[3];
+                                LDZ <= W[3];
+                                LDC <= W[3];
                                 if (W[3])
                                     flag = 3;
                             end
                         end
                         // 将SELF_R0寄存器提取至软件
                         3'b011: begin
-                            SELF_IR = SELF_IR << 1;
-                            SELF_IR = SELF_IR + C;
-                            SHORT = W[1];
+                            SELF_IR <= SELF_IR << 1;
+                            SELF_IR <= SELF_IR + C;
+                            SHORT <= W[1];
                             if (count < 7) begin
-                                count = count + 1;
-                                ABUS = W[1];
-                                SEL[3] = !W[1];
-                                SEL[2] = !W[1];
-                                S = 1100;
-                                SELCTL = W[1];
-                                CIN = W[1];
-                                DRW = W[1];
-                                LDZ = W[1];
-                                LDC = W[1];
+                                count <= count + 1;
+                                ABUS <= W[1];
+                                SEL[3] <= !W[1];
+                                SEL[2] <= !W[1];
+                                S <= 1100;
+                                SELCTL <= W[1];
+                                CIN <= W[1];
+                                DRW <= W[1];
+                                LDZ <= W[1];
+                                LDC <= W[1];
                             end
                             else begin
-                                count = 0;
-                                flag = 4;
-                                SELF_PC = SELF_PC + SELF_IR & 2'h0f;
+                                count <= 0;
+                                flag <= 4;
+                                SELF_PC <= SELF_PC + SELF_IR & 8'h0f;
                                 if (SELF_IR >= 8)
-                                    SELF_PC = SELF_PC - 16;
+                                    SELF_PC <= SELF_PC - 16;
                             end
                         end
                         // 恢复SELF_R0初始值
                         3'b100: begin
                             if (count < 8) begin
-                                count = count + 1;
-                                ABUS = W[1];
-                                SEL[3] = !W[1];
-                                SEL[2] = !W[1];
-                                SELCTL = W[1];
-                                S = 1100;
-                                CIN = W[1];
-                                DRW = W[1];
-                                LDZ = W[1];
-                                LDC = W[1];
+                                count <= count + 1;
+                                ABUS <= W[1];
+                                SEL[3] <= !W[1];
+                                SEL[2] <= !W[1];
+                                SELCTL <= W[1];
+                                S <= 1100;
+                                CIN <= W[1];
+                                DRW <= W[1];
+                                LDZ <= W[1];
+                                LDC <= W[1];
                                 if (SELF_R0[8-count]) begin
-                                    SELCTL = W[2];
-                                    SEL[3] = !W[2];
-                                    SEL[2] = !W[2];
-                                    S = 0000;
-                                    ABUS = W[2];
-                                    DRW = W[2];
-                                    LDZ = W[2];
-                                    LDC = W[2];
+                                    SELCTL <= W[2];
+                                    SEL[3] <= !W[2];
+                                    SEL[2] <= !W[2];
+                                    S <= 0000;
+                                    ABUS <= W[2];
+                                    DRW <= W[2];
+                                    LDZ <= W[2];
+                                    LDC <= W[2];
                                 end
                                 else
-                                    SHORT = W[1];
+                                    SHORT <= W[1];
                             end
                             else begin
-                                count = 0;
-                                SHORT = W[1];
-                                flag = 0;
+                                count <= 0;
+                                SHORT <= W[1];
+                                flag <= 0;
                             end
                         end
                         // 恢复SELF_PC初始值
                         3'b101: begin
                             if (count < 8) begin
-                                count = count + 1;
-                                ABUS = W[1];
-                                SEL[3] = !W[1];
-                                SEL[2] = !W[1];
-                                SELCTL = W[1];
-                                S = 1100;
-                                CIN = W[1];
-                                DRW = W[1];
-                                LDZ = W[1];
-                                LDC = W[1];
+                                count <= count + 1;
+                                ABUS <= W[1];
+                                SEL[3] <= !W[1];
+                                SEL[2] <= !W[1];
+                                SELCTL <= W[1];
+                                S <= 1100;
+                                CIN <= W[1];
+                                DRW <= W[1];
+                                LDZ <= W[1];
+                                LDC <= W[1];
                                 if (SELF_PC[8-count]) begin
-                                    SELCTL = W[2];
-                                    SEL[3] = !W[2];
-                                    SEL[2] = !W[2];
-                                    S = 0000;
-                                    ABUS = W[2];
-                                    DRW = W[2];
-                                    LDZ = W[2];
-                                    LDC = W[2];
+                                    SELCTL <= W[2];
+                                    SEL[3] <= !W[2];
+                                    SEL[2] <= !W[2];
+                                    S <= 0000;
+                                    ABUS <= W[2];
+                                    DRW <= W[2];
+                                    LDZ <= W[2];
+                                    LDC <= W[2];
                                 end
                                 else
-                                    SHORT = W[1];
+                                    SHORT <= W[1];
                             end
                             else begin
-                                count = 0;
-                                SHORT =1;
-                                flag = 0;
-                                SELCTL = 1;
-                                SEL[1] = 0;
-                                SEL[0] = 0;
-                                M = 1;
-                                S = 1010;
-                                ABUS = 1;
-                                LPC = 1;
-                                EI = 1;
+                                count <= 0;
+                                SHORT <=1;
+                                flag <= 0;
+                                SELCTL <= 1;
+                                SEL[1] <= 0;
+                                SEL[0] <= 0;
+                                M <= 1;
+                                S <= 1010;
+                                ABUS <= 1;
+                                LPC <= 1;
+                                EI <= 1;
                             end
                         end
                     endcase
