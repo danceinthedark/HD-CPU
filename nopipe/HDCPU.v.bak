@@ -33,12 +33,13 @@ module HDCPU(
 
     reg ST0  = 0;
     reg SST0 = 0;
-    reg [2:0] flag
     reg EI = 1;
     reg [7:0] SELF_PC = 0;
     reg [2:0] count;
     reg [7:0] SELF_R0;
     reg [7:0] SELF_IR;
+
+    flag = 0;
 
     always @(negedge T3, negedge CLR)
     begin
