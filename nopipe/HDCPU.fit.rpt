@@ -1,5 +1,5 @@
 Fitter report for HDCPU
-Sun Jul 04 15:00:01 2021
+Sun Jul 04 15:47:47 2021
 Quartus II Version 9.1 Build 222 10/21/2009 SJ Full Version
 
 
@@ -54,7 +54,7 @@ applicable agreement for further details.
 +------------------------------------------------------------------+
 ; Fitter Summary                                                   ;
 +-----------------------+------------------------------------------+
-; Fitter Status         ; Successful - Sun Jul 04 15:00:01 2021    ;
+; Fitter Status         ; Successful - Sun Jul 04 15:47:47 2021    ;
 ; Quartus II Version    ; 9.1 Build 222 10/21/2009 SJ Full Version ;
 ; Revision Name         ; HDCPU                                    ;
 ; Top-level Entity Name ; HDCPU                                    ;
@@ -62,7 +62,7 @@ applicable agreement for further details.
 ; Device                ; EPM7128SLC84-15                          ;
 ; Timing Models         ; Final                                    ;
 ; Total macrocells      ; 35 / 128 ( 27 % )                        ;
-; Total pins            ; 45 / 68 ( 66 % )                         ;
+; Total pins            ; 46 / 68 ( 68 % )                         ;
 +-----------------------+------------------------------------------+
 
 
@@ -120,7 +120,7 @@ The pin-out file can be found in D:/Code/Github/HD-CPU/nopipe/HDCPU.pin.
 ; Registers                         ; 1 / 128 ( < 1 % ) ;
 ; Number of pterms used             ; 64                ;
 ; User inserted logic elements      ; 0                 ;
-; I/O pins                          ; 45 / 68 ( 66 % )  ;
+; I/O pins                          ; 46 / 68 ( 68 % )  ;
 ;     -- Clock pins                 ; 2 / 2 ( 100 % )   ;
 ;     -- Dedicated input pins       ; 2 / 2 ( 100 % )   ;
 ; Global signals                    ; 2                 ;
@@ -132,7 +132,7 @@ The pin-out file can be found in D:/Code/Github/HD-CPU/nopipe/HDCPU.pin.
 ; Highest non-global fan-out signal ; SW[0]             ;
 ; Highest non-global fan-out        ; 24                ;
 ; Total fan-out                     ; 171               ;
-; Average fan-out                   ; 2.04              ;
+; Average fan-out                   ; 2.01              ;
 +-----------------------------------+-------------------+
 
 
@@ -147,6 +147,7 @@ The pin-out file can be found in D:/Code/Github/HD-CPU/nopipe/HDCPU.pin.
 ; IR[5] ; 9     ; --       ; 1   ; 0                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
 ; IR[6] ; 10    ; --       ; 1   ; 0                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
 ; IR[7] ; 11    ; --       ; 1   ; 0                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
+; PULSE ; 61    ; --       ; 6   ; 0                     ; 0                  ; no     ; no             ; TTL          ; User                 ;
 ; SW[0] ; 4     ; --       ; 1   ; 24                    ; 0                  ; no     ; no             ; TTL          ; User                 ;
 ; SW[1] ; 5     ; --       ; 1   ; 24                    ; 0                  ; no     ; no             ; TTL          ; User                 ;
 ; SW[2] ; 6     ; --       ; 1   ; 23                    ; 0                  ; no     ; no             ; TTL          ; User                 ;
@@ -258,7 +259,7 @@ The pin-out file can be found in D:/Code/Github/HD-CPU/nopipe/HDCPU.pin.
 ; 58       ; 57         ; --       ; RESERVED       ;        ;              ;         ;                 ;
 ; 59       ; 58         ; --       ; GND            ; gnd    ;              ;         ;                 ;
 ; 60       ; 59         ; --       ; RESERVED       ;        ;              ;         ;                 ;
-; 61       ; 60         ; --       ; RESERVED       ;        ;              ;         ;                 ;
+; 61       ; 60         ; --       ; PULSE          ; input  ; TTL          ;         ; Y               ;
 ; 62       ; 61         ; --       ; TCK            ; input  ; TTL          ;         ; N               ;
 ; 63       ; 62         ; --       ; RESERVED       ;        ;              ;         ;                 ;
 ; 64       ; 63         ; --       ; RESERVED       ;        ;              ;         ;                 ;
@@ -324,7 +325,7 @@ Note: User assignments will override these defaults. The user specified values a
 +----------------------------+------------+------+---------------------+--------------+
 ; Compilation Hierarchy Node ; Macrocells ; Pins ; Full Hierarchy Name ; Library Name ;
 +----------------------------+------------+------+---------------------+--------------+
-; |HDCPU                     ; 35         ; 45   ; |HDCPU              ; work         ;
+; |HDCPU                     ; 35         ; 46   ; |HDCPU              ; work         ;
 +----------------------------+------------+------+---------------------+--------------+
 
 
@@ -364,9 +365,9 @@ Note: User assignments will override these defaults. The user specified values a
 ; count[2]~30        ; 3          ;
 ; Decoder1~2sexpand0 ; 2          ;
 ; SST0~9             ; 2          ;
-; Mux26~2sexpand2    ; 1          ;
-; Mux26~2sexpand1    ; 1          ;
-; Mux26~2sexpand0    ; 1          ;
+; Mux27~2sexpand2    ; 1          ;
+; Mux27~2sexpand1    ; 1          ;
+; Mux27~2sexpand0    ; 1          ;
 ; ~GND~12            ; 1          ;
 ; ~GND~11            ; 1          ;
 ; ~GND~10            ; 1          ;
@@ -382,21 +383,21 @@ Note: User assignments will override these defaults. The user specified values a
 ; ~GND~0             ; 1          ;
 ; CIN~6              ; 1          ;
 ; Add1~3             ; 1          ;
-; Mux13~8            ; 1          ;
-; Mux19~8            ; 1          ;
-; Mux17~5            ; 1          ;
-; Mux22~3            ; 1          ;
-; Mux25~5            ; 1          ;
+; Mux14~8            ; 1          ;
+; Mux20~8            ; 1          ;
+; Mux18~5            ; 1          ;
 ; Mux23~3            ; 1          ;
-; Mux21~4            ; 1          ;
+; Mux26~5            ; 1          ;
+; Mux24~3            ; 1          ;
+; Mux22~4            ; 1          ;
 ; Add1~4             ; 1          ;
-; Mux14~21           ; 1          ;
-; Mux14~15           ; 1          ;
-; Mux27~5            ; 1          ;
-; Mux20~9            ; 1          ;
-; Mux24~4            ; 1          ;
-; Mux15~3            ; 1          ;
-; Mux18~4            ; 1          ;
+; Mux15~21           ; 1          ;
+; Mux15~15           ; 1          ;
+; Mux28~5            ; 1          ;
+; Mux21~9            ; 1          ;
+; Mux25~4            ; 1          ;
+; Mux16~3            ; 1          ;
+; Mux19~4            ; 1          ;
 +--------------------+------------+
 
 
@@ -484,19 +485,19 @@ Note: User assignments will override these defaults. The user specified values a
 ;  C  ; LC46       ; ST0, SW[0], SW[1], SW[2], CLR, W[1]                                                          ; ARINC                                                                       ;
 ;  C  ; LC43       ; ST0, SW[2], CLR, W[1], SW[0], SW[1]                                                          ; MEMW                                                                        ;
 ;  C  ; LC42       ; W[2], SW[0], ST0, SW[1], W[1]                                                                ; SST0~9                                                                      ;
-;  C  ; LC36       ; Add1~4, CLR, count[1]~26, SW[2], SW[1], SW[0], Decoder1~2sexpand0                            ; Add1~4, count[1]~26, Add1~3, CIN~6                                          ;
-;  C  ; LC34       ; count[0]~23, CLR, SW[2], SW[1], SW[0]                                                        ; count[0]~23, Add1~4, Add1~3, CIN~6                                          ;
+;  C  ; LC36       ; Add1~4, CLR, count[1]~26, SW[0], SW[2], SW[1], Decoder1~2sexpand0                            ; Add1~4, count[1]~26, Add1~3, CIN~6                                          ;
+;  C  ; LC34       ; count[0]~23, CLR, SW[0], SW[2], SW[1]                                                        ; count[0]~23, Add1~4, Add1~3, CIN~6                                          ;
 ;  C  ; LC40       ; W[1], CLR, SW[2], SW[1], SW[0], W[2]                                                         ; STOP                                                                        ;
 ;  C  ; LC44       ; count[0]~23, count[1]~26                                                                     ; count[1]~26                                                                 ;
-;  C  ; LC47       ; Mux27~5, CLR, SST0~9, SW[2], SW[1], SW[0], Mux26~2sexpand0, Mux26~2sexpand1, Mux26~2sexpand2 ; SST0~9, ST0                                                                 ;
-;  C  ; LC33       ; T3, CLR, SST0~9, ST0, W[2], SW[2], SW[0], SW[1]                                              ; Mux27~5, ST0, Mux21~4, Mux23~3, Mux25~5, Mux22~3, Mux17~5, Mux19~8, Mux13~8 ;
+;  C  ; LC47       ; Mux28~5, CLR, SST0~9, SW[0], SW[2], SW[1], Mux27~2sexpand0, Mux27~2sexpand1, Mux27~2sexpand2 ; SST0~9, ST0                                                                 ;
+;  C  ; LC33       ; T3, CLR, SST0~9, ST0, W[2], SW[2], SW[0], SW[1]                                              ; Mux28~5, ST0, Mux22~4, Mux24~3, Mux26~5, Mux23~3, Mux18~5, Mux20~8, Mux14~8 ;
 ;  C  ; LC48       ; count[0]~23, count[1]~26, count[2]~30                                                        ; count[2]~30                                                                 ;
-;  C  ; LC41       ; Add1~3, CLR, count[2]~30, SW[2], SW[1], SW[0], Decoder1~2sexpand0                            ; Add1~3, count[2]~30, CIN~6                                                  ;
+;  C  ; LC41       ; Add1~3, CLR, count[2]~30, SW[0], SW[2], SW[1], Decoder1~2sexpand0                            ; Add1~3, count[2]~30, CIN~6                                                  ;
 ;  C  ; LC35       ;                                                                                              ; LDC                                                                         ;
 ;  C  ; LC37       ;                                                                                              ; LDZ                                                                         ;
 ;  C  ; LC38       ;                                                                                              ; LIR                                                                         ;
 ;  D  ; LC49       ; ST0, W[1], CLR, SW[2], SW[0], SW[1], W[2]                                                    ; SBUS                                                                        ;
-;  D  ; LC64       ; count[2]~30, CLR, W[1], count[0]~23, count[1]~26, SW[2], SW[1], SW[0]                        ; CIN                                                                         ;
+;  D  ; LC64       ; count[2]~30, CLR, W[1], count[0]~23, count[1]~26, SW[0], SW[2], SW[1]                        ; CIN                                                                         ;
 ;  D  ; LC61       ;                                                                                              ; S[0]                                                                        ;
 ;  D  ; LC59       ;                                                                                              ; S[1]                                                                        ;
 ;  D  ; LC57       ;                                                                                              ; S[2]                                                                        ;
@@ -535,14 +536,14 @@ Note: User assignments will override these defaults. The user specified values a
 Info: *******************************************************************
 Info: Running Quartus II Fitter
     Info: Version 9.1 Build 222 10/21/2009 SJ Full Version
-    Info: Processing started: Sun Jul 04 15:00:01 2021
+    Info: Processing started: Sun Jul 04 15:47:47 2021
 Info: Command: quartus_fit --read_settings_files=off --write_settings_files=off HDCPU -c HDCPU
 Info: Parallel compilation is enabled and will use 6 of the 6 processors detected
 Info: Selected device EPM7128SLC84-15 for design "HDCPU"
 Info: Quartus II Fitter was successful. 0 errors, 0 warnings
     Info: Peak virtual memory: 235 megabytes
-    Info: Processing ended: Sun Jul 04 15:00:01 2021
-    Info: Elapsed time: 00:00:00
-    Info: Total CPU time (on all processors): 00:00:01
+    Info: Processing ended: Sun Jul 04 15:47:48 2021
+    Info: Elapsed time: 00:00:01
+    Info: Total CPU time (on all processors): 00:00:00
 
 

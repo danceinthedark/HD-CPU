@@ -1,5 +1,5 @@
 EDA Netlist Writer report for HDCPU
-Sun Jul 04 15:00:05 2021
+Sun Jul 04 15:47:51 2021
 Quartus II Version 9.1 Build 222 10/21/2009 SJ Full Version
 
 
@@ -34,7 +34,7 @@ applicable agreement for further details.
 +----------------------------------------------------------------------------------+
 ; EDA Netlist Writer Summary                                                       ;
 +---------------------------+------------------------------------------------------+
-; EDA Netlist Writer Status ; No Output Files Generated - Sun Jul 04 15:00:05 2021 ;
+; EDA Netlist Writer Status ; No Output Files Generated - Sun Jul 04 15:47:51 2021 ;
 ; Revision Name             ; HDCPU                                                ;
 ; Top-level Entity Name     ; HDCPU                                                ;
 ; Family                    ; MAX7000S                                             ;
@@ -47,12 +47,12 @@ applicable agreement for further details.
 Info: *******************************************************************
 Info: Running Quartus II EDA Netlist Writer
     Info: Version 9.1 Build 222 10/21/2009 SJ Full Version
-    Info: Processing started: Sun Jul 04 15:00:05 2021
+    Info: Processing started: Sun Jul 04 15:47:51 2021
 Info: Command: quartus_eda --read_settings_files=off --write_settings_files=off HDCPU -c HDCPU
 Warning: Can't generate output files. Specify command-line options to generate output files, or update EDA tool settings using GUI or Tcl script.
 Info: Quartus II EDA Netlist Writer was successful. 0 errors, 1 warning
     Info: Peak virtual memory: 189 megabytes
-    Info: Processing ended: Sun Jul 04 15:00:05 2021
+    Info: Processing ended: Sun Jul 04 15:47:51 2021
     Info: Elapsed time: 00:00:00
     Info: Total CPU time (on all processors): 00:00:00
 

@@ -125,7 +125,7 @@ RESERVED                     : 57        :        :                   :         
 RESERVED                     : 58        :        :                   :         :           :                
 GND                          : 59        : gnd    :                   :         :           :                
 RESERVED                     : 60        :        :                   :         :           :                
-RESERVED                     : 61        :        :                   :         :           :                
+PULSE                        : 61        : input  : TTL               :         :           : Y              
 TCK                          : 62        : input  : TTL               :         :           : N              
 RESERVED                     : 63        :        :                   :         :           :                
 RESERVED                     : 64        :        :                   :         :           :                
