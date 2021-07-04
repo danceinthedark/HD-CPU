@@ -1,5 +1,5 @@
 Analysis & Synthesis report for HDCPU
-Sun Jul 04 13:11:36 2021
+Sun Jul 04 15:00:00 2021
 Quartus II Version 9.1 Build 222 10/21/2009 SJ Full Version
 
 
@@ -41,7 +41,7 @@ applicable agreement for further details.
 +------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                           ;
 +-----------------------------+------------------------------------------+
-; Analysis & Synthesis Status ; Successful - Sun Jul 04 13:11:36 2021    ;
+; Analysis & Synthesis Status ; Successful - Sun Jul 04 15:00:00 2021    ;
 ; Quartus II Version          ; 9.1 Build 222 10/21/2009 SJ Full Version ;
 ; Revision Name               ; HDCPU                                    ;
 ; Top-level Entity Name       ; HDCPU                                    ;
@@ -147,12 +147,11 @@ applicable agreement for further details.
 ; Logic cells          ; 35                   ;
 ; Total registers      ; 1                    ;
 ; I/O pins             ; 41                   ;
-; Shareable expanders  ; 3                    ;
-; Parallel expanders   ; 5                    ;
+; Shareable expanders  ; 4                    ;
 ; Maximum fan-out node ; SW[0]                ;
-; Maximum fan-out      ; 38                   ;
-; Total fan-out        ; 318                  ;
-; Average fan-out      ; 4.03                 ;
+; Maximum fan-out      ; 24                   ;
+; Total fan-out        ; 171                  ;
+; Average fan-out      ; 2.14                 ;
 +----------------------+----------------------+
 
 
@@ -170,8 +169,11 @@ applicable agreement for further details.
 +----------------------------------------------------+---------------------+------------------------+
 ; Latch Name                                         ; Latch Enable Signal ; Free of Timing Hazards ;
 +----------------------------------------------------+---------------------+------------------------+
-; SST0                                               ; Mux13               ; yes                    ;
-; Number of user-specified and inferred latches = 1  ;                     ;                        ;
+; count[0]                                           ; Decoder1            ; yes                    ;
+; count[1]                                           ; Decoder1            ; yes                    ;
+; count[2]                                           ; Decoder1            ; yes                    ;
+; SST0                                               ; Mux26               ; yes                    ;
+; Number of user-specified and inferred latches = 4  ;                     ;                        ;
 +----------------------------------------------------+---------------------+------------------------+
 Note: All latches listed above may not be present at the end of synthesis due to various synthesis optimizations.
 
@@ -182,42 +184,151 @@ Note: All latches listed above may not be present at the end of synthesis due to
 Info: *******************************************************************
 Info: Running Quartus II Analysis & Synthesis
     Info: Version 9.1 Build 222 10/21/2009 SJ Full Version
-    Info: Processing started: Sun Jul 04 13:11:33 2021
+    Info: Processing started: Sun Jul 04 14:59:59 2021
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off HDCPU -c HDCPU
 Info: Parallel compilation is enabled and will use 6 of the 6 processors detected
+Warning (10229): Verilog HDL Expression warning at HDCPU.v(322): truncated literal to match 2 bits
 Info: Found 1 design units, including 1 entities, in source file hdcpu.v
     Info: Found entity 1: HDCPU
 Info: Elaborating entity "HDCPU" for the top level hierarchy
-Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(56): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(57): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(58): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(66): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
 Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(67): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
 Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(68): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
 Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(69): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(70): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(89): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(90): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(92): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(147): variable "C" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(149): variable "Z" is read inside the Always Construct but isn't in the Always Construct's Event Control
-Warning (10270): Verilog HDL Case Statement warning at HDCPU.v(54): incomplete case statement has no default case item
-Warning (10240): Verilog HDL Always Construct warning at HDCPU.v(47): inferring latch(es) for variable "SST0", which holds its previous value in one or more paths through the always construct
-Info (10041): Inferred latch for "SST0" at HDCPU.v(47)
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(77): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(78): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(79): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(80): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(81): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(99): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(100): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(102): variable "ST0" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(107): variable "flag" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(112): variable "EI" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(113): variable "SELF_PC" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10230): Verilog HDL assignment warning at HDCPU.v(113): truncated value with size 32 to match size of target (8)
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(162): variable "C" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(164): variable "EI" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10230): Verilog HDL assignment warning at HDCPU.v(169): truncated value with size 32 to match size of target (4)
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(179): variable "Z" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(181): variable "EI" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10230): Verilog HDL assignment warning at HDCPU.v(186): truncated value with size 32 to match size of target (4)
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(235): variable "SELF_R0" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(236): variable "C" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(238): variable "count" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(239): variable "count" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10230): Verilog HDL assignment warning at HDCPU.v(239): truncated value with size 32 to match size of target (3)
+Warning (10230): Verilog HDL assignment warning at HDCPU.v(243): truncated value with size 32 to match size of target (4)
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(257): variable "count" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(258): variable "count" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10230): Verilog HDL assignment warning at HDCPU.v(258): truncated value with size 32 to match size of target (3)
+Warning (10230): Verilog HDL assignment warning at HDCPU.v(263): truncated value with size 32 to match size of target (4)
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(268): variable "SELF_PC" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(304): variable "SELF_IR" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(305): variable "C" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(307): variable "count" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(308): variable "count" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10230): Verilog HDL assignment warning at HDCPU.v(308): truncated value with size 32 to match size of target (3)
+Warning (10230): Verilog HDL assignment warning at HDCPU.v(312): truncated value with size 32 to match size of target (4)
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(322): variable "SELF_PC" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10230): Verilog HDL assignment warning at HDCPU.v(324): truncated value with size 32 to match size of target (8)
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(329): variable "count" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(330): variable "count" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10230): Verilog HDL assignment warning at HDCPU.v(330): truncated value with size 32 to match size of target (3)
+Warning (10230): Verilog HDL assignment warning at HDCPU.v(335): truncated value with size 32 to match size of target (4)
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(340): variable "SELF_R0" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(361): variable "count" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(362): variable "count" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10230): Verilog HDL assignment warning at HDCPU.v(362): truncated value with size 32 to match size of target (3)
+Warning (10230): Verilog HDL assignment warning at HDCPU.v(367): truncated value with size 32 to match size of target (4)
+Warning (10235): Verilog HDL Always Construct warning at HDCPU.v(372): variable "SELF_PC" is read inside the Always Construct but isn't in the Always Construct's Event Control
+Warning (10270): Verilog HDL Case Statement warning at HDCPU.v(65): incomplete case statement has no default case item
+Warning (10240): Verilog HDL Always Construct warning at HDCPU.v(54): inferring latch(es) for variable "SST0", which holds its previous value in one or more paths through the always construct
+Warning (10240): Verilog HDL Always Construct warning at HDCPU.v(54): inferring latch(es) for variable "count", which holds its previous value in one or more paths through the always construct
+Warning (10240): Verilog HDL Always Construct warning at HDCPU.v(54): inferring latch(es) for variable "SELF_PC", which holds its previous value in one or more paths through the always construct
+Warning (10240): Verilog HDL Always Construct warning at HDCPU.v(54): inferring latch(es) for variable "EI", which holds its previous value in one or more paths through the always construct
+Warning (10240): Verilog HDL Always Construct warning at HDCPU.v(54): inferring latch(es) for variable "flag", which holds its previous value in one or more paths through the always construct
+Warning (10240): Verilog HDL Always Construct warning at HDCPU.v(54): inferring latch(es) for variable "SELF_R0", which holds its previous value in one or more paths through the always construct
+Warning (10240): Verilog HDL Always Construct warning at HDCPU.v(54): inferring latch(es) for variable "SELF_IR", which holds its previous value in one or more paths through the always construct
+Info (10041): Inferred latch for "EI" at HDCPU.v(54)
+Info (10041): Inferred latch for "SST0" at HDCPU.v(54)
+Info (10041): Inferred latch for "SELF_IR[0]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_IR[1]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_IR[2]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_IR[3]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_IR[4]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_IR[5]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_IR[6]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_R0[0]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_R0[1]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_R0[2]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_R0[3]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_R0[4]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_R0[5]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_R0[6]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_R0[7]" at HDCPU.v(65)
+Info (10041): Inferred latch for "flag.101" at HDCPU.v(65)
+Info (10041): Inferred latch for "flag.100" at HDCPU.v(65)
+Info (10041): Inferred latch for "flag.011" at HDCPU.v(65)
+Info (10041): Inferred latch for "flag.010" at HDCPU.v(65)
+Info (10041): Inferred latch for "flag.001" at HDCPU.v(65)
+Info (10041): Inferred latch for "flag.000" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_PC[0]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_PC[1]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_PC[2]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_PC[3]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_PC[4]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_PC[5]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_PC[6]" at HDCPU.v(65)
+Info (10041): Inferred latch for "SELF_PC[7]" at HDCPU.v(65)
+Info (10041): Inferred latch for "count[0]" at HDCPU.v(65)
+Info (10041): Inferred latch for "count[1]" at HDCPU.v(65)
+Info (10041): Inferred latch for "count[2]" at HDCPU.v(65)
+Warning: LATCH primitive "EI" is permanently disabled
+Warning: LATCH primitive "SELF_PC[0]" is permanently disabled
+Warning: LATCH primitive "SELF_PC[1]" is permanently disabled
+Warning: LATCH primitive "SELF_PC[2]" is permanently disabled
+Warning: LATCH primitive "SELF_PC[3]" is permanently disabled
+Warning: LATCH primitive "SELF_PC[4]" is permanently disabled
+Warning: LATCH primitive "SELF_PC[5]" is permanently disabled
+Warning: LATCH primitive "SELF_PC[6]" is permanently disabled
+Warning: LATCH primitive "SELF_PC[7]" is permanently disabled
+Warning: LATCH primitive "SELF_R0[0]" is permanently disabled
+Warning: Output pins are stuck at VCC or GND
+    Warning (13410): Pin "LDC" is stuck at GND
+    Warning (13410): Pin "LDZ" is stuck at GND
+    Warning (13410): Pin "S[0]" is stuck at GND
+    Warning (13410): Pin "S[1]" is stuck at GND
+    Warning (13410): Pin "S[2]" is stuck at GND
+    Warning (13410): Pin "S[3]" is stuck at GND
+    Warning (13410): Pin "M" is stuck at GND
+    Warning (13410): Pin "ABUS" is stuck at GND
+    Warning (13410): Pin "PCINC" is stuck at GND
+    Warning (13410): Pin "LPC" is stuck at GND
+    Warning (13410): Pin "PCADD" is stuck at GND
+    Warning (13410): Pin "LIR" is stuck at GND
+    Warning (13410): Pin "LONG" is stuck at GND
 Info: Promoted pin-driven signal(s) to global signal
     Info: Promoted clear signal driven by pin "CLR" to global clear signal
     Info: Promoted clock signal driven by pin "T3" to global clock signal
-Info: Implemented 79 device resources after synthesis - the final resource count might be different
+Warning: Design contains 7 input pin(s) that do not drive logic
+    Warning (15610): No output dependent on input pin "C"
+    Warning (15610): No output dependent on input pin "Z"
+    Warning (15610): No output dependent on input pin "IR[4]"
+    Warning (15610): No output dependent on input pin "IR[5]"
+    Warning (15610): No output dependent on input pin "IR[6]"
+    Warning (15610): No output dependent on input pin "IR[7]"
+    Warning (15610): No output dependent on input pin "W[3]"
+Info: Implemented 80 device resources after synthesis - the final resource count might be different
     Info: Implemented 14 input pins
     Info: Implemented 27 output pins
     Info: Implemented 35 macrocells
-    Info: Implemented 3 shareable expanders
+    Info: Implemented 4 shareable expanders
 Info: Generated suppressed messages file D:/Code/Github/HD-CPU/nopipe/HDCPU.map.smsg
-Info: Quartus II Analysis & Synthesis was successful. 0 errors, 15 warnings
+Info: Quartus II Analysis & Synthesis was successful. 0 errors, 91 warnings
     Info: Peak virtual memory: 224 megabytes
-    Info: Processing ended: Sun Jul 04 13:11:36 2021
-    Info: Elapsed time: 00:00:03
-    Info: Total CPU time (on all processors): 00:00:03
+    Info: Processing ended: Sun Jul 04 15:00:00 2021
+    Info: Elapsed time: 00:00:01
+    Info: Total CPU time (on all processors): 00:00:01
 
 
 +------------------------------------------+
