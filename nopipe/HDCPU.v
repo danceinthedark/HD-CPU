@@ -31,25 +31,31 @@ module HDCPU(
 
     reg ST0  = 0;
     reg SST0 = 0;
+    reg [2:0] flag = 0;
+    reg EI = 1;
+    reg [7:0] PC = 0;
 
     always @(negedge T3 or negedge CLR)
     begin
         if (!CLR) ST0 <= 0;
         else if (!T3) begin
             if (SST0 == 1'b1)
-                ST0 = SST0; // ÊúâSST0 == 1Â∞±Á´ãÂàªST0    = 1
+                ST0 = SST0; // ”–SST0 == 1æÕ¡¢øÃST0    = 1
             else if (SW == 3'b100 && ST0 && W[2])
                 ST0 = 0;
         end
     end
 
 
-    always @(SW or W or CLR or IR) // ?ÊòØÂê¶ÈúÄË¶ÅÊääT3‰∏ìÈó®ÂÜôÊàêËÑâÂÜ≤ÂΩ¢Âºè
+    always @(SW or W or CLR or IR) // ? «∑Ò–Ë“™∞—T3◊®√≈–¥≥…¬ˆ≥Â–Œ Ω
     begin
         {LDC, LDZ, CIN, M, ABUS, DRW, PCINC, LPC, LAR, PCADD, ARINC, SELCTL, MEMW, STOP, LIR, SBUS, MBUS, SHORT, LONG, S, SEL} = 0;
 
-        if (CLR == 0)
+        if (CLR == 0) begin
             SST0 <= 0;
+            PC <= 0;
+            EI <= 1;
+        end
         else begin
             case (SW)
                 3'b001: begin
@@ -82,10 +88,10 @@ module HDCPU(
                 end
                 3'b100: begin
 
-                    SBUS   <= W[1]||W[2];
-                    SELCTL <= W[1]||W[2];
-                    DRW    <= W[1]||W[2];
-                    STOP   <= W[1]||W[2];
+                    SBUS   <= W[1] || W[2];
+                    SELCTL <= W[1] || W[2];
+                    DRW    <= W[1] || W[2];
+                    STOP   <= W[1] || W[2];
                     SST0   <= !ST0&&W[2];
                     SEL[3] <= ST0;
                     SEL[2] <= W[2];
@@ -93,92 +99,148 @@ module HDCPU(
                     SEL[0] <= W[1];
                 end
                 3'b000: begin
-                    // ÂºÄÂßãÊâßË°åSW == 000ÁöÑÊÉÖÂÜµ--->
-                    LIR   = W[1];
-                    PCINC = W[1];
-                    case (IR)
-                        4'b0001: begin // ADD
-                            S    = 4'b1001;
-                            CIN  = W[2];
-                            ABUS = W[2];
-                            DRW  = W[2];
-                            LDZ  = W[2];
-                            LDC  = W[2];
+                    // ø™ º÷¥––SW == 000µƒ«Èøˆ--->
+                    case (flag)
+                        // »°÷∏¡Ó÷¥––÷∏¡Ó
+                        3'b000: begin
+                            LIR   = W[1];
+                            PCINC = W[1];
+                            if (EI)
+                                PC = PC + 1;
+                            case (IR)
+                                4'b0001: begin // ADD
+                                    S    = 4'b1001;
+                                    CIN  = W[2];
+                                    ABUS = W[2];
+                                    DRW  = W[2];
+                                    LDZ  = W[2];
+                                    LDC  = W[2];
+                                end
+                                4'b0010: begin // SUB
+                                    S    = 4'b0110;
+                                    ABUS = W[2];
+                                    DRW  = W[2];
+                                    LDZ  = W[2];
+                                    LDC  = W[2];
+                                end
+                                4'b0011: begin // AND
+                                    M    = W[2];
+                                    S    = 4'b1011;
+                                    ABUS = W[2];
+                                    DRW  = W[2];
+                                    LDZ  = W[2];
+                                end
+                                4'b0100: begin // INC
+                                    S    = 4'b0000;
+                                    ABUS = W[2];
+                                    DRW  = W[2];
+                                    LDZ  = W[2];
+                                    LDC  = W[2];
+                                end
+                                4'b0101: begin // LD
+                                    M    = W[2];
+                                    S    = 4'b1010;
+                                    ABUS = W[2];
+                                    LAR  = W[2];
+                                    LONG = W[2];
+                                    DRW  = W[3];
+                                    MBUS = W[3];
+                                end
+                                4'b0110: begin // ST
+                                    M    = W[2] || W[3];
+                                    S    = { 1'b1, W[2], 1'b1, W[2] };
+                                    ABUS = W[2] || W[3];
+                                    LAR  = W[2];
+                                    LONG = W[2];
+                                    MEMW = W[3];
+                                end
+                                4'b0111: // JC
+                                    if (C == 1) begin
+                                        PCADD = W[2];
+                                        if(EI) begin
+                                            LONG = W[2];
+                                            ABUS = W[3];
+                                            SEL3 = !W[3];
+                                            SEL2 = !W[3];
+                                            S = 1100;
+                                            SELCTL = W[3]
+                                            CIN = W[3]
+                                            DRW = W[3]
+                                            LDZ = W[3]
+                                            LDC = W[3]
+                                            flag = 1;
+                                        end
+                                    end
+                                4'b1000: // JZ
+                                    if (Z == 1) begin
+                                        PCADD = W[2];
+                                        if(EI) begin
+                                            LONG = W[2];
+                                            ABUS = W[3];
+                                            SEL3 = !W[3];
+                                            SEL2 = !W[3];
+                                            S = 1100;
+                                            SELCTL = W[3]
+                                            CIN = W[3]
+                                            DRW = W[3]
+                                            LDZ = W[3]
+                                            LDC = W[3]
+                                            flag = 1;
+                                        end
+                                    end
+                                4'b1001: begin // JMP
+                                    M    = W[2];
+                                    S    = 4'b1111;
+                                    ABUS = W[2];
+                                    LPC  = W[2];
+                                    // TODO: PCÕ¨≤Ω
+                                end
+                                // ∂ÓÕ‚÷∏¡Ó
+                                4'b1010: begin // OUT
+                                    M    = W[2];
+                                    S    = 4'b1010;
+                                    ABUS = W[2];
+                                end
+                                4'b1011: begin // IRET
+                                    SHORT = W[1];
+                                    flag = 5;
+                                end
+                                4'b1100: begin // OR
+                                    M    = W[2];
+                                    S    = 4'b1110;
+                                    ABUS = W[2];
+                                    DRW  = W[2];
+                                    LDZ  = W[2];
+                                end
+                                4'b1101: begin // XOR
+                                    M    = W[2];
+                                    S    = 4'b0110;
+                                    ABUS = W[2];
+                                    DRW  = W[2];
+                                    LDZ  = W[2];
+                                end
+                                4'b1110: begin // STP
+                                    STOP = W[2];
+                                end
+                                default: S = 4'b0000;
+                            endcase
+                            // <---SW == 000µƒ«Èøˆ÷¥––ÕÍ±œ
                         end
-                        4'b0010: begin // SUB
-                            S    = 4'b0110;
-                            ABUS = W[2];
-                            DRW  = W[2];
-                            LDZ  = W[2];
-                            LDC  = W[2];
+                        // Ω´R0ºƒ¥Ê∆˜Ã·»°≤¢±£¥Ê÷¡»Ìº˛
+                        3'b001: begin
                         end
-                        4'b0011: begin // AND
-                            M    = W[2];
-                            S    = 4'b1011;
-                            ABUS = W[2];
-                            DRW  = W[2];
-                            LDZ  = W[2];
+                        // Ω´PCÃ·»°÷¡R0ºƒ¥Ê∆˜
+                        3'b010: begin
                         end
-                        4'b0100: begin // INC
-                            S    = 4'b0000;
-                            ABUS = W[2];
-                            DRW  = W[2];
-                            LDZ  = W[2];
-                            LDC  = W[2];
+                        // Ω´R0ºƒ¥Ê∆˜Ã·»°÷¡»Ìº˛
+                        3'b011: begin
                         end
-                        4'b0101: begin // LD
-                            M    = W[2];
-                            S    = 4'b1010;
-                            ABUS = W[2];
-                            LAR  = W[2];
-                            LONG = W[2];
-                            DRW  = W[3];
-                            MBUS = W[3];
+                        // ª÷∏¥R0≥ı º÷µ
+                        3'b100: begin
                         end
-                        4'b0110: begin // ST
-                            M    = W[2] ||W[3];
-                            S    = {1'b1,W[2],1'b1,W[2]};
-                            ABUS = W[2] || W[3];
-                            LAR  = W[2];
-                            LONG = W[2];
-                            MEMW = W[3];
+                        // ª÷∏¥PC≥ı º÷µ
+                        3'b101: begin
                         end
-                        4'b0111: // JC
-                            if (C == 1) PCADD = W[2];
-                        4'b1000: // JZ
-                            if (Z == 1) PCADD = W[2];
-                        4'b1001: begin // JMP
-                            M    = W[2];
-                            S    = 4'b1111;
-                            ABUS = W[2];
-                            LPC  = W[2];
-                        end
-                        4'b1110: begin // STP
-                            STOP = W[2];
-                        end
-                        // È¢ùÂ§ñÊåá‰ª§
-                        4'b1010: begin // OUT
-                            M    = W[2];
-                            S    = 4'b1010;
-                            ABUS = W[2];
-                        end
-                        4'b1011: begin // XOR
-                            M    = W[2];
-                            S    = 4'b0110;
-                            ABUS = W[2];
-                            DRW  = W[2];
-                            LDZ  = W[2];
-                        end
-                        4'b1100: begin // OR
-                            M    = W[2];
-                            S    = 4'b1110;
-                            ABUS = W[2];
-                            DRW  = W[2];
-                            LDZ  = W[2];
-                        end
-                        default: S = 4'b0000;
-                    endcase
-                    // <---SW == 000ÁöÑÊÉÖÂÜµÊâßË°åÂÆåÊØï
                 end
                 // default:
             endcase
