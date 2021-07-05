@@ -47,9 +47,9 @@ module HDCPU(
             flag = 0;
         end
         else if (!T3) begin
+            flag = fflag;
             if (SST0 == 1'b1) begin
                 ST0 = SST0; // ÓÐSST0 == 1¾ÍÁ¢¿ÌST0    = 1
-                flag = fflag;
             end
             else if (SW == 3'b100 && ST0 && W[2])
                 ST0 = 0;
