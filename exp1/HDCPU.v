@@ -45,10 +45,11 @@ module HDCPU(
 
     always @(W, CLR) // ?是否需要把T3专门写成脉冲形式
     begin
-        {LDC, LDZ, CIN, M, ABUS, DRW, PCINC, LPC, LAR, PCADD, ARINC, SELCTL, MEMW, STOP, LIR, SBUS, MBUS, SHORT, LONG, S, SEL} = 0;
-        S = 0;
-        if (CLR == 0)
-            SST0 <= 0;
+        {LDC, LDZ, CIN, M, ABUS, DRW, PCINC, LPC, LAR, PCADD, ARINC, SELCTL, MEMW, STOP, LIR, SBUS, MBUS, SHORT, LONG, S, SEL, SST0} = 0;
+        if (CLR == 0)begin
+            
+        end
+        
         else begin
             case (SW)
                 3'b001: begin
