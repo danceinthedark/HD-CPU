@@ -29,4 +29,26 @@ module HDCPU(
     output reg LONG
     );
 
+    reg [2:0] flag;
+
+    always @(W)
+    begin
+        flag = 0;
+        ABUS = 0;
+        CIN = 0;
+        PCINC = 0;
+        case (flag)
+            3'b000: begin
+                ABUS = 1;
+                flag = 3'b001;
+            end
+            3'b001: begin
+                CIN = 1;
+                flag = 3'b010;
+            end
+            3'b010: begin
+                PCINC = 1;
+            end
+        endcase
+    end
 endmodule

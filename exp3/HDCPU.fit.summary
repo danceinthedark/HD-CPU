@@ -1,9 +1,9 @@
-Fitter Status : Successful - Mon Jul 05 14:08:22 2021
+Fitter Status : Successful - Mon Jul 05 15:57:05 2021
 Quartus II Version : 9.1 Build 222 10/21/2009 SJ Full Version
 Revision Name : HDCPU
 Top-level Entity Name : HDCPU
 Family : MAX7000S
 Device : EPM7128SLC84-15
 Timing Models : Final
-Total macrocells : 79 / 128 ( 62 % )
+Total macrocells : 80 / 128 ( 63 % )
 Total pins : 46 / 68 ( 68 % )
