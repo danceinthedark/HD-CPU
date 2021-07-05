@@ -94,6 +94,3 @@ set_location_assignment PIN_12 -to W[1]
 set_location_assignment PIN_84 -to Z
 set_global_assignment -name MISC_FILE "G:/Datas/Develop/Codes/Github/HD-CPU/HDCPU.dpf"
 set_global_assignment -name MISC_FILE "G:/Datas/Develop/Codes/Github/HD-CPU/nopipe/HDCPU.dpf"
-set_location_assignment PIN_61 -to PULSE
-set_global_assignment -name MISC_FILE "D:/Code/Github/HD-CPU/nopipe/HDCPU.dpf"
-set_global_assignment -name MISC_FILE "D:/Code/Github/HD-CPU/exp3/HDCPU.dpf"

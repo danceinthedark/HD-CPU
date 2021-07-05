@@ -52,7 +52,7 @@ module HDCPU(
         end
     end
 
-    always @(SW, W, CLR, IR, PULSE) // ?是否需要把T3专门写成脉冲形式
+    always @(W, CLR, PULSE) // ?是否需要把T3专门写成脉冲形式
     begin
         {LDC, LDZ, CIN, M, ABUS, DRW, PCINC, LPC, LAR, PCADD, ARINC, SELCTL, MEMW, STOP, LIR, SBUS, MBUS, SHORT, LONG, S, SEL} = 0;
 
@@ -163,16 +163,16 @@ module HDCPU(
                                     end
                                     4'b0110: begin // ST
                                         M    = W[2] || W[3];
-                                        S    = { 1'b1, W[2], 1'b1, W[2] };
+                                        S    = (W[2]) ? 4'b1111 : 4'b1010;
                                         ABUS = W[2] || W[3];
                                         LAR  = W[2];
                                         LONG = W[2];
                                         MEMW = W[3];
                                     end
-                                    4'b0111: begin // JC
+                                    4'b0111:// JC
                                         if (C == 1) begin
                                             PCADD = W[2];
-                                            //if(EI) begin
+                                            if(EI) begin
                                                 ABUS = W[2];
                                                 SEL[3] = !W[2];
                                                 SEL[2] = !W[2];
@@ -182,11 +182,10 @@ module HDCPU(
                                                 DRW = W[2];
                                                 LDZ = W[2];
                                                 LDC = W[2];
-                                                flag = 1;
-                                            //end
+                                                if(W[2]) flag = 1;
+                                            end
                                         end
-                                    end
-                                    4'b1000: begin // JZ
+                                    4'b1000:// JZ
                                         if (Z == 1) begin
                                             PCADD = W[2];
                                             if(EI) begin
@@ -199,10 +198,9 @@ module HDCPU(
                                                 DRW = W[2];
                                                 LDZ = W[2];
                                                 LDC = W[2];
-                                                flag = 1;
+                                                if(W[2]) flag = 1;
                                             end
                                         end
-                                    end
                                     4'b1001: begin // JMP
                                         M    = W[2];
                                         S    = 4'b1111;
@@ -242,8 +240,9 @@ module HDCPU(
                                 // <---SW == 000的情况执行完毕
                             end
                         end
-                        // 将SELF_R0寄存器提取并保存至软件
-                        3'b001: begin
+                        // flag1将SELF_R0寄存器提取并保存至软件
+                        // flag3将SELF_R0寄存器提取至软件
+                        3'b001, 3'b011: begin
                             SELF_R0 = SELF_R0 << 1 + C;
                             SHORT = W[1];
                             if (count < 7) begin
@@ -259,7 +258,12 @@ module HDCPU(
                                 LDC = W[1];
                             end
                             else begin
-                                flag = 2;
+                                if (flag == 3)begin
+                                    SELF_PC = SELF_PC + SELF_IR & 8'h0f;
+                                    if (SELF_IR >= 8)
+                                        SELF_PC = SELF_PC - 16;
+                                end
+                                flag = flag + 1;
                                 count = 0;
                             end
                         end
@@ -310,31 +314,7 @@ module HDCPU(
                                     flag = 3;
                             end
                         end
-                        // 将SELF_R0寄存器提取至软件
-                        3'b011: begin
-                            SELF_IR = SELF_IR << 1;
-                            SELF_IR = SELF_IR + C;
-                            SHORT = W[1];
-                            if (count < 7) begin
-                                count = count + 1;
-                                ABUS = W[1];
-                                SEL[3] = !W[1];
-                                SEL[2] = !W[1];
-                                S = 4'b1100;
-                                SELCTL = W[1];
-                                CIN = W[1];
-                                DRW = W[1];
-                                LDZ = W[1];
-                                LDC = W[1];
-                            end
-                            else begin
-                                count = 0;
-                                flag = 4;
-                                SELF_PC = SELF_PC + SELF_IR & 8'h0f;
-                                if (SELF_IR >= 8)
-                                    SELF_PC = SELF_PC - 16;
-                            end
-                        end
+
                         // 恢复SELF_R0初始值
                         3'b100: begin
                             if (count < 8) begin

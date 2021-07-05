@@ -32,7 +32,7 @@ module HDCPU(
     reg ST0  = 0;
     reg SST0 = 0;
 
-    always @(negedge T3 or negedge CLR)
+    always @(negedge T3, negedge CLR)
     begin
         if (!CLR) ST0 <= 0;
         else if (!T3) begin
@@ -43,11 +43,10 @@ module HDCPU(
         end
     end
 
-
-    always @(SW or W or CLR or IR) // ?是否需要把T3专门写成脉冲形式
+    always @(W, CLR) // ?是否需要把T3专门写成脉冲形式
     begin
         {LDC, LDZ, CIN, M, ABUS, DRW, PCINC, LPC, LAR, PCADD, ARINC, SELCTL, MEMW, STOP, LIR, SBUS, MBUS, SHORT, LONG, S, SEL} = 0;
-
+        S = 0;
         if (CLR == 0)
             SST0 <= 0;
         else begin
