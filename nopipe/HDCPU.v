@@ -30,14 +30,14 @@ module HDCPU(
     output reg LONG
     );
 
-    reg ST0  = 0;
-    reg SST0 = 0;
-    reg [2:0] flag = 0;
-    reg EI = 1;
-    reg [7:0] SELF_PC = 0;
+    reg EI;
+    reg SST0;
+    reg ST0;
     reg [2:0] count;
-    reg [7:0] SELF_R0;
+    reg [2:0] flag;
     reg [7:0] SELF_IR;
+    reg [7:0] SELF_PC;
+    reg [7:0] SELF_R0;
 
     always @(negedge T3, negedge CLR)
     begin
@@ -57,10 +57,13 @@ module HDCPU(
         {LDC, LDZ, CIN, M, ABUS, DRW, PCINC, LPC, LAR, PCADD, ARINC, SELCTL, MEMW, STOP, LIR, SBUS, MBUS, SHORT, LONG, S, SEL} = 0;
 
         if (!CLR) begin
-            SST0 = 0;
             count = 0;
-            SELF_PC = 0;
+            flag = 0;
             EI = 1;
+            SELF_IR = 0;
+            SELF_PC = 0;
+            SELF_R0 = 0;
+            SST0 = 0;
         end
         else begin
             case (SW)
@@ -166,40 +169,40 @@ module HDCPU(
                                         LONG = W[2];
                                         MEMW = W[3];
                                     end
-                                    4'b0111: // JC
+                                    4'b0111: begin // JC
                                         if (C == 1) begin
                                             PCADD = W[2];
-                                            if(EI) begin
-                                                LONG = W[2];
-                                                ABUS = W[3];
-                                                SEL[3] = !W[3];
-                                                SEL[2] = !W[3];
-                                                S = 1100;
-                                                SELCTL = W[3];
-                                                CIN = W[3];
-                                                DRW = W[3];
-                                                LDZ = W[3];
-                                                LDC = W[3];
+                                            //if(EI) begin
+                                                ABUS = W[2];
+                                                SEL[3] = !W[2];
+                                                SEL[2] = !W[2];
+                                                S = 4'b1100;
+                                                SELCTL = W[2];
+                                                CIN = W[2];
+                                                DRW = W[2];
+                                                LDZ = W[2];
+                                                LDC = W[2];
                                                 flag = 1;
-                                            end
+                                            //end
                                         end
-                                    4'b1000: // JZ
+                                    end
+                                    4'b1000: begin // JZ
                                         if (Z == 1) begin
                                             PCADD = W[2];
                                             if(EI) begin
-                                                LONG = W[2];
-                                                ABUS = W[3];
-                                                SEL[3] = !W[3];
-                                                SEL[2] = !W[3];
-                                                S = 1100;
-                                                SELCTL = W[3];
-                                                CIN = W[3];
-                                                DRW = W[3];
-                                                LDZ = W[3];
-                                                LDC = W[3];
+                                                ABUS = W[2];
+                                                SEL[3] = !W[2];
+                                                SEL[2] = !W[2];
+                                                S = 4'b1100;
+                                                SELCTL = W[2];
+                                                CIN = W[2];
+                                                DRW = W[2];
+                                                LDZ = W[2];
+                                                LDC = W[2];
                                                 flag = 1;
                                             end
                                         end
+                                    end
                                     4'b1001: begin // JMP
                                         M    = W[2];
                                         S    = 4'b1111;
@@ -248,7 +251,7 @@ module HDCPU(
                                 ABUS = W[1];
                                 SEL[3] = !W[1];
                                 SEL[2] = !W[1];
-                                S = 1100;
+                                S = 4'b1100;
                                 SELCTL = W[1];
                                 CIN = W[1];
                                 DRW = W[1];
@@ -268,7 +271,7 @@ module HDCPU(
                                 SEL[3] = !W[1];
                                 SEL[2] = !W[1];
                                 SELCTL = W[1];
-                                S = 1100;
+                                S = 4'b1100;
                                 CIN = W[1];
                                 DRW = W[1];
                                 LDZ = W[1];
@@ -277,7 +280,7 @@ module HDCPU(
                                     SELCTL = W[2];
                                     SEL[3] = !W[2];
                                     SEL[2] = !W[2];
-                                    S = 0000;
+                                    S = 4'b0000;
                                     ABUS = W[2];
                                     DRW = W[2];
                                     LDZ = W[2];
@@ -294,7 +297,7 @@ module HDCPU(
                                 SEL[1] = 0;
                                 SEL[0] = 0;
                                 M = W[1];
-                                S = W[1] ? 1010 : 1100;
+                                S = W[1] ? 4'b1010 : 4'b1100;
                                 ABUS = W[1] || W[3];
                                 LAR = W[1];
                                 MBUS = W[2];
@@ -317,7 +320,7 @@ module HDCPU(
                                 ABUS = W[1];
                                 SEL[3] = !W[1];
                                 SEL[2] = !W[1];
-                                S = 1100;
+                                S = 4'b1100;
                                 SELCTL = W[1];
                                 CIN = W[1];
                                 DRW = W[1];
@@ -340,7 +343,7 @@ module HDCPU(
                                 SEL[3] = !W[1];
                                 SEL[2] = !W[1];
                                 SELCTL = W[1];
-                                S = 1100;
+                                S = 4'b1100;
                                 CIN = W[1];
                                 DRW = W[1];
                                 LDZ = W[1];
@@ -349,7 +352,7 @@ module HDCPU(
                                     SELCTL = W[2];
                                     SEL[3] = !W[2];
                                     SEL[2] = !W[2];
-                                    S = 0000;
+                                    S = 4'b0000;
                                     ABUS = W[2];
                                     DRW = W[2];
                                     LDZ = W[2];
@@ -372,7 +375,7 @@ module HDCPU(
                                 SEL[3] = !W[1];
                                 SEL[2] = !W[1];
                                 SELCTL = W[1];
-                                S = 1100;
+                                S = 4'b1100;
                                 CIN = W[1];
                                 DRW = W[1];
                                 LDZ = W[1];
@@ -381,7 +384,7 @@ module HDCPU(
                                     SELCTL = W[2];
                                     SEL[3] = !W[2];
                                     SEL[2] = !W[2];
-                                    S = 0000;
+                                    S = 4'b0000;
                                     ABUS = W[2];
                                     DRW = W[2];
                                     LDZ = W[2];
@@ -398,7 +401,7 @@ module HDCPU(
                                 SEL[1] = 0;
                                 SEL[0] = 0;
                                 M = 1;
-                                S = 1010;
+                                S = 4'b1010;
                                 ABUS = 1;
                                 LPC = 1;
                                 EI = 1;
