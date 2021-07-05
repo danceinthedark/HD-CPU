@@ -15,9 +15,9 @@ Failed Paths   : 0
 Type           : Worst-case tco
 Slack          : N/A
 Required Time  : None
-Actual Time    : 17.000 ns
+Actual Time    : 28.000 ns
 From           : ST0
-To             : ARINC
+To             : PCINC
 From Clock     : T3
 To Clock       : --
 Failed Paths   : 0
@@ -27,7 +27,7 @@ Slack          : N/A
 Required Time  : None
 Actual Time    : 26.000 ns
 From           : C
-To             : LIR
+To             : PCINC
 From Clock     : --
 To Clock       : --
 Failed Paths   : 0

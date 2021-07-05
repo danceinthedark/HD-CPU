@@ -91,7 +91,16 @@ module HDCPU(
                     SEL[1] <= (!ST0&&W[1])||(ST0 && W[2]);
                     SEL[0] <= W[1];
                 end
-                3'b000: begin
+                3'b000: 
+                    if(ST0==0)begin 
+                        LPC=W[1];
+                        SBUS=W[1];
+                        SST0=W[1];
+                        SHORT=W[1];
+                        STOP=W[1];
+                    end
+                    else 
+                    begin
                     // 开始执行SW == 000的情况--->
                     LIR   = W[1];
                     PCINC = W[1];

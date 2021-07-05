@@ -6,7 +6,7 @@ Type           : Worst-case tsu
 Slack          : N/A
 Required Time  : None
 Actual Time    : 39.000 ns
-From           : PULSE
+From           : SW[1]
 To             : flag[0]
 From Clock     : --
 To Clock       : T3
@@ -26,7 +26,7 @@ Type           : Worst-case tpd
 Slack          : N/A
 Required Time  : None
 Actual Time    : 115.000 ns
-From           : PULSE
+From           : SW[0]
 To             : S[2]
 From Clock     : --
 To Clock       : --
