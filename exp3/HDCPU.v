@@ -56,7 +56,7 @@ module HDCPU(
         end
     end
 
-    always @(W, CLR, PULSE) // ?是否需要把T3专门写成脉冲形式
+    always @(SW,W, CLR, PULSE) // ?是否需要把T3专门写成脉冲形式
     begin
         {LDC, LDZ, CIN, M, ABUS, DRW, PCINC, LPC, LAR, PCADD, ARINC, SELCTL, MEMW, STOP, LIR, SBUS, MBUS, SHORT, LONG, S, SEL, SST0} = 0;
 
@@ -67,11 +67,10 @@ module HDCPU(
             SELF_IR = 0;
             SELF_PC = 0;
             SELF_R0 = 0;
-            S = 0;
         end
         else begin
             case (SW)
-                3'b001: begin
+                3'b001: begin //写存储器
                     LAR    = W[1] && !ST0;
                     MEMW   = W[1] && ST0;
                     ARINC  = W[1] && ST0;
@@ -81,7 +80,7 @@ module HDCPU(
                     SELCTL = W[1];
                     SST0   = W[1];
                 end
-                3'b010: begin
+                3'b010: begin //读存储器
                     SBUS   = W[1] && !ST0;
                     LAR    = W[1] && !ST0;
                     SST0   = W[1] && !ST0;
@@ -99,7 +98,7 @@ module HDCPU(
                     SEL[1] = W[2];
                     SEL[0] = W[1] || W[2];
                 end
-                3'b100: begin
+                3'b100: begin //写寄存器
                     SBUS   = W[1] || W[2];
                     SELCTL = W[1] || W[2];
                     DRW    = W[1] || W[2];
@@ -109,6 +108,19 @@ module HDCPU(
                     SEL[2] = W[2];
                     SEL[1] = (!ST0&&W[1])||(ST0 && W[2]);
                     SEL[0] = W[1];
+                end
+                3'b110://显示当前flag，注意先010再110
+                begin
+                    S[0]=0;//LED4
+                    CIN=flag[2];
+                    LDC=flag[1];
+                    LDZ=flag[0];
+
+                    LIR = 0; //LED5;
+                    STOP=SELF_PC;
+                    MEMW=SELF_R0;
+                    LAR = EI;
+                    
                 end
                 3'b000: 
                 if(ST0==0)begin 
