@@ -5,9 +5,9 @@ Timing Analyzer Summary
 Type           : Worst-case tpd
 Slack          : N/A
 Required Time  : None
-Actual Time    : 42.000 ns
-From           : CLR
-To             : ABUS
+Actual Time    : 24.000 ns
+From           : SW[2]
+To             : LDZ
 From Clock     : --
 To Clock       : --
 Failed Paths   : 0

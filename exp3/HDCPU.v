@@ -56,7 +56,7 @@ module HDCPU(
         end
     end
 
-    always @(SW,W, CLR, PULSE) // ?是否需要把T3专门写成脉冲形式
+    always @(CLR, PULSE) // ?是否需要把T3专门写成脉冲形式
     begin
         {LDC, LDZ, CIN, M, ABUS, DRW, PCINC, LPC, LAR, PCADD, ARINC, SELCTL, MEMW, STOP, LIR, SBUS, MBUS, SHORT, LONG, S, SEL, SST0} = 0;
 
@@ -111,15 +111,8 @@ module HDCPU(
                 end
                 3'b110://显示当前flag，注意先010再110
                 begin
-                    S[0]=0;//LED4
-                    CIN=flag[2];
-                    LDC=flag[1];
-                    LDZ=flag[0];
-
-                    LIR = 0; //LED5;
-                    STOP=SELF_PC;
-                    MEMW=SELF_R0;
-                    LAR = EI;
+                    {M,S,CIN,LDC,LDZ}=SELF_PC;
+                    {SEL}={EI,flag};
                     
                 end
                 3'b000: 

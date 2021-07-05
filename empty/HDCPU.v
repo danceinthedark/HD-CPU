@@ -31,24 +31,32 @@ module HDCPU(
 
     reg [2:0] flag;
 
-    always @(W)
+    always @(flag,W)
     begin
         flag = 0;
         ABUS = 0;
         CIN = 0;
         PCINC = 0;
-        case (flag)
-            3'b000: begin
-                ABUS = 1;
-                flag = 3'b001;
-            end
+        case (SW)
             3'b001: begin
-                CIN = 1;
-                flag = 3'b010;
+                {M,S,CIN,LDC,LDZ}=0;
+                {M,S,CIN,LDC,LDZ}=~{M,S,CIN,LDC,LDZ};
+                if(W[1])begin
+                if(ABUS==0) ABUS = 1;
+                //else ABUS = 0;
+                end
             end
             3'b010: begin
-                PCINC = 1;
+                {LIR,STOP,MEMW,LAR,ARINC,LPC,PCINC,DRW} = 0;
+                {LIR,STOP,MEMW,LAR,ARINC,LPC,PCINC,DRW}=~{LIR,STOP,MEMW,LAR,ARINC,LPC,PCINC,DRW};
             end
+            3'b100: begin
+                SEL=4'b1111;
+            end
+            default:
+                begin
+                    {LDC, LDZ, CIN, M, ABUS, DRW, PCINC, LPC, LAR, PCADD, ARINC, SELCTL, MEMW, STOP, LIR, SBUS, MBUS, SHORT, LONG, S, SEL}=0;
+                end
         endcase
     end
 endmodule
