@@ -4,7 +4,7 @@ JedecChain;
 	DefaultMfr(6E);
 
 	P ActionCode(Cfg)
-		Device PartName(EPM7128SL84) Path("G:/Datas/Develop/Codes/Github/HD-CPU/exp3/") File("HDCPU.pof") MfrSpec(OpMask(1));
+		Device PartName(EPM7128SL84) Path("E:/dxw/教学课件/大二/大二下/计组课程设计/HardConnectWire/HD-CPU/exp3/") File("HDCPU.pof") MfrSpec(OpMask(1));
 
 ChainEnd;
 
