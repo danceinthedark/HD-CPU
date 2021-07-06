@@ -16,7 +16,7 @@ Type           : Worst-case tco
 Slack          : N/A
 Required Time  : None
 Actual Time    : 27.000 ns
-From           : EI
+From           : EI~reg0
 To             : LDC
 From Clock     : T3
 To Clock       : --
@@ -46,7 +46,7 @@ Type           : Clock Setup: 'T3'
 Slack          : N/A
 Required Time  : None
 Actual Time    : 20.41 MHz ( period = 49.000 ns )
-From           : EI
+From           : EI~reg0
 To             : SELF_C[1]
 From Clock     : T3
 To Clock       : T3

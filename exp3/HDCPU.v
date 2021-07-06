@@ -27,18 +27,22 @@ module HDCPU(
     output reg SBUS,
     output reg MBUS,
     output reg SHORT,
-    output reg LONG
+    output reg LONG,
+    output reg EI,
+    output reg [2:0] flag,
+    output reg [2:0] count
     );
 
-    reg EI,EEI;
+    reg EEI;
     reg SST0;
-    reg ST0,MIDDLE;
-    reg [2:0] count,ccount;
-    reg [2:0] flag,fflag;
-    reg [7:0] SELF_IR,SELF_PC,SELF_R0;
-    reg [7:0] SSELF_IR,SSELF_PC,SSELF_R0;
-    reg [1:0] SELF_C,SELF_Z,jmp_flag,iret_flag;
-    reg [1:0] SSELF_C,SSELF_Z,jjmp_flag,iiret_flag;
+    reg ST0, MIDDLE;
+    reg [2:0] ccount;
+    reg [2:0] fflag;
+    reg [7:0] SELF_IR,SELF_PC, SELF_R0;
+    reg [7:0] SSELF_IR, SSELF_PC, SSELF_R0;
+    reg [1:0] SELF_C, SELF_Z, jmp_flag, iret_flag;
+    reg [1:0] SSELF_C, SSELF_Z, jjmp_flag, iiret_flag;
+
     always @(negedge T3, negedge CLR)
     begin
         if (!CLR) begin
@@ -124,22 +128,21 @@ module HDCPU(
                     SELCTL = W[1] || W[2];
                     DRW    = W[1] || W[2];
                     STOP   = W[1] || W[2];
-                    SST0   = !ST0&&W[2];
+                    SST0   = !ST0 && W[2];
                     SEL[3] = ST0;
                     SEL[2] = W[2];
-                    SEL[1] = (!ST0&&W[1])||(ST0 && W[2]);
+                    SEL[1] = (!ST0 && W[1]) || (ST0 && W[2]);
                     SEL[0] = W[1];
                 end
                 3'b000:
-                if(ST0==0)begin
+                if(ST0 == 0) begin
                     LPC = W[1];
                     SBUS = W[1];
                     SST0 = W[1];
                     SHORT = W[1];
                     STOP = W[1];
                 end
-                else
-                begin
+                else begin
                     // 开始执行SW == 000的情况--->
                     case (flag)
                         // 取指令执行指令
@@ -234,7 +237,7 @@ module HDCPU(
                         // flag==4 恢复SELF_R0初始值
                         // flag==5 IRET将SELF_PC打入PC
                         3'b001,3'b010,3'b011,3'b100,3'b101: begin
-                            ccount = count + W[1] && (count < 8);
+                            ccount = count + W[1];
                             if (W[1])
 								if (flag == 1) SSELF_R0 = (SELF_R0 << 1) + C;
 								else if (flag== 3)SSELF_IR = (SELF_IR << 1) + C;
