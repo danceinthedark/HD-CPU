@@ -24,10 +24,10 @@ VECTOR("D:/Code/Github/HD-CPU/exp3/db/HDCPU.sim.cvwf")
 {
 	ZOOM{
 		ZBEGIN = 0;
-		ZEND = 33333;
-		NUMERATOR = 765;
-		DENOMINATOR = 33333;
-		TOP_INDEX = 31;
+		ZEND = 30000;
+		NUMERATOR = 998;
+		DENOMINATOR = 30000;
+		TOP_INDEX = 29;
 	}
 	CLOCK{
 		PERIOD = 10000;
@@ -270,24 +270,8 @@ VECTOR("D:/Code/Github/HD-CPU/exp3/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "flag";
+		SIGNAL = "T3";
 		INDEX = 29;
-		FORMAT = T;
-		SCALE = 1;
-		VISIBLE = Y;
-		FLAG = N;
-	}
-	LINE{
-		SIGNAL = "flag[0]";
-		INDEX = 30;
-		FORMAT = E;
-		SCALE = 1;
-		VISIBLE = Y;
-		FLAG = N;
-	}
-	LINE{
-		SIGNAL = "PULSE";
-		INDEX = 31;
 		FORMAT = E;
 		SCALE = 1;
 		VISIBLE = Y;
@@ -295,7 +279,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3/db/HDCPU.sim.cvwf")
 	}
 	LINE{
 		SIGNAL = "W";
-		INDEX = 32;
+		INDEX = 30;
 		FORMAT = T;
 		SCALE = 1;
 		VISIBLE = Y;
@@ -303,7 +287,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3/db/HDCPU.sim.cvwf")
 	}
 	LINE{
 		SIGNAL = "W[3]";
-		INDEX = 33;
+		INDEX = 31;
 		FORMAT = E;
 		SCALE = 1;
 		VISIBLE = Y;
@@ -311,7 +295,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3/db/HDCPU.sim.cvwf")
 	}
 	LINE{
 		SIGNAL = "W[2]";
-		INDEX = 34;
+		INDEX = 32;
 		FORMAT = E;
 		SCALE = 1;
 		VISIBLE = Y;
@@ -319,6 +303,22 @@ VECTOR("D:/Code/Github/HD-CPU/exp3/db/HDCPU.sim.cvwf")
 	}
 	LINE{
 		SIGNAL = "W[1]";
+		INDEX = 33;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "flag";
+		INDEX = 34;
+		FORMAT = T;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "flag[0]";
 		INDEX = 35;
 		FORMAT = E;
 		SCALE = 1;
@@ -326,7 +326,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "Z";
+		SIGNAL = "PULSE";
 		INDEX = 36;
 		FORMAT = E;
 		SCALE = 1;
@@ -334,7 +334,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "C";
+		SIGNAL = "CLR";
 		INDEX = 37;
 		FORMAT = E;
 		SCALE = 1;
@@ -342,7 +342,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "CLR";
+		SIGNAL = "Z";
 		INDEX = 38;
 		FORMAT = E;
 		SCALE = 1;
@@ -350,8 +350,16 @@ VECTOR("D:/Code/Github/HD-CPU/exp3/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "IR";
+		SIGNAL = "C";
 		INDEX = 39;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "IR";
+		INDEX = 40;
 		FORMAT = T;
 		SCALE = 1;
 		VISIBLE = Y;
@@ -359,14 +367,6 @@ VECTOR("D:/Code/Github/HD-CPU/exp3/db/HDCPU.sim.cvwf")
 	}
 	LINE{
 		SIGNAL = "IR[7]";
-		INDEX = 40;
-		FORMAT = E;
-		SCALE = 1;
-		VISIBLE = Y;
-		FLAG = N;
-	}
-	LINE{
-		SIGNAL = "IR[6]";
 		INDEX = 41;
 		FORMAT = E;
 		SCALE = 1;
@@ -374,7 +374,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "IR[5]";
+		SIGNAL = "IR[6]";
 		INDEX = 42;
 		FORMAT = E;
 		SCALE = 1;
@@ -382,7 +382,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "IR[4]";
+		SIGNAL = "IR[5]";
 		INDEX = 43;
 		FORMAT = E;
 		SCALE = 1;
@@ -390,8 +390,16 @@ VECTOR("D:/Code/Github/HD-CPU/exp3/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "SW";
+		SIGNAL = "IR[4]";
 		INDEX = 44;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SW";
+		INDEX = 45;
 		FORMAT = T;
 		SCALE = 1;
 		VISIBLE = Y;
@@ -399,14 +407,6 @@ VECTOR("D:/Code/Github/HD-CPU/exp3/db/HDCPU.sim.cvwf")
 	}
 	LINE{
 		SIGNAL = "SW[2]";
-		INDEX = 45;
-		FORMAT = E;
-		SCALE = 1;
-		VISIBLE = Y;
-		FLAG = N;
-	}
-	LINE{
-		SIGNAL = "SW[1]";
 		INDEX = 46;
 		FORMAT = E;
 		SCALE = 1;
@@ -414,7 +414,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "SW[0]";
+		SIGNAL = "SW[1]";
 		INDEX = 47;
 		FORMAT = E;
 		SCALE = 1;
@@ -422,7 +422,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "T3";
+		SIGNAL = "SW[0]";
 		INDEX = 48;
 		FORMAT = E;
 		SCALE = 1;
