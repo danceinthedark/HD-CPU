@@ -97,3 +97,4 @@ set_global_assignment -name MISC_FILE "G:/Datas/Develop/Codes/Github/HD-CPU/nopi
 set_location_assignment PIN_61 -to PULSE
 set_global_assignment -name MISC_FILE "D:/Code/Github/HD-CPU/nopipe/HDCPU.dpf"
 set_global_assignment -name MISC_FILE "D:/Code/Github/HD-CPU/exp3/HDCPU.dpf"
+set_global_assignment -name VECTOR_WAVEFORM_FILE HDCPU.vwf

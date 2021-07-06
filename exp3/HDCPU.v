@@ -41,26 +41,36 @@ module HDCPU(
     reg [1:0] SSELF_C,SSELF_Z,jjmp_flag,iiret_flag;
     always @(negedge T3, negedge CLR)
     begin
-        case (CLR)
-            1:begin
-                SELF_IR = SSELF_IR;
-                SELF_PC = SSELF_PC;
-                SELF_R0 = SSELF_R0;
-                SELF_C = SSELF_C;
-                SELF_Z = SSELF_Z;
-                jmp_flag = jjmp_flag;
-                iret_flag = iiret_flag;
-                count = ccount;
-                flag = fflag;
-                EI = EEI;
-                ST0 = (SST0) ? SST0 : 0;
+        if (!CLR) begin
+            ST0 = 0;
+            flag = 0;
+            count = 0;
+            SELF_IR = 0;
+            SELF_PC = 0;
+            SELF_R0 = 0;
+            SELF_Z = 0;
+            SELF_C = 0;
+            jmp_flag = 0;
+            iret_flag = 0;
+            EI = 1;
+        end
+        else if (!T3) begin
+            flag = fflag;
+            count = ccount;
+            SELF_IR = SSELF_IR;
+            SELF_PC = SSELF_PC;
+            SELF_R0 = SSELF_R0;
+            SELF_C = SSELF_C;
+            SELF_Z = SSELF_Z;
+            jmp_flag = jjmp_flag;
+            iret_flag = iiret_flag;
+            EI = EEI;
+            if (SST0 == 1'b1) begin
+                ST0 = SST0; // 有SST0 == 1就立刻ST0    = 1
             end
-            0:begin
-                {SELF_IR, SELF_PC, SELF_R0, SELF_C, SELF_Z,
-                jmp_flag, iret_flag, count, flag, EI, ST0}=0;
-            end
-        endcase
-        
+            else if (SW == 3'b100 && ST0 && W[2])
+                ST0 = 0;
+        end
     end
 
     always @(CLR, PULSE) // ?是否需要把T3专门写成脉冲形式
@@ -120,15 +130,15 @@ module HDCPU(
                     SEL[1] = (!ST0&&W[1])||(ST0 && W[2]);
                     SEL[0] = W[1];
                 end
-                3'b000: 
-                if(ST0==0)begin 
+                3'b000:
+                if(ST0==0)begin
                     LPC = W[1];
                     SBUS = W[1];
                     SST0 = W[1];
                     SHORT = W[1];
                     STOP = W[1];
                 end
-                else 
+                else
                 begin
                     // 开始执行SW == 000的情况--->
                     case (flag)
@@ -185,7 +195,7 @@ module HDCPU(
                                     end
                                     4'b0111,4'b1000,4'b1001,4'b1011: begin // JC && JZ && JMP && IRET
                                         if ((IR==4'b0111 && ((SELF_C==0 && C) || SELF_C==2'b11))
-                                        || (IR==4'b1000 && ((SELF_Z==0 && Z) || SELF_Z==2'b11)) 
+                                        || (IR==4'b1000 && ((SELF_Z==0 && Z) || SELF_Z==2'b11))
                                         || IR>8) begin
                                             PCADD = W[2] && (IR<=8);
                                             ABUS = (EI || IR>8) && W[2];
@@ -225,14 +235,15 @@ module HDCPU(
                         // flag==5 IRET将SELF_PC打入PC
                         3'b001,3'b010,3'b011,3'b100,3'b101: begin
                             ccount = count + W[1] && (count < 8);
-                            if (flag == 1) SSELF_R0 = (SELF_R0 << 1) + C;
-                            else if (flag== 3)SSELF_IR = (SELF_IR << 1) + C;
+                            if (W[1])
+								if (flag == 1) SSELF_R0 = (SELF_R0 << 1) + C;
+								else if (flag== 3)SSELF_IR = (SELF_IR << 1) + C;
 
                             if (flag==1 || flag==3)MIDDLE = W[1];
-                            else MIDDLE = (W[1] || (W[2] && 
-                            ((IR==3'b100) ? SELF_R0[7-count] : SELF_PC[7-count]))); 
-                        
-                            SELCTL = (count == 8) || W[1];
+                            else MIDDLE = (W[1] || (W[2] &&
+                            ((flag == 4) ? SELF_R0[7-count] : SELF_PC[7-count])));
+
+                            SELCTL = (count == 8) || MIDDLE;
                             SEL[3] = (count < 8) && !MIDDLE;
                             SEL[2] = (count < 8) && !MIDDLE;
                             S = (W[1])?4'b1100:4'b0000;
@@ -245,7 +256,7 @@ module HDCPU(
                             if (count == 8)
                             begin
                                 case (flag)
-                                    3'b010:begin 
+                                    3'b010:begin
                                         SEL[3] = W[1];
                                         SEL[2] = W[1];
                                         SEL[1] = W[1];
@@ -262,7 +273,7 @@ module HDCPU(
                                         CIN = W[3];
                                         fflag = (W[3])?3:flag;
                                         ccount = (W[3])?0:count;
-                                    end 
+                                    end
                                     3'b101:begin
                                         ccount = 0;
                                         SHORT = W[1];
@@ -281,7 +292,7 @@ module HDCPU(
                                         iiret_flag = 0;
                                         jjmp_flag = 0;
                                         fflag = 0;
-                                    end 
+                                    end
                                     3'b001:begin
                                         SHORT = W[1];
                                         fflag = (iret_flag)?5:2;
@@ -297,7 +308,7 @@ module HDCPU(
                                         ccount = 0;
                                     end
                                 endcase
-                                
+
                             end
                         end
                         3'b110://将Rx传至R0或直接将SELF_PC赋值为SELF_R0(Rx=R0)
