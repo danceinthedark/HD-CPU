@@ -244,12 +244,9 @@ module HDCPU(
                             LDZ = (count < 8) && W[1];
                             LDC = (count < 8) && W[1];
                             CIN = (count < 8) && W[1];
-                            if (count==8)
+                            if (count == 8)
                             begin
-                                if (flag == 3'b001) begin
-                                    if (iret_flag) fflag = 5;
-                                    if (jmp_flag) fflag = 2;
-                                end
+                                if (flag == 3'b001) fflag = (iret_flag)?5:2;
                                 else begin
                                     fflag = 4;
                                     if (jmp_flag == 0)begin
@@ -330,29 +327,34 @@ module HDCPU(
                             end
                         end
                         3'b110://将Rx传至R0或直接将SELF_PC赋值为SELF_R0(Rx=R0)
-                            if (SELF_IR&2'h0c==2'h0c)begin
-                                SELCTL = W[1] || W[2];
-                                SEL[3] = !(W[1] || W[2]);
-                                SEL[2] = !(W[1] || W[2]);
-                                SEL[1] = SELF_IR[3];
-                                SEL[0] = SELF_IR[2];
-                                S = (W[1])?4'b1010:4'b1100;
-                                ABUS = W[1] || W[2];
-                                DRW = W[1] || W[2];
-                                M = W[1];
-                                LDZ = W[2];
-                                LDC = W[2];
-                                CIN = W[2];
-                                jmp_flag = 2;
-                                fflag = 3;
+                        //TODO 把if拆开
+                        begin
+                            SELCTL = (W[1] || W[2]) && (SELF_IR&2'h0c);
+                            SEL[3] = !(W[1] || W[2]) && (SELF_IR&2'h0c);
+                            SEL[2] = !(W[1] || W[2]) && (SELF_IR&2'h0c);
+                            SEL[1] = SELF_IR[3] && (SELF_IR&2'h0c);
+                            SEL[0] = SELF_IR[2] && (SELF_IR&2'h0c);
+                            S = (W[1])?4'b1010:4'b1100;
+                            ABUS = (W[1] || W[2])&& (SELF_IR&2'h0c);
+                            DRW = (W[1] || W[2])&& (SELF_IR&2'h0c);
+                            M = W[1] && (SELF_IR&2'h0c);
+                            LDZ = W[2]&& (SELF_IR&2'h0c);
+                            LDC = W[2]&& (SELF_IR&2'h0c);
+                            CIN = W[2]&& (SELF_IR&2'h0c);
+                            SHORT = W[1] && !(SELF_IR&2'h0c);
+                            if (SELF_IR&2'h0c)begin
+                                if (W[2])begin
+                                    jmp_flag = 2;
+                                    fflag = 3;
+                                end
                             end
                             else
                             begin
-                                SHORT = W[1];
                                 jmp_flag = 2;
                                 fflag = 4;
                                 SELF_PC = SELF_R0;
                             end
+                        end
                     endcase
                 end
                 // default:
