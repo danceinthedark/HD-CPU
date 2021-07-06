@@ -29,24 +29,24 @@ module HDCPU(
     output reg LONG
     );
 
-    reg ST0  = 0;
-    reg SST0 = 0;
+    reg ST0;
+    reg SST0;
 
     always @(negedge T3 or negedge CLR)
     begin
         if (!CLR) ST0 <= 0;
         else if (!T3) begin
             if (SST0 == 1'b1)
-                ST0 = SST0; // æœ‰SST0 == 1å°±ç«‹åˆ»ST0    = 1
+                ST0 <= SST0; // ÓÐSST0 == 1¾ÍÁ¢¿ÌST0    <= 1
             else if (SW == 3'b100 && ST0 && W[2])
-                ST0 = 0;
+                ST0 <= 0;
         end
     end
 
 
-    always @(SW or W or CLR or IR) // ?æ˜¯å¦éœ€è¦æŠŠT3ä¸“é—¨å†™æˆè„‰å†²å½¢å¼
+    always @(SW or W or CLR or IR) // ?ÊÇ·ñÐèÒª°ÑT3×¨ÃÅÐ´³ÉÂö³åÐÎÊ½
     begin
-        {LDC, LDZ, CIN, M, ABUS, DRW, PCINC, LPC, LAR, PCADD, ARINC, SELCTL, MEMW, STOP, LIR, SBUS, MBUS, SHORT, LONG, S, SEL} = 0;
+        {LDC, LDZ, CIN, M, ABUS, DRW, PCINC, LPC, LAR, PCADD, ARINC, SELCTL, MEMW, STOP, LIR, SBUS, MBUS, SHORT, LONG, S, SEL} <= 0;
 
         if (CLR == 0)
             SST0 <= 0;
@@ -82,27 +82,27 @@ module HDCPU(
                 end
                 3'b100: begin
 
-                    SBUS   <= W[1]||W[2];
-                    SELCTL <= W[1]||W[2];
-                    DRW    <= W[1]||W[2];
-                    STOP   <= W[1]||W[2];
+                    SBUS   <= W[1] || W[2];
+                    SELCTL <= W[1] || W[2];
+                    DRW    <= W[1] || W[2];
+                    STOP   <= W[1] || W[2];
                     SST0   <= !ST0&&W[2];
                     SEL[3] <= ST0;
                     SEL[2] <= W[2];
                     SEL[1] <= (!ST0&&W[1])||(ST0 && W[2]);
                     SEL[0] <= W[1];
                 end
-                3'b000: 
-                if(ST0==0)begin 
-                        LPC=W[1];
-                        SBUS=W[1];
-                        SST0=W[1];
-                        SHORT=W[1];
-                        STOP=W[1];
+                3'b000:
+                if(ST0==0)begin
+                        LPC <= W[1];
+                        SBUS <= W[1];
+                        SST0 <= W[1];
+                        SHORT <= W[1];
+                        STOP <= W[1];
                     end
-                else 
+                else
                 begin
-                    // å¼€å§‹æ‰§è¡ŒSW == 000çš„æƒ…å†µ--->
+                    // ¿ªÊ¼Ö´ÐÐSW == 000µÄÇé¿ö--->
                     case (IR)
                         4'b0000: begin
                             LIR   <= W[1];
@@ -156,7 +156,7 @@ module HDCPU(
                         end
                         4'b0101: begin // LD
                             M    <= W[1];
-                            S    <= 4'b1010;
+                            S    <= {W[1], 1'b0, W[1], 1'b0};
                             ABUS <= W[1];
                             LAR  <= W[1];
                             DRW  <= W[2];
@@ -166,18 +166,18 @@ module HDCPU(
                             PCINC <= W[2];
                         end
                         4'b0110: begin // ST
-                            M    = W[1] ||W[2];
-                            S    = {1'b1,W[1],1'b1,W[1]};
-                            ABUS = W[1] || W[2];
-                            LAR  = W[1];
-                            MEMW = W[2];
+                            M    <= W[1] || W[2];
+                            S    <= {1'b1, W[1], 1'b1, W[1]};
+                            ABUS <= W[1] || W[2];
+                            LAR  <= W[1];
+                            MEMW <= W[2];
 
                             LIR   <= W[2];
                             PCINC <= W[2];
                         end
                         4'b0111: begin // JC
                             if (C == 1) begin
-                                PCADD = W[1];
+                                PCADD <= W[1];
                                 LIR   <= W[2];
                                 PCINC <= W[2];
                             end
@@ -189,7 +189,7 @@ module HDCPU(
                         end
                         4'b1000: begin // JZ
                             if (Z == 1) begin
-                                PCADD = W[1];
+                                PCADD <= W[1];
 
                                 LIR   <= W[2];
                                 PCINC <= W[2];
@@ -201,51 +201,51 @@ module HDCPU(
                             end
                         end
                         4'b1001: begin // JMP
-                            M    = W[1];
-                            S    = 4'b1111;
-                            ABUS = W[1];
-                            LPC  = W[1];
+                            M    <= W[1];
+                            S    <= {W[1], W[1], W[1], W[1]};
+                            ABUS <= W[1];
+                            LPC  <= W[1];
 
                             LIR   <= W[2];
                             PCINC <= W[2];
                         end
                         4'b1110: begin // STP
-                            STOP = W[1];
+                            STOP <= W[1];
                         end
-                        // é¢å¤–æŒ‡ä»¤
+                        // ¶îÍâÖ¸Áî
                         4'b1010: begin // OUT
-                            M    = W[1];
-                            S    = 4'b1010;
-                            ABUS = W[1];
+                            M    <= W[1];
+                            S    <= 4'b1010;
+                            ABUS <= W[1];
 
                             LIR   <= W[1];
                             PCINC <= W[1];
                             SHORT <= W[1];
                         end
                         4'b1011: begin // XOR
-                            M    = W[1];
-                            S    = 4'b0110;
-                            ABUS = W[1];
-                            DRW  = W[1];
-                            LDZ  = W[1];
+                            M    <= W[1];
+                            S    <= 4'b0110;
+                            ABUS <= W[1];
+                            DRW  <= W[1];
+                            LDZ  <= W[1];
 
                             LIR   <= W[1];
                             PCINC <= W[1];
                             SHORT <= W[1];
                         end
                         4'b1100: begin // OR
-                            M    = W[1];
-                            S    = 4'b1110;
-                            ABUS = W[1];
-                            DRW  = W[1];
-                            LDZ  = W[1];
+                            M    <= W[1];
+                            S    <= 4'b1110;
+                            ABUS <= W[1];
+                            DRW  <= W[1];
+                            LDZ  <= W[1];
 
                             LIR   <= W[1];
                             PCINC <= W[1];
                             SHORT <= W[1];
                         end
                     endcase
-                    // <---SW == 000çš„æƒ…å†µæ‰§è¡Œå®Œæ¯•
+                    // <---SW == 000µÄÇé¿öÖ´ÐÐÍê±Ï
                 end
                 // default:
             endcase
