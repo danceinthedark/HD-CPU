@@ -41,26 +41,26 @@ module HDCPU(
     reg [1:0] SSELF_C,SSELF_Z,jjmp_flag,iiret_flag;
     always @(negedge T3, negedge CLR)
     begin
-        if (!CLR) begin
-            ST0 = 0;
-            flag = 0;
-        end
-        else if (!T3) begin
-            flag = fflag;
-            count = ccount;
-            SELF_IR = SSELF_IR;
-            SELF_PC = SSELF_PC;
-            SELF_R0 = SSELF_R0;
-            SELF_C = SSELF_C;
-            SELF_Z = SSELF_Z;
-            jmp_flag = jjmp_flag;
-            iret_flag = iiret_flag;
-            if (SST0 == 1'b1) begin
-                ST0 = SST0; // 有SST0 == 1就立刻ST0    = 1
+        case (CLR)
+            1:begin
+                SELF_IR = SSELF_IR;
+                SELF_PC = SSELF_PC;
+                SELF_R0 = SSELF_R0;
+                SELF_C = SSELF_C;
+                SELF_Z = SSELF_Z;
+                jmp_flag = jjmp_flag;
+                iret_flag = iiret_flag;
+                count = ccount;
+                flag = fflag;
+                EI = EEI;
+                ST0 = (SST0) ? SST0 : 0;
             end
-            else if (SW == 3'b100 && ST0 && W[2])
-                ST0 = 0;
-        end
+            0:begin
+                {SELF_IR, SELF_PC, SELF_R0, SELF_C, SELF_Z,
+                jmp_flag, iret_flag, count, flag, EI, ST0}=0;
+            end
+        endcase
+        
     end
 
     always @(CLR, PULSE) // ?是否需要把T3专门写成脉冲形式
@@ -70,7 +70,7 @@ module HDCPU(
         if (!CLR) begin
             ccount = 0;
             fflag = 0;
-            EI = 1;
+            EEI = 1;
             SSELF_IR = 0;
             SSELF_PC = 0;
             SSELF_R0 = 0;
@@ -183,48 +183,36 @@ module HDCPU(
                                         LONG = W[2];
                                         MEMW = W[3];
                                     end
-                                    4'b0111,4'b1000: begin // JC && JZ
+                                    4'b0111,4'b1000,4'b1001,4'b1011: begin // JC && JZ && JMP && IRET
                                         if ((IR==4'b0111 && ((SELF_C==0 && C) || SELF_C==2'b11))
-                                        || (IR==4'b1000 && ((SELF_Z==0 && Z) || SELF_Z==2'b11))) begin
-                                            PCADD = W[2];
-                                            ABUS = EI && W[2];
+                                        || (IR==4'b1000 && ((SELF_Z==0 && Z) || SELF_Z==2'b11)) 
+                                        || IR>8) begin
+                                            PCADD = W[2] && (IR<=8);
+                                            ABUS = (EI || IR>8) && W[2];
                                             SEL[3] = EI && !W[2];
                                             SEL[2] = EI && !W[2];
                                             S = 4'b1100;
-                                            SELCTL = EI && W[2];
-                                            CIN = EI && W[2];
-                                            DRW = EI && W[2];
-                                            LDZ = EI && W[2];
-                                            LDC = EI && W[2];
-                                            fflag = EI && W[2];
-                                            SSELF_C = (!SELF_C && EI && W[2]) ? {1'b1,C} : SELF_C;
-                                            SSELF_Z = (!SELF_Z && EI && W[2]) ? {1'b1,Z} : SELF_Z;
+                                            SELCTL = (EI || IR>8) && W[2];
+                                            CIN = (EI || IR>8) && W[2];
+                                            DRW = (EI || IR>8) && W[2];
+                                            LDZ = (EI || IR>8) && W[2];
+                                            LDC = (EI || IR>8) && W[2];
+                                            fflag = (EI || IR>8) && W[2];
+                                            case(IR)
+                                                4'b1001:jjmp_flag = W[2];
+                                                4'b1010:iiret_flag = W[2];
+                                            endcase
+                                            SSELF_C = (!SELF_C && (EI || IR>8) && W[2]) ? {1'b1,C} : SELF_C;
+                                            SSELF_Z = (!SELF_Z && (EI || IR>8) && W[2]) ? {1'b1,Z} : SELF_Z;
+                                            ccount = 1;
                                         end
-                                    end
-                                    4'b1001,4'b1010: begin // JMP && IRET
-                                        ABUS = W[2];
-                                        SEL[3] = !W[2];
-                                        SEL[2] = !W[2];
-                                        S = 4'b1100;
-                                        SELCTL = W[2];
-                                        CIN = W[2];
-                                        DRW = W[2];
-                                        LDZ = W[2];
-                                        LDC = W[2];
-                                        if (IR==4'b1001) jjmp_flag = W[2];
-                                        else iiret_flag = W[2];
-                                        fflag = W[2];
-                                        SSELF_C = (!SELF_C && EI && W[2]) ? {1'b1,C} : SELF_C;
-                                        SSELF_Z = (!SELF_Z && EI && W[2]) ? {1'b1,Z} : SELF_Z;
                                     end
                                     4'b1010: begin // OUT
                                         M    = W[2];
                                         S    = 4'b1010;
                                         ABUS = W[2];
                                     end
-                                    4'b1110: begin // STP
-                                        STOP = W[2];
-                                    end
+                                    4'b1110:STOP = W[2];// STP
                                     default: S = 4'b0000;
                                 endcase
                                 // <---SW == 000的情况执行完毕
@@ -232,52 +220,32 @@ module HDCPU(
                         end
                         // flag==1 将SELF_R0寄存器提取并保存至软件
                         // flag==3 将SELF_R0寄存器提取至软件
-                        3'b001,3'b011: begin
-                            if (flag == 3'b001) SSELF_R0 = (SELF_R0 << 1) + C;
-                            else SSELF_IR = (SELF_IR << 1) + C;
-                            SHORT = W[1];
-                            SELCTL = (count < 7) && W[1];
-                            SEL[3] = (count < 7) && !W[1];
-                            SEL[2] = (count < 7) && !W[1];
-                            S = 4'b1100;
-                            ABUS = (count < 7) && W[1];
-                            DRW = (count < 7) && W[1];
-                            LDZ = (count < 7) && W[1];
-                            LDC = (count < 7) && W[1];
-                            CIN = (count < 7) && W[1];
-                            ccount = count + W[1];
-                            if (count == 7)
-                            begin
-                                fflag = (flag&2==0)?((iret_flag)?5:2):((jmp_flag == 1)?6:4);
-                                if (flag&2) begin
-                                    case (jmp_flag)
-                                        0:SSELF_PC = SELF_PC + SELF_IR[3:0] - (((SELF_IR[3])?16:0));
-                                        2:SSELF_PC = SELF_IR;
-                                    endcase
-                                end
-                                ccount = 0;
-                            end
-                        end
                         // flag==2 将SELF_PC提取至SELF_R0寄存器
                         // flag==4 恢复SELF_R0初始值
                         // flag==5 IRET将SELF_PC打入PC
-                        3'b010,3'b101,3'b100: begin
+                        3'b001,3'b010,3'b011,3'b100,3'b101: begin
                             ccount = count + W[1] && (count < 8);
-                            MIDDLE = (W[1] || (W[2] && 
+                            if (flag == 1) SSELF_R0 = (SELF_R0 << 1) + C;
+                            else if (flag== 3)SSELF_IR = (SELF_IR << 1) + C;
+
+                            if (flag==1 || flag==3)MIDDLE = W[1];
+                            else MIDDLE = (W[1] || (W[2] && 
                             ((IR==3'b100) ? SELF_R0[7-count] : SELF_PC[7-count]))); 
-                            SELCTL = MIDDLE && (count < 8);
-                            SEL[3] = !MIDDLE && (count < 8);
-                            SEL[2] = !MIDDLE && (count < 8);
+                        
+                            SELCTL = (count == 8) || W[1];
+                            SEL[3] = (count < 8) && !MIDDLE;
+                            SEL[2] = (count < 8) && !MIDDLE;
                             S = (W[1])?4'b1100:4'b0000;
-                            ABUS = MIDDLE && (count < 8);
-                            DRW = MIDDLE && (count < 8);
-                            LDZ = MIDDLE && (count < 8);
-                            LDC = MIDDLE && (count < 8);
-                            CIN = W[1] && (count < 8);
-                            if (count==8)begin
+                            ABUS = (count < 8) && MIDDLE;
+                            DRW = (count < 8) && MIDDLE;
+                            LDZ = (count < 8) && MIDDLE;
+                            LDC = (count < 8) && MIDDLE;
+                            CIN = (count < 8) && W[1];
+
+                            if (count == 8)
+                            begin
                                 case (flag)
                                     3'b010:begin 
-                                        SELCTL = 1;
                                         SEL[3] = W[1];
                                         SEL[2] = W[1];
                                         SEL[1] = W[1];
@@ -314,11 +282,25 @@ module HDCPU(
                                         jjmp_flag = 0;
                                         fflag = 0;
                                     end 
+                                    3'b001:begin
+                                        SHORT = W[1];
+                                        fflag = (iret_flag)?5:2;
+                                        ccount = 0;
+                                    end
+                                    3'b011:begin
+                                        SHORT = W[1];
+                                        fflag = (jmp_flag == 1)?6:4;
+                                        case (jmp_flag)
+                                            0:SSELF_PC = SELF_PC + SELF_IR[3:0] - (((SELF_IR[3])?16:0));
+                                            2:SSELF_PC = SELF_IR;
+                                        endcase
+                                        ccount = 0;
+                                    end
                                 endcase
+                                
                             end
                         end
                         3'b110://将Rx传至R0或直接将SELF_PC赋值为SELF_R0(Rx=R0)
-                        //TODO 把if拆开
                         begin
                             SELCTL = (W[1] || W[2]) && (SELF_IR&2'h0c);
                             SEL[3] = !(W[1] || W[2]) && (SELF_IR&2'h0c);

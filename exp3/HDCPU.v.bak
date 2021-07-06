@@ -143,8 +143,7 @@ module HDCPU(
                             else begin
                                 LIR   = W[1];
                                 PCINC = W[1];
-                                if (EI && W[1])
-                                    SSELF_PC = SELF_PC + 1;
+                                SSELF_PC = SELF_PC + (EI && W[1]);
                                 case (IR)
                                     4'b0001,4'b0010,4'b0100,
                                     4'b0011,4'b1100,4'b1101:begin
@@ -161,11 +160,9 @@ module HDCPU(
                                         ABUS = W[2];
                                         DRW = W[2];
                                         LDZ = W[2];
-                                        if (IR<4'b0101 && IR!=4'b0011)begin
-                                            LDC = W[2];
-                                            SSELF_C = 0;
-                                        end
-                                        else M = W[2];
+                                        LDC = W[2] && (IR<4'b0101 && IR!=4'b0011);
+                                        SSELF_C = (IR<4'b0101 && IR!=4'b0011) ? 0 : SELF_C;
+                                        M = W[2] && !(IR<4'b0101 && IR!=4'b0011);
                                         SSELF_Z = 0;
                                     end
 
@@ -190,22 +187,18 @@ module HDCPU(
                                         if ((IR==4'b0111 && ((SELF_C==0 && C) || SELF_C==2'b11))
                                         || (IR==4'b1000 && ((SELF_Z==0 && Z) || SELF_Z==2'b11))) begin
                                             PCADD = W[2];
-                                            if(EI) begin
-                                                ABUS = W[2];
-                                                SEL[3] = !W[2];
-                                                SEL[2] = !W[2];
-                                                S = 4'b1100;
-                                                SELCTL = W[2];
-                                                CIN = W[2];
-                                                DRW = W[2];
-                                                LDZ = W[2];
-                                                LDC = W[2];
-                                                fflag = W[2];
-                                                if (W[2])begin
-                                                    if (!SELF_C) SSELF_C = {1'b1,C};
-                                                    if (!SELF_Z) SSELF_Z = {1'b1,Z};
-                                                end
-                                            end
+                                            ABUS = EI && W[2];
+                                            SEL[3] = EI && !W[2];
+                                            SEL[2] = EI && !W[2];
+                                            S = 4'b1100;
+                                            SELCTL = EI && W[2];
+                                            CIN = EI && W[2];
+                                            DRW = EI && W[2];
+                                            LDZ = EI && W[2];
+                                            LDC = EI && W[2];
+                                            fflag = EI && W[2];
+                                            SSELF_C = (!SELF_C && EI && W[2]) ? {1'b1,C} : SELF_C;
+                                            SSELF_Z = (!SELF_Z && EI && W[2]) ? {1'b1,Z} : SELF_Z;
                                         end
                                     end
                                     4'b1001,4'b1010: begin // JMP && IRET
@@ -218,13 +211,11 @@ module HDCPU(
                                         DRW = W[2];
                                         LDZ = W[2];
                                         LDC = W[2];
-                                        if (IR==4'b1001) Jjmp_flag = W[2];
+                                        if (IR==4'b1001) jjmp_flag = W[2];
                                         else iiret_flag = W[2];
                                         fflag = W[2];
-                                        if (W[2])begin
-                                            if (!SELF_C) SSELF_C={1'b1,C};
-                                            if (!SELF_Z) SSELF_Z={1'b1,Z};
-                                        end
+                                        SSELF_C = (!SELF_C && EI && W[2]) ? {1'b1,C} : SELF_C;
+                                        SSELF_Z = (!SELF_Z && EI && W[2]) ? {1'b1,Z} : SELF_Z;
                                     end
                                     4'b1010: begin // OUT
                                         M    = W[2];
@@ -257,19 +248,12 @@ module HDCPU(
                             ccount = count + W[1];
                             if (count == 7)
                             begin
-                                if (flag == 3'b001) fflag = (iret_flag)?5:2;
-                                else begin
-                                    fflag = 4;
-                                    if (jmp_flag == 0)begin
-                                        SSELF_PC = SELF_PC + SELF_IR[3:0]; 
-                                        if (SELF_IR[3]) SSELF_PC = SELF_PC - 5'b10000;
-                                    end
-                                    else if (jmp_flag == 1)begin
-                                        fflag = 6;
-                                    end
-                                    else if (jmp_flag == 2)begin
-                                        SSELF_PC = SELF_IR;
-                                    end
+                                fflag = ((flag&2)==0)?((iret_flag)?3'b101:3'b010):((jmp_flag == 1)?3'b110:);
+                                if (flag&2) begin
+                                    case (jmp_flag)
+                                        0:SSELF_PC = SELF_PC + SELF_IR[3:0] - (((SELF_IR[3])?16:0));
+                                        2:SSELF_PC = SELF_IR;
+                                    endcase
                                 end
                                 ccount = 0;
                             end
@@ -278,42 +262,37 @@ module HDCPU(
                         // flag==4 恢复SELF_R0初始值
                         // flag==5 IRET将SELF_PC打入PC
                         3'b010,3'b101,3'b100: begin
-                            if (count < 8) begin
-                                ccount = count + W[1];
-                                MIDDLE = (IR==3'b100)?SELF_R0[7-count]:SELF_PC[7-count]; 
-                                SELCTL = W[1] || (W[2] && MIDDLE);
-                                SEL[3] = !(W[1] || (W[2] && MIDDLE));
-                                SEL[2] = !(W[1] || (W[2] && MIDDLE));
-                                ABUS = W[1] || (W[2] && MIDDLE);
-                                DRW = W[1] || (W[2] && MIDDLE);
-                                LDZ = W[1] || (W[2] && MIDDLE);
-                                LDC = W[1] || (W[2] && MIDDLE);
-                                S = (W[1])?4'b1100:4'b0000;
-                                CIN = W[1];
-                            end
-                            else begin
+                            ccount = count + W[1] && (count < 8);
+                            MIDDLE = (W[1] || (W[2] && 
+                            ((IR==3'b100) ? SELF_R0[7-count] : SELF_PC[7-count]))); 
+                            SELCTL = MIDDLE || (count == 8);
+                            SEL[3] = !MIDDLE && (count < 8);
+                            SEL[2] = !MIDDLE && (count < 8);
+                            S = (W[1])?4'b1100:4'b0000;
+                            ABUS = MIDDLE && (count < 8);
+                            DRW = MIDDLE && (count < 8);
+                            LDZ = MIDDLE && (count < 8);
+                            LDC = MIDDLE && (count < 8);
+                            CIN = W[1] && (count < 8);
+                            if (count==8)begin
                                 case (flag)
                                     3'b010:begin 
-                                        SELCTL = W[1] || W[2] || W[3];
-                                        SEL[3] = !(W[2] || W[3]);
-                                        SEL[2] = !(W[2] || W[3]);
+                                        SEL[3] = W[1];
+                                        SEL[2] = W[1];
                                         SEL[1] = W[1];
                                         SEL[0] = W[1];
                                         M = W[1];
-                                        if (W[1]) S=4'b1010;
-                                        else if (W[3]) S=4'b1100;
-                                        ABUS = W[1] || W[3];
+                                        S=(W[1])?4'b1010:4'b1100;
+                                        ABUS =!W[2];
                                         LAR = W[1];
                                         MBUS = W[2];
-                                        DRW = W[2] || W[3];
+                                        DRW = !W[1];
                                         LONG = W[2];
                                         LDZ = W[3];
                                         LDC = W[3];
                                         CIN = W[3];
-                                        if (W[3])begin
-                                            fflag = 3;
-                                            ccount = 0;
-                                        end
+                                        fflag = (W[3])?3:flag;
+                                        ccount = (W[3])?0:count;
                                     end 
                                     3'b101:begin
                                         ccount = 0;
@@ -353,18 +332,9 @@ module HDCPU(
                             LDC = W[2]&& (SELF_IR&2'h0c);
                             CIN = W[2]&& (SELF_IR&2'h0c);
                             SHORT = W[1] && !(SELF_IR&2'h0c);
-                            if (SELF_IR&2'h0c)begin
-                                if (W[2])begin
-                                    jjmp_flag = 2;
-                                    fflag = 3;
-                                end
-                            end
-                            else
-                            begin
-                                jjmp_flag = 2;
-                                fflag = 4;
-                                SSELF_PC = SELF_R0;
-                            end
+                            jjmp_flag = (SELF_IR&2'h0c && !W[2]) ? jmp_flag : 2;
+                            fflag = (SELF_IR&2'h0c && !W[2]) ? flag : ((SELF_IR&2'h0c) ? 3 : 4);;
+                            SSELF_PC = (!(SELF_IR&2'h0c)) ? SELF_R0 : SELF_PC;
                         end
                     endcase
                 end
