@@ -294,17 +294,25 @@ module HDCPU(
                                 else
                                 begin
                                     if (jmp_flag)begin
-                                        SHORT = W[1];
-                                        SELCTL = W[1];
-                                        SEL[3] = 1;
-                                        SEL[2] = 1;
-                                        SEL[1] = SELF_IR[3];
-                                        SEL[0] = SELF_IR[2];
-                                        S = 4'b1010;
-                                        ABUS = W[1];
-                                        DRW = W[1];
-                                        M = W[1];
-                                        fflag = 4;
+                                        if (SELF_IR[3:2])
+                                        begin
+                                            SHORT = W[1];
+                                            SELCTL = W[1];
+                                            SEL[3] = 1;
+                                            SEL[2] = 1;
+                                            SEL[1] = SELF_IR[3];
+                                            SEL[0] = SELF_IR[2];
+                                            S = 4'b1010;
+                                            ABUS = W[1];
+                                            DRW = W[1];
+                                            M = W[1];
+                                            fflag = 4;
+                                        end
+                                        else
+                                        begin//Rx=0的情况下，将先进行flag4将R0返还后再置入
+                                            SHORT = W[1];
+                                            fflag = 4;
+                                        end
                                     end
                                     else begin
                                         SHORT = W[1];
@@ -345,6 +353,18 @@ module HDCPU(
                                     fflag = 4;
                                 end
                                 else begin
+                                    if (jmp_flag && SELF_IR[3:2]==2'b00)
+                                    begin
+                                        SELCTL = W[1];
+                                        SEL[3] = 1;
+                                        SEL[2] = 1;
+                                        SEL[1] = 0;
+                                        SEL[0] = 0;
+                                        S = 4'b1010;
+                                        ABUS = W[1];
+                                        DRW = W[1];
+                                        M = W[1];
+                                    end
                                     jjmp_flag = 0;
                                     EEI = 0;
                                     fflag = 0;

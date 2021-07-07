@@ -15,9 +15,9 @@ Failed Paths   : 0
 Type           : Worst-case tco
 Slack          : N/A
 Required Time  : None
-Actual Time    : 28.000 ns
-From           : EI
-To             : ABUS
+Actual Time    : 35.000 ns
+From           : count[0]
+To             : DRW
 From Clock     : T3
 To Clock       : --
 Failed Paths   : 0
@@ -25,9 +25,9 @@ Failed Paths   : 0
 Type           : Worst-case tpd
 Slack          : N/A
 Required Time  : None
-Actual Time    : 26.000 ns
+Actual Time    : 33.000 ns
 From           : PULSE
-To             : ABUS
+To             : DRW
 From Clock     : --
 To Clock       : --
 Failed Paths   : 0
@@ -46,7 +46,7 @@ Type           : Clock Setup: 'T3'
 Slack          : N/A
 Required Time  : None
 Actual Time    : 31.25 MHz ( period = 32.000 ns )
-From           : EI
+From           : count[0]
 To             : count[0]
 From Clock     : T3
 To Clock       : T3
