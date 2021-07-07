@@ -26,37 +26,25 @@ module HDCPU(
     output reg SBUS,
     output reg MBUS,
     output reg SHORT,
-    output reg LONG
+    output reg LONG,
+    output reg[3:0] count,
+    output reg [3:0] x
     );
 
     reg [2:0] flag;
-
-    always @(flag,W)
+	
+    always @(T3)
     begin
-        flag = 0;
-        ABUS = 0;
-        CIN = 0;
-        PCINC = 0;
-        case (SW)
-            3'b001: begin
-                {M,S,CIN,LDC,LDZ}=0;
-                {M,S,CIN,LDC,LDZ}=~{M,S,CIN,LDC,LDZ};
-                if(W[1])begin
-                if(ABUS==0) ABUS = 1;
-                //else ABUS = 0;
-                end
-            end
-            3'b010: begin
-                {LIR,STOP,MEMW,LAR,ARINC,LPC,PCINC,DRW} = 0;
-                {LIR,STOP,MEMW,LAR,ARINC,LPC,PCINC,DRW}=~{LIR,STOP,MEMW,LAR,ARINC,LPC,PCINC,DRW};
-            end
-            3'b100: begin
-                SEL=4'b1111;
-            end
-            default:
-                begin
-                    {LDC, LDZ, CIN, M, ABUS, DRW, PCINC, LPC, LAR, PCADD, ARINC, SELCTL, MEMW, STOP, LIR, SBUS, MBUS, SHORT, LONG, S, SEL}=0;
-                end
-        endcase
+		case(count)
+			3'b001:begin
+				count = count + 2;
+				x = count;
+			end
+			3'b000:
+			begin
+				count = count + 1;
+				x = count;
+				end
+		endcase
     end
 endmodule

@@ -95,3 +95,4 @@ set_location_assignment PIN_84 -to Z
 set_global_assignment -name MISC_FILE "G:/Datas/Develop/Codes/Github/HD-CPU/HDCPU.dpf"
 set_global_assignment -name MISC_FILE "G:/Datas/Develop/Codes/Github/HD-CPU/nopipe/HDCPU.dpf"
 set_global_assignment -name MISC_FILE "D:/Code/Github/HD-CPU/empty/HDCPU.dpf"
+set_global_assignment -name VECTOR_WAVEFORM_FILE HDCPU.vwf

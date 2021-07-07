@@ -26,33 +26,25 @@ module HDCPU(
     output reg SBUS,
     output reg MBUS,
     output reg SHORT,
-    output reg LONG
+    output reg LONG,
+    output reg[3:0] count,
+    output reg [3:0] x
     );
 
     reg [2:0] flag;
-
-    always @(W, CLR, PULSE)
+	
+    always @(T3)
     begin
-        if (!CLR) begin
-            flag = 0;
-            ABUS = 0;
-            CIN = 0;
-            PCINC = 0;
-        end
-        else begin
-            case (flag)
-                3'b000: begin
-                    ABUS = 1;
-                    flag = 3'b001;
-                end
-                3'b001: begin
-                    CIN = 1;
-                    flag = 3'b010;
-                end
-                3'b010: begin
-                    PCINC = 1;
-                end
-            endcase
-        end
+		case(count)
+			3'b000:
+			begin
+				count = count + 1;
+				x = count;
+				end
+			3'b001:begin
+				count = count + 2;
+				x = count;
+			end
+		endcase
     end
 endmodule
