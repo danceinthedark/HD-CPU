@@ -37,7 +37,7 @@ module HDCPU(
     output reg [7:0] SELF_R0
     );
     reg SST0;
-    reg ST0,MIDDLE;
+    reg ST0;
     reg[1:0] iiret_flag,iret_flag;
     
     reg [7:0] SELF_IR,SELF_PC;//,SELF_R0;
@@ -71,14 +71,14 @@ module HDCPU(
             iret_flag = iiret_flag;
             EI = EEI;
             if (SST0 == 1'b1) begin
-                ST0 = SST0; // ¨¦????¡è??¡¦SST0 == 1¨¦????¡è??¡¦¨¦????¡è??¡¦¨¦????¡è??¡¦ST0    = 1
+                ST0 = SST0; // ????????????SST0 == 1????????????????????????????????????ST0    = 1
             end
             else if (SW == 3'b100 && ST0 && W[2])
                 ST0 = 0;
         end
     end
 
-    always @(CLR, PULSE) // ?¨¦???¡ì???¡è??¡¦¨¦????¡è??¡¦???¨¦????¡è??¡¦T3???¨¦????¡è??¡¦???¨¦????¡è??¡¦¨¦????¡è??¡¦¨¦????¡è??¡¦¨¦????¡è??¡¦???
+    always @(CLR, PULSE) // ????????????????????????????????????????????T3?????????????????????????????????????????????????????????????????????
     begin
         {LDC, LDZ, CIN, M, ABUS, DRW, PCINC, LPC, LAR, PCADD, ARINC, SELCTL, MEMW, STOP, LIR, SBUS, MBUS, SHORT, LONG, S, SEL, SST0} = 0;
 
@@ -96,7 +96,7 @@ module HDCPU(
         end
         else begin
             case (SW)
-                3'b001: begin //???¨¦???????¡§¨¦????¡è???
+                3'b001: begin //?????????????????????????
                     LAR    = W[1] && !ST0;
                     MEMW   = W[1] && ST0;
                     ARINC  = W[1] && ST0;
@@ -106,7 +106,7 @@ module HDCPU(
                     SELCTL = W[1];
                     SST0   = W[1];
                 end
-                3'b010: begin //¨¦????¡è??¡¦¨¦???????¡§¨¦????¡è???
+                3'b010: begin //??????????????????????????????????
                     SBUS   = W[1] && !ST0;
                     LAR    = W[1] && !ST0;
                     SST0   = W[1] && !ST0;
@@ -124,7 +124,7 @@ module HDCPU(
                     SEL[1] = W[2];
                     SEL[0] = W[1] || W[2];
                 end
-                3'b100: begin //???¨¦??????????¡¦¨¦????¡è??¡¦
+                3'b100: begin //?????????????????????????????
                     SBUS   = W[1] || W[2];
                     SELCTL = W[1] || W[2];
                     DRW    = W[1] || W[2];
@@ -145,9 +145,9 @@ module HDCPU(
                 end
                 else
                 begin
-                    // ¨¦????¡è??¡¦?¡ì???¡ì¨¦????¡è??¡¦SW == 000¨¦????¡è??¡¦¨¦????¡è??¡¦¨¦???-->
+                    // ??????????????????????????????SW == 000?????????????????????????????-->
                     case (flag)
-                        // ??????¨¦????¡è??¡¦??¡ì¨¦????¡è??¡¦???¨¦????¡è???
+                        // ??????????????????????????????????????????????
                         3'b000: begin
                             if (PULSE && EI) begin
                                 EEI = !W[1];
@@ -162,27 +162,24 @@ module HDCPU(
                                 case (IR)
                                     4'b0001,4'b0010,4'b0100,
                                     4'b0011,4'b1100,4'b1101:begin
-                                        case (IR)
-                                            4'b0001:S = 4'b1001;//ADD
-                                            4'b0010:S = 4'b0110;//SUB
-                                            4'b0100:S = 4'b0000;//INC
-                                            4'b0011:S = 4'b1011;//AND
-                                            4'b1100:S = 4'b1110;//OR
-                                            4'b1101:S = 4'b0110;//XOR
-                                        endcase
+                                        S[3] = IR[7] ^ IR[4];
+                                        S[2] = IR[7] || (IR[5] && !IR[4]);
+                                        S[1] = IR[7] || IR[5];
+                                        S[0] = !IR[7] && IR[4];
                                         CIN = W[2] && (IR == 4'b0001);
                                         ABUS = W[2];
                                         DRW = W[2];
                                         LDZ = W[2];
-                                        LDC = W[2] && (IR<4'b0101 && IR!=4'b0011);
-                                        SSELF_C = (IR<4'b0101 && IR!=4'b0011) ? 0 : SELF_C;
-                                        M = W[2] && !(IR<4'b0101 && IR!=4'b0011);
+                                        LDC = W[2] && (!IR[7] && (!IR[5]||!IR[4]));
+                                        SSELF_C = ((!IR[7] && (!IR[5]||!IR[4]))) ? 0 : SELF_C;
+                                        M = W[2] && !(!IR[7] && (!IR[5]||!IR[4]));
                                         SSELF_Z = 0;
                                     end
 
                                     4'b0101: begin // LD
                                         M    = W[2];
-                                        S    = 4'b1010;
+                                        S[2]=0;
+                                        S[1]=0;
                                         ABUS = W[2];
                                         LAR  = W[2];
                                         LONG = W[2];
@@ -229,73 +226,132 @@ module HDCPU(
                                     4'b1110:STOP = W[2];// STP
                                     default: S = 4'b0000;
                                 endcase
-                                // <---SW == 000¨¦????¡è??¡¦¨¦????¡è??¡¦¨¦??????????¡¦¨¦????¡è??¡¦¨¦????¡è??¡¦
+                                // <---SW == 000??????????????????????????????????????????????????????????????
                             end
                         end
-                        // flag==1 ¨¦????¡è??¡¦SELF_R0¨¦??????????¡¦¨¦????¡è??¡¦¨¦????¡è??¡¦???¨¦????¡è??¡¦¨¦????¡è??¡¦¨¦????¡è??¡¦¨¦????¡è??¡¦¨¦????¡è??¡¦¨¦????¡è???
-                        // flag==3 ¨¦????¡è??¡¦SELF_R0¨¦??????????¡¦¨¦????¡è??¡¦¨¦????¡è??¡¦???¨¦????¡è??¡¦¨¦????¡è??¡¦¨¦????¡è??¡¦
-                        // flag==2 ¨¦????¡è??¡¦SELF_PC¨¦????¡è??¡¦???¨¦????¡è??¡¦SELF_R0¨¦??????????¡¦¨¦????¡è???
-                        // flag==4 ¨¦?????¨¦????¡¦SELF_R0¨¦????¡è??¡¦?¡ì????
-                        // flag==5 IRET¨¦????¡è??¡¦SELF_PC¨¦????¡è??¡¦¨¦????¡è??¡¦PC
+                        // flag==1 ????????????SELF_R0????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+                        // flag==3 ????????????SELF_R0?????????????????????????????????????????????????????????????????????????????
+                        // flag==2 ????????????SELF_PC???????????????????????????SELF_R0?????????????????????????
+                        // flag==4 ???????????????SELF_R0???????????????????
+                        // flag==5 IRET????????????SELF_PC????????????????????????PC
                         3'b001,3'b010,3'b011,3'b100,3'b101: begin
-                            ccount = (W[3])?1:((count==7)?0:count+W[1]);
+                            ccount = (W[3])?1:count+W[1];
                             if (W[1])
-								if (flag == 1) SSELF_R0 = (SELF_R0 << 1) + C;
-								else if (flag== 3)SSELF_IR = (SELF_IR << 1) + C;
-
-
-                            SELCTL = 1;
-                            M = (count == 7)&&W[1];
-                            ABUS = !(count==7 && W[2]);
-                            DRW = (count != 7) || !W[1];
-                            LDZ = (count != 7) || W[3];
-                            LDC = (count != 7) || W[3];
-                            CIN = (count != 7 && !(flag==2 && W[2])) || W[3];
-                            LAR = (count==7)  && (flag==2) && W[1];
-                            MBUS = (count==7) && (flag==2) && W[2];
-                            SHORT = (flag==1) || (flag==3) || ((count==7) && flag != 2 && flag!=4 && flag!=5);
-                            LONG = (count==7) && (flag==2) && W[2];
-                            LPC = (count==7) && (flag==5) && W[1];
-                            fflag = (W[3])?3:flag;
-                            EEI = (flag==4 && count==7)?1:EI;
-                            iiret_flag = (flag==4 && count==7)?0:iret_flag;
-                            jjmp_flag = (flag==4 && count==7)?0:jjmp_flag;
-                            if (count == 7)
-                            begin
-                                case (flag)
-                                    3'b010:S = ((W[1])?4'b1010:4'b1100);
-                                    3'b101:begin
-                                        fflag = 4;
-                                        S = 4'b1010;
-                                    end
-                                    3'b100:fflag = 0;
-                                    3'b001:fflag = (iret_flag)?5:2;
-                                    3'b011:begin
-                                        fflag = (jmp_flag == 1)?6:4;
-                                        case (jmp_flag)
-                                            0:SSELF_PC = SELF_PC + SELF_IR[3:0] - (((SELF_IR[3])?16:0));
-                                            2:SSELF_PC = SELF_IR;
-                                        endcase
-                                    end
-                                endcase      
-                            end
-                            else S=(W[1])?4'b1100:4'b0000;
+								if (!flag[2]&&!flag[1]&&flag[0]) SSELF_R0 = (SELF_R0 << 1) | C;
+								else if (!flag[2]&&flag[1]&&flag[0])SSELF_IR = (SELF_IR << 1) | C;
+							//software judge
+							if((flag[2] && !flag[1] && !flag[0] && count[2] && count[1] && count[0] && W[1]))
+							EEI=1;
+							if(flag[2]&&!flag[1]&&!flag[0] && count[2] && count[1] && count[0] && W[1])
+							begin
+							iiret_flag = 0;
+							jjmp_flag = 0;
+							end
+							if(!flag[2]&&flag[1]&&flag[0] && count[2]&&count[1]&&count[0])
+							begin
+							case (jmp_flag)
+							0:SSELF_PC = SELF_PC + SELF_IR[3:0] - (SELF_IR[3]?16:0);
+							2:SSELF_PC = SELF_IR;
+							endcase
+							end
+							SELCTL=!(count[2]&&count[1]&&count[0]&&((!flag[2]&&!flag[1]&&flag[0]) || (!flag[2] && flag[1] && flag[0]) || (flag[2] && !flag[1] && !flag[0])));								
+							S[3] = ((!count[2] || !count[1] || !count[0] && W[1]) ||
+									(count[2] && count[1] && count[0] &&(
+									(!flag[2] && flag[1] && !flag[0] && (W[1] || W[3])) || 
+									(flag[2] && !flag[1] && flag[0] && W[1])))
+									);
+							S[2]=(
+								(!count[2] || !count[1] || !count[0] && W[1]) ||
+								(count[2] && count[1] && count[0] && !flag[2] && flag[1] && !flag[0] && W[3])
+								);
+							S[1]=((count[2] && count[1] && count[0]) &&(
+								(!flag[2] && flag[1] && !flag[0] && W[1]) || (flag[2] && !flag[1] && flag[0] && W[1]))
+								);
+							S[0] = 0;
+							ABUS=!(
+								(!flag[2] && !flag[1] && flag[0] && count[2] && count[1] && count[0] && W[1]) ||
+								(!flag[2] && flag[1] && !flag[0] && count[2] && count[1] && count[0] && W[2]) ||
+								(!flag[2] && flag[1] && flag[0]  && count[2] && count[1] && count[0] && W[1]) ||
+								(flag[2] && !flag[1] && !flag[0] && count[2] && count[1] && count[0] && W[1])
+								);
+							DRW=!(
+								(count[2] && count[1] && count[0] && W[1])
+								);
+							LDZ=!(
+								(count[2] && count[1] && count[0] && W[1]) || 
+								(!flag[2] && flag[1] && !flag[0] && count[2] && count[1] && count[0] && W[2])
+								);
+							LDC=!(
+								(count[2] && count[1] && count[0] && W[1]) || 
+								(!flag[2] && flag[1] && !flag[0] && count[2] && count[1] && count[0] && W[2])
+								);
+							CIN=(
+								(!count[2] || !count[1] || !count[0] && W[1]) ||  
+								(!flag[2] && flag[1] && !flag[0] && count[2] && count[1] && count[0] && W[3])
+								);
+							SHORT=(W[1]&&(
+								(!flag[2] && flag[0]) || 
+								(!flag[2] && flag[1] && !flag[0] && (!count[2] || !count[1] || !count[0]) && !(((!flag[2] && flag[1] && !flag[0]) || (flag[2] && !flag[1] && !flag[0]))?SELF_PC[7-count]:SELF_R0[7-count])) ||
+								(flag[2] && !flag[1] && ((count[2] && count[1] && count[0] && W[1]) || (!(((!flag[2] && flag[1] && !flag[0]) || (flag[2] && !flag[1] && !flag[0]))?SELF_PC[7-count]:SELF_R0[7-count])) ))
+								));
+							if((count[2] && count[1] && count[0] && (flag[2]||!flag[1]||flag[0]) && W[1]) || (count[2] & count[1] && count[0] && !flag[2]&&flag[1]&&!flag[0]&&W[3]))
+							begin
+							fflag[2]=(
+									(!flag[2] && !flag[1] && flag[0] && iret_flag && W[1]) || 
+									(!flag[2] && flag[1] && flag[0] && W[1]) || 
+									(flag[2] && !flag[1] && flag[0] && W[1])
+									);
+							fflag[1] =(
+									(!flag[2] && !flag[1] && flag[0] && !iret_flag && W[1]) || 
+									(!flag[2] && flag[1] && !flag[0] && W[3]) || 
+									(!flag[2] && flag[1] && flag[0] && jmp_flag && W[1])
+									);
+							fflag[0] = (
+									(!flag[2] && !flag[1] && flag[0] && iret_flag && W[1]) || 
+									(!flag[2] && flag[1] && !flag[0] && W[3])
+									);
+							end
+							LONG=(
+							(!flag[2] && flag[1] && !flag[0] && count[2] && count[1] && count[0] && W[2])
+							);
+							M=(
+							(!flag[2] && flag[1] && !flag[0] && count[2] && count[1] && count[0] && W[1]) ||
+							(flag[2] && !flag[1] && flag[0]  && count[2] && count[1] && count[0] && W[1])
+							);
+							LAR
+							=(
+							(!flag[2] && flag[1] && !flag[0] && count[2] && count[1] && count[0] && W[1])
+							);
+							MBUS
+							=(
+							(!flag[2] && flag[1] && !flag[0] && count[2] && count[1] && count[0] && W[2])
+							);
+							LPC
+							=(
+							(flag[2] && !flag[1] && flag[0] && count[2] && count[1] && count[0] && W[1])
+							);				
                         end
-                        3'b110://¨¦????¡è??¡¦Rx¨¦????¡è??¡¦¨¦????¡è??¡¦R0¨¦????¡è??¡¦???¨¦???????¡è??¡¦SELF_PC¨¦????¡è??¡¦??????SELF_R0(Rx=R0)
+                        3'b110://????????????Rx????????????????????????R0??????????????????????????????SELF_PC??????????????????SELF_R0(Rx=R0)
                         begin
-                            SELCTL = (SELF_IR&4'hc);
+							if(SELF_IR[3] || SELF_IR[2])
+							begin
+							SELCTL = 1;
+							ABUS = 1;
+							DRW = 1;
+							M = W[1];
+							LDZ = W[2];
+							LDC = W[2];
+							CIN = W[2];
+							jjmp_flag = (!W[2]) ? jmp_flag : 2;
+							fflag = (W[1]) ? flag : 3;
+							end
+							else begin
+							fflag = 4;
+							SSELF_PC = SELF_R0;
+							end
                             SEL[1:0] = SELF_IR[3:2];
-                            S = (W[1])?4'b1010:4'b1100;
-                            ABUS = (SELF_IR&4'hc);
-                            DRW = (SELF_IR&4'hc);
-                            M = W[1] && (SELF_IR&4'hc);
-                            LDZ = W[2] && (SELF_IR&4'hc);
-                            LDC = W[2] && (SELF_IR&4'hc);
-                            CIN = W[2] && (SELF_IR&4'hc);
-                            SHORT = !(SELF_IR&4'hc);
-                            jjmp_flag = (SELF_IR&4'hc && !W[2]) ? jmp_flag : 2;
-                            fflag = (SELF_IR&4'hc && W[1]) ? flag : ((SELF_IR&4'hc) ? 3 : 4);;
-                            SSELF_PC = (SELF_IR&4'hc) ?  SELF_PC : SELF_R0;
+                            S[3] = 1;S[2] = W[1];
+                            S[1] = !W[1];S[0] = 0; 
                         end
                     endcase
                 end
