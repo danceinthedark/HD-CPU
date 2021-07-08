@@ -5,9 +5,9 @@ Timing Analyzer Summary
 Type           : Worst-case tsu
 Slack          : N/A
 Required Time  : None
-Actual Time    : 30.000 ns
-From           : PULSE
-To             : count[2]~reg0
+Actual Time    : 37.000 ns
+From           : W[1]
+To             : jmp_flag
 From Clock     : --
 To Clock       : T3
 Failed Paths   : 0
@@ -45,9 +45,9 @@ Failed Paths   : 0
 Type           : Clock Setup: 'T3'
 Slack          : N/A
 Required Time  : None
-Actual Time    : 31.25 MHz ( period = 32.000 ns )
-From           : ST0
-To             : count[2]~reg0
+Actual Time    : 25.64 MHz ( period = 39.000 ns )
+From           : EI
+To             : jmp_flag
 From Clock     : T3
 To Clock       : T3
 Failed Paths   : 0

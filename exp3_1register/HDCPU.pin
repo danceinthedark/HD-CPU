@@ -121,20 +121,20 @@ VCCIO                        : 53        : power  :                   : 5.0V    
 RESERVED                     : 54        :        :                   :         :           :                
 RESERVED                     : 55        :        :                   :         :           :                
 RESERVED                     : 56        :        :                   :         :           :                
-RESERVED                     : 57        :        :                   :         :           :                
-RESERVED                     : 58        :        :                   :         :           :                
+count[3]                     : 57        : output : TTL               :         :           : N              
+ccount[3]                    : 58        : output : TTL               :         :           : N              
 GND                          : 59        : gnd    :                   :         :           :                
 RESERVED                     : 60        :        :                   :         :           :                
 PULSE                        : 61        : input  : TTL               :         :           : Y              
 TCK                          : 62        : input  : TTL               :         :           : N              
 RESERVED                     : 63        :        :                   :         :           :                
-RESERVED                     : 64        :        :                   :         :           :                
-count[3]                     : 65        : output : TTL               :         :           : N              
+count[0]                     : 64        : output : TTL               :         :           : N              
+ccount[1]                    : 65        : output : TTL               :         :           : N              
 VCCIO                        : 66        : power  :                   : 5.0V    :           :                
-RESERVED                     : 67        :        :                   :         :           :                
-count[0]                     : 68        : output : TTL               :         :           : N              
-count[1]                     : 69        : output : TTL               :         :           : N              
-count[2]                     : 70        : output : TTL               :         :           : N              
+ccount[0]                    : 67        : output : TTL               :         :           : N              
+count[1]                     : 68        : output : TTL               :         :           : N              
+count[2]                     : 69        : output : TTL               :         :           : N              
+ccount[2]                    : 70        : output : TTL               :         :           : N              
 TDO                          : 71        : output : TTL               :         :           : N              
 GND                          : 72        : gnd    :                   :         :           :                
 RESERVED                     : 73        :        :                   :         :           :                

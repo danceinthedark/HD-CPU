@@ -28,385 +28,443 @@ module HDCPU(
     output reg MBUS,
     output reg SHORT,
     output reg LONG,
-    output reg[3:0] count
+    output reg[3:0] count,
+    output reg[3:0] ccount
     );
     reg EI,EEI;
     reg SST0;
     reg ST0,MIDDLE,jmp_flag,jjmp_flag;
-    reg[3:0] ccount;
     reg [2:0] flag,fflag;
     reg [7:0] SELF_IR,SELF_R0;
     reg [7:0] SSELF_IR,SSELF_R0;
     always @(negedge T3, negedge CLR)
     begin
         if (!CLR) begin
-            ST0 = 0;
-            flag = 0;
-            SELF_R0 = 0;
-            SELF_IR = 0;
-            count = 0;
-            jmp_flag = 0;
             EI = 0;
+            SELF_IR = 0;
+            SELF_R0 = 0;
+            ST0 = 0;
+            count = 0;
+            flag = 0;
+            jmp_flag = 0;
         end
         else if (!T3) begin
             EI = EEI;
-            flag = fflag;
-            count = ccount;
             SELF_IR = SSELF_IR;
             SELF_R0 = SSELF_R0;
+            count = ccount;
+            flag = fflag;
             jmp_flag = jjmp_flag;
             if (SST0 == 1'b1) begin
-                ST0 = SST0; // ï¿½ï¿½SST0 == 1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ST0    = 1
+                ST0 = SST0;
             end
             else if (SW == 3'b100 && ST0 && W[2])
                 ST0 = 0;
         end
     end
 
-    always @(CLR, PULSE) // ?ï¿½Ç·ï¿½ï¿½ï¿½Òªï¿½ï¿½T3×¨ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½
+    always @(CLR, PULSE)
     begin
         {LDC, LDZ, CIN, M, ABUS, DRW, PCINC, LPC, LAR, PCADD, ARINC, SELCTL, MEMW, STOP, LIR, SBUS, MBUS, SHORT, LONG, S, SEL, SST0} = 0;
 
         if (!CLR) begin
-            ccount = 0;
-            fflag = 0;
             EEI = 0;
             SSELF_IR = 0;
             SSELF_R0 = 0;
+            ccount = 0;
+            fflag = 0;
         end
         else begin
             case (SW)
-                3'b001: begin //Ð´ï¿½æ´¢ï¿½ï¿½
-                    LAR    = W[1] && !ST0;
-                    MEMW   = W[1] && ST0;
-                    ARINC  = W[1] && ST0;
-                    SBUS   = W[1];
-                    STOP   = W[1];
-                    SHORT  = W[1];
-                    SELCTL = W[1];
-                    SST0   = W[1];
+                3'b001: begin // Write RAM
+                    if(W[1]) begin
+                        ARINC  = ST0;
+                        LAR    = !ST0;
+                        MEMW   = ST0;
+                        SBUS   = 1;
+                        SELCTL = 1;
+                        SHORT  = 1;
+                        SST0   = 1;
+                        STOP   = 1;
+                    end
                 end
-                3'b010: begin //ï¿½ï¿½ï¿½æ´¢ï¿½ï¿½
-                    SBUS   = W[1] && !ST0;
-                    LAR    = W[1] && !ST0;
-                    SST0   = W[1] && !ST0;
-                    MBUS   = W[1] && ST0;
-                    ARINC  = W[1] && ST0;
-                    STOP   = W[1];
-                    SHORT  = W[1];
-                    SELCTL = W[1];
+                3'b010: begin // Read RAM
+                    if(W[1]) begin
+                        ARINC  = ST0;
+                        LAR    = !ST0;
+                        MBUS   = ST0;
+                        SBUS   = !ST0;
+                        SELCTL = 1;
+                        SHORT  = 1;
+                        SST0   = !ST0;
+                        STOP   = 1;
+                    end
                 end
-                3'b011: begin
-                    SELCTL = W[1] || W[2];
-                    STOP   = W[1] || W[2];
-                    SEL[3] = W[2];
-                    SEL[2] = 0;
-                    SEL[1] = W[2];
-                    SEL[0] = W[1] || W[2];
+                3'b011: begin // Read Register
+                    if(W[1]) begin
+                        SEL = 4'b0001;
+                        SELCTL = 1;
+                        STOP   = 1;
+                    end
+                    else if (W[2]) begin
+                        SEL = 4'b1011;
+                        SELCTL = 1;
+                        STOP   = 1;
+                    end
                 end
-                3'b100: begin //Ð´ï¿½Ä´ï¿½ï¿½ï¿½
-                    SBUS   = W[1] || W[2];
-                    SELCTL = W[1] || W[2];
-                    DRW    = W[1] || W[2];
-                    STOP   = W[1] || W[2];
-                    SST0   = !ST0&&W[2];
-                    SEL[3] = ST0;
-                    SEL[2] = W[2];
-                    SEL[1] = (!ST0&&W[1])||(ST0 && W[2]);
-                    SEL[0] = W[1];
+                3'b100: begin // Write Register
+                    if(W[1]) begin
+                        DRW    = 1;
+                        SBUS   = 1;
+                        SEL = {ST0, 1'b0, !ST0, 1'b1};
+                        SELCTL = 1;
+                        SST0   = 0;
+                        STOP   = 1;
+                    end
+                    else if(W[2]) begin
+                        DRW    = 1;
+                        SBUS   = 1;
+                        SEL = {ST0, 1'b1, ST0, 1'b0};
+                        SELCTL = 1;
+                        SST0   = !ST0;
+                        STOP   = 1;
+                    end
                 end
-                3'b000:
-                if(ST0==0)begin           
-                    SELCTL = 1;
-                    SEL[3] = 1;
-                    SEL[2] = 1;
-                    SBUS = W[1];
-                    DRW = W[1]; 
-                    STOP = W[1];
-                        
-                    ABUS = W[2];
-                    S = 4'b1010;
-                    M = W[2];
-                    SEL[1] = 1;
-                    SEL[0] = 1;
-                    LPC = W[2];
-                    SST0 = W[2];
+                3'b000: // Execute Instructions
+                if(ST0 == 0) begin
+                    if(W[1]) begin
+                        DRW = 1;
+                        S = 4'b1010;
+                        SBUS = 1;
+                        SEL = 4'b1111;
+                        SELCTL = 1;
+                        SST0 = 0;
+                        STOP = 1;
+                    end
+                    else if(W[2]) begin
+                        ABUS = 1;
+                        LPC = 1;
+                        M = 1;
+                        S = 4'b1010;
+                        SEL = 4'b1111;
+                        SELCTL = 1;
+                        SST0 = 1;
+                    end
                 end
-                else 
-                begin
+                else begin
                     case (flag)
                         3'b000: begin
                             if (PULSE && !EI) begin
-                                EEI = 1;
-                                SELCTL = 1;
-                                SEL[3] = 1;
-                                SEL[2] = 1;
-                                SBUS = W[1];
-                                DRW = W[1]; 
-                                STOP = W[1];
-                                
-                                ABUS = W[2];
-                                S = 4'b1010;
-                                M = W[2];
-                                SEL[1] = 1;
-                                SEL[0] = 1;
-                                LPC = W[2];
+                                if(W[1]) begin
+                                    DRW = 1;
+                                    EEI = 1;
+                                    S = 4'b1010;
+                                    SBUS = 1;
+                                    SEL = 4'b1111;
+                                    SELCTL = 1;
+                                    STOP = 1;
+                                end
+                                else if(W[2]) begin
+                                    ABUS = 1;
+                                    EEI = 1;
+                                    LPC = 1;
+                                    M = 1;
+                                    S = 4'b1010;
+                                    SEL = 4'b1111;
+                                    SELCTL = 1;
+                                end
                             end
                             else begin
-                                LIR   = W[1];
-                                PCINC = W[1];
-                                if (W[1])begin
-                                    if (!EI)begin
-                                        SELCTL = 1;
-                                        SEL[3] = 1;
-                                        SEL[2] = 1;
-                                        S= 4'b0000;
+                                if(W[1]) begin
+                                    LIR   = 1;
+                                    PCINC = 1;
+                                    if (!EI) begin
                                         ABUS = 1;
                                         DRW = 1;
+                                        S = 4'b0000;
+                                        SEL = 4'b1100;
+                                        SELCTL = 1;
                                     end
                                 end
-                                else
-                                begin
+                                else begin
                                     case (IR)
-                                        4'b0001,4'b0010: begin // ADD & SUB
-                                            S    = (IR==4'b0001) ? 4'b1001 : 4'b0110;
-                                            CIN  = W[2] && (IR == 4'b0001);
-                                            ABUS = W[2];
-                                            DRW  = W[2];
-                                            LDZ  = W[2];
-                                            LDC  = W[2];
-                                        end
-                                        4'b0011,4'b1100,4'b1101: begin // AND
-                                            M    = W[2];
-                                            case (IR)
-                                                4'b0011:S = 4'b1011;//AND
-                                                4'b1100:S = 4'b1110;//OR 
-                                                default:S = 4'b0110;//XOR
-                                            endcase
-                                            ABUS = W[2];
-                                            DRW  = W[2];
-                                            LDZ  = W[2];
-                                        end
-                                        4'b0100: begin // INC
-                                            S    = 0;
-                                            ABUS = W[2];
-                                            DRW  = W[2];
-                                            LDZ  = W[2];
-                                            LDC  = W[2];
-                                        end
-                                        4'b0101: begin // LD
-                                            M    = W[2];
-                                            S    = 4'b1010;
-                                            ABUS = W[2];
-                                            LAR  = W[2];
-                                            LONG = W[2];
-                                            DRW  = W[3];
-                                            MBUS = W[3];
-                                        end
-                                        4'b0110: begin // ST
-                                            M    = W[2] || W[3];
-                                            S    = (W[2]) ? 4'b1111 : 4'b1010;
-                                            ABUS = W[2] || W[3];
-                                            LAR  = W[2];
-                                            LONG = W[2];
-                                            MEMW = W[3];
-                                        end
-                                        4'b0111,4'b1000:// JC && JZ
-                                            if ((flag==4'b0111 && C) || (flag==4'b1000 && Z))
-                                            begin
-                                                PCADD = W[2];
-                                                if(!EI) begin
-                                                    ABUS = W[2];
-                                                    SEL[3] = !W[2];
-                                                    SEL[2] = !W[2];
-                                                    S = 4'b1100;
-                                                    SELCTL = W[2];
-                                                    CIN = W[2];
-                                                    DRW = W[2];
-                                                    LDZ = W[2];
-                                                    LDC = W[2];
-                                                    fflag = W[2];
-                                                    ccount = 1;
-                                                end
-                                            end
-                                        4'b1001: begin // JMP
-                                            M=W[2];
-                                            S=4'b1111;
-                                            ABUS = W[2];
-                                            LPC = W[2];
-                                            if (!EI) begin
-                                                LONG = W[2];
-                                                if (W[3])begin
-                                                    ABUS = W[3];
-                                                    SEL[2] = 0;
-                                                    SEL[3] = 0;
-                                                    S = 4'b1100;
-                                                    SELCTL = W[3];
-                                                    CIN = W[3];
-                                                    DRW = W[3];
-                                                    LDZ = W[3];
-                                                    LDC = W[3];
-                                                    jjmp_flag = W[3];
-                                                    fflag = W[3];
-                                                    ccount = 1;
-                                                end
+                                        // ADD, SUB
+                                        4'b0001, 4'b0010: begin
+                                            if(W[2]) begin
+                                                ABUS = 1;
+                                                CIN  = (IR == 4'b0001);
+                                                DRW  = 1;
+                                                LDC  = 1;
+                                                LDZ  = 1;
+                                                S    = (IR==4'b0001) ? 4'b1001 : 4'b0110;
                                             end
                                         end
-                                        4'b1011://IRET
-                                        begin
-                                            ABUS = W[2];
-                                            S = 4'b1010;
-                                            M = W[2];
-                                            SELCTL = W[2];
-                                            SEL[1] = 1;
-                                            SEL[0] = 1;
-                                            LPC = W[2];
+                                        4'b0011, 4'b1100, 4'b1101: begin
+                                            if(W[2]) begin
+                                                ABUS = 1;
+                                                DRW  = 1;
+                                                LDZ  = 1;
+                                                M    = 1;
+                                                case (IR)
+                                                    // AND
+                                                    4'b0011: S = 4'b1011;
+                                                    // OR
+                                                    4'b1100: S = 4'b1110;
+                                                    // XOR
+                                                    4'b1101: S = 4'b0110;
+                                                endcase
+                                            end
                                         end
-                                        4'b1101:
+                                        // INC
+                                        4'b0100: begin
+                                            if(W[2]) begin
+                                                ABUS = 1;
+                                                DRW  = 1;
+                                                LDC  = 1;
+                                                LDZ  = 1;
+                                            end
+                                        end
+                                        // LD
+                                        4'b0101: begin
+                                            if(W[2]) begin
+                                                ABUS = 1;
+                                                LAR  = 1;
+                                                LONG = 1;
+                                                M    = 1;
+                                                S    = 4'b1010;
+                                            end
+                                            else if(W[3]) begin
+                                                DRW  = 1;
+                                                MBUS = 1;
+                                            end
+                                        end
+                                        // ST
+                                        4'b0110: begin
+                                            if(W[2]) begin
+                                                ABUS = 1;
+                                                LAR  = 1;
+                                                LONG = 1;
+                                                M    = 1;
+                                                S    = 4'b1111;
+                                            end
+                                            else if(W[3]) begin
+                                                ABUS = 1;
+                                                M    = 1;
+                                                MEMW = 1;
+                                                S    = 4'b1010;
+                                            end
+                                        end
+                                        // JC, JZ
+                                        4'b0111, 4'b1000:
+                                            if ((flag == 4'b0111 && C) || (flag == 4'b1000 && Z)) begin
+                                                if(W[2]) begin
+                                                    PCADD = 1;
+                                                    if(!EI) begin
+                                                        ABUS = 1;
+                                                        CIN = 1;
+                                                        DRW = 1;
+                                                        LDC = 1;
+                                                        LDZ = 1;
+                                                        S = 4'b1100;
+                                                        SELCTL = 1;
+                                                        ccount = 1;
+                                                        fflag = 1;
+                                                    end
+                                                end
+                                                else if(W[3]) begin
+                                                    if(!EI) begin
+                                                        S = 4'b1100;
+                                                        SEL[2] = 1;
+                                                        SEL[3] = 1;
+                                                        ccount = 1;
+                                                        fflag = 0;
+                                                    end
+                                                end
+                                            end
+                                        // JMP
+                                        4'b1001: begin
+                                            if(W[2]) begin
+                                                ABUS = 1;
+                                                LPC = 1;
+                                                M = 1;
+                                                S = 4'b1111;
+                                                LONG = !EI;
+                                            end
+                                            else if(W[3]) begin
+                                                ABUS = 1;
+                                                CIN = 1;
+                                                DRW = 1;
+                                                LDC = 1;
+                                                LDZ = 1;
+                                                S = 4'b1100;
+                                                SELCTL = 1;
+                                                ccount = 1;
+                                                fflag = 1;
+                                                jjmp_flag = 1;
+                                            end
+                                        end
+                                        // IRET
+                                        4'b1011:
                                         begin
+                                            if(W[2]) begin
+                                                ABUS = 1;
+                                                LPC = 1;
+                                                M = 1;
+                                                S = 4'b1010;
+                                                SEL = 4'b0011;
+                                                SELCTL = 1;
+                                            end
+                                        end
+                                        4'b1101: begin
                                             EEI = 1;
                                         end
-                                        4'b1010: begin // OUT
-                                            M    = W[2];
-                                            S    = 4'b1010;
-                                            ABUS = W[2];
+                                        // OUT
+                                        4'b1010: begin
+                                            if(W[2]) begin
+                                                ABUS = 1;
+                                                M    = 1;
+                                                S    = 4'b1010;
+                                            end
                                         end
-                                        4'b1110: begin // STP
-                                            STOP = W[2];
+                                        // STP
+                                        4'b1110: begin
+                                            if(W[2]) begin
+                                                STOP = 1;
+                                            end
                                         end
                                         default: S = 4'b0000;
                                     endcase
                                 end
-                                // <---SW == 000ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ï¿½ï¿½
                             end
                         end
-                        //flag=1 ï¿½ï¿½ï¿½ï¿½R0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-                        //flag=2 ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½îµ½R0ï¿½ï¿½ï¿½Ù´ï¿½R0ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                        // flag = 1 ½«R0ÌáÈ¡µ½³ÌÐòºóPC->AR->R0
+                        // flag = 2 ½«Ö¸ÁîÌáÈ¡µ½³ÌÐòÖÐ
                         3'b001,3'b010: begin
-                            if (flag==1) SSELF_R0 = (SELF_R0 << 1) + C;
-                            else SSELF_IR = (SELF_IR << 1) + C;
-                            if (count !=8) begin
-                                ccount = count + W[1];
-                                SELCTL = W[1];
-                                SEL[3] = !W[1];
-                                SEL[2] = !W[1];
-                                S = 4'b1100;
-                                ABUS = W[1];
-                                DRW = W[1];
-                                LDZ = W[1];
-                                LDC = W[1];
-                                CIN = W[1];
-                                SHORT = W[1];
+                            if (flag == 1)
+                                SSELF_R0 = (SELF_R0 << 1) + C;
+                            else
+                                SSELF_IR = (SELF_IR << 1) + C;
+
+                            if (count != 8) begin
+                                if(W[1]) begin
+                                    ccount = count + 1;
+                                    ABUS = 1;
+                                    CIN = 1;
+                                    DRW = 1;
+                                    LDC = 1;
+                                    LDZ = 1;
+                                    S = 4'b1100;
+                                    SELCTL = 1;
+                                    SHORT = 1;
+                                end
                             end
                             else begin
-                                if (flag==1)begin
-                                    ABUS = !W[2];
-                                    S = (W[1])?4'b1010:4'b1100;
-                                    M = W[1];
-                                    SELCTL = 1;
-                                    SEL[3] = 0;
-                                    SEL[2] = 0;
-                                    SEL[1] = 1;
-                                    SEL[0] = 1;
-                                    LAR = W[1];
-
-                                    MBUS = W[2];  
-                                    DRW = W[2];
-                                    LONG = W[2];
-
-                                    DRW = W[3];
-                                    LDZ = W[3];
-                                    LDC = W[3];
-                                    CIN = W[3];
-
-                                    if (W[3])begin
-                                        fflag = 2;
+                                if (flag == 1) begin
+                                    if(W[1]) begin
+                                        ABUS = 1;
+                                        CIN = 1;
+                                        LAR = 1;
+                                        S = 4'b1111;
+                                        SEL = 4'b1100;
+                                        SELCTL = 1;
+                                    end
+                                    else if(W[2]) begin
+                                        DRW = 1;
+                                        LONG = 1;
+                                        MBUS = 1;
+                                        S = 4'b1100;
+                                        SELCTL = 1;
+                                    end
+                                    else if(W[3]) begin
+                                        ABUS = 1;
+                                        CIN = 1;
+                                        DRW = 1;
+                                        LDC = 1;
+                                        LDZ = 1;
+                                        S = 4'b1100;
+                                        SEL = 4'b0000;
+                                        SELCTL = 1;
                                         ccount = 1;
+                                        fflag = 2;
                                     end
                                 end
-                                else
-                                begin
-                                    if (jmp_flag)begin
-                                        if (SELF_IR[3:2])
-                                        begin
-                                            SHORT = W[1];
-                                            SELCTL = W[1];
-                                            SEL[3] = 1;
-                                            SEL[2] = 1;
-                                            SEL[1] = SELF_IR[3];
-                                            SEL[0] = SELF_IR[2];
-                                            S = 4'b1010;
-                                            ABUS = W[1];
-                                            DRW = W[1];
-                                            M = W[1];
-                                            fflag = 4;
+                                else begin
+                                    if (jmp_flag) begin
+                                        if(SELF_IR[3:2]) begin
+                                            if(W[1]) begin
+                                                ABUS = 1;
+                                                DRW = 1;
+                                                M = 1;
+                                                S = 4'b1010;
+                                                SEL = {1'b1, 1'b1, SELF_IR[3], SELF_IR[2]};
+                                                SELCTL = 1;
+                                                SHORT = 1;
+                                                fflag = 4;
+                                            end
                                         end
-                                        else
-                                        begin//Rx=0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½È½ï¿½ï¿½ï¿½flag4ï¿½ï¿½R0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-                                            SHORT = W[1];
-                                            fflag = 4;
+                                        else begin
+                                            if(W[1]) begin
+                                                SHORT = 1;
+                                                fflag = 4;
+                                            end
                                         end
                                     end
                                     else begin
-                                        SHORT = W[1];
-                                        fflag = 3;
+                                        if(W[1]) begin
+                                            SHORT = 1;
+                                            fflag = 3;
+                                        end
                                     end
                                     ccount = 0;
                                 end
                             end
                         end
-                        //flag=3 ï¿½ï¿½IRï¿½Äºï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½R0ï¿½ï¿½È»ï¿½ï¿½PC(R3)+=R0
-                        //flag=4 ï¿½Ö¸ï¿½R0
+                        // flag = 3, ½«Ö¸ÁîºóËÄÎ»´òÈëµ½R0, ²¢ÓëR3(PC)Ïà¼Ó
+                        // flag = 4, »Ö¸´R0
                         3'b011,3'b100: begin
                             if (count !=8) begin
-                                ccount = count + W[1];
-                                SELCTL = 1;
-                                SEL[3] = 0;
-                                SEL[2] = 0;
-                                S = 4'b1100;
+                                if(W[1]) begin
+                                    SHORT= 1;
+                                    ccount = count + 1;
+                                end
                                 ABUS = 1;
+                                CIN = !((flag == 3 && count>=4 && SELF_IR[7-count]) ||
+                                    (flag == 4 && SELF_R0[7-count]));
                                 DRW = 1;
-                                CIN = !((flag==3 && count>=4 && SELF_IR[7-count]) || 
-                                    (flag==4 && SELF_R0[7-count]));
-                                SHORT=W[1];
+                                S = 4'b1100;
+                                SEL = {1'b0, 1'b0, 1'b0, 1'b0};
+                                SELCTL = 1;
                             end
                             else begin
                                 SHORT = W[1];
-                                ccount = 0;
-                                if (flag==3)begin
-                                    SELCTL = W[1];
-                                    SEL[3] = 1;
-                                    SEL[2] = 1;
-                                    SEL[1] = 0;
-                                    SEL[0] = 0;
-                                    S = 4'b1001;
-                                    CIN = W[1];
+                                if (flag == 3) begin
                                     ABUS = W[1];
+                                    CIN = W[1];
                                     DRW = W[1];
+                                    S = 4'b1001;
+                                    SEL = {1'b1, 1'b1, 1'b0, 1'b0};
+                                    SELCTL = W[1];
                                     fflag = 4;
                                 end
                                 else begin
                                     if (jmp_flag && SELF_IR[3:2]==2'b00)
                                     begin
-                                        SELCTL = W[1];
-                                        SEL[3] = 1;
-                                        SEL[2] = 1;
-                                        SEL[1] = 0;
-                                        SEL[0] = 0;
-                                        S = 4'b1010;
                                         ABUS = W[1];
                                         DRW = W[1];
                                         M = W[1];
+                                        S = 4'b1010;
+                                        SEL = {1'b1, 1'b1, 1'b0, 1'b0};
+                                        SELCTL = W[1];
                                     end
-                                    jjmp_flag = 0;
                                     EEI = 0;
                                     fflag = 0;
+                                    jjmp_flag = 0;
                                 end
+                                ccount = 0;
                             end
                         end
                     endcase
                 end
-                // default:
             endcase
         end
     end

@@ -2424,14 +2424,14 @@ VECTOR("E:/dxw/教学课件/大二/大二下/计组课程设计/HardConnectWire/HD-CPU/exp3_1re
 	}
 }
 
-VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
+VECTOR("D:/Code/Github/HD-CPU/exp3_1register/HDCPU.vwf")
 {
 	ZOOM{
 		ZBEGIN = 0;
-		ZEND = 36000000;
+		ZEND = 18000000;
 		NUMERATOR = 1161;
-		DENOMINATOR = 36000000;
-		TOP_INDEX = 13;
+		DENOMINATOR = 18000000;
+		TOP_INDEX = 14;
 	}
 	CLOCK{
 		PERIOD = 10000;
@@ -2458,8 +2458,16 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "SELF_R0";
+		SIGNAL = "Z";
 		INDEX = 2;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SELF_R0";
+		INDEX = 3;
 		FORMAT = T;
 		SCALE = 1;
 		VISIBLE = Y;
@@ -2467,14 +2475,6 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 	}
 	LINE{
 		SIGNAL = "SELF_R0[7]";
-		INDEX = 3;
-		FORMAT = E;
-		SCALE = 1;
-		VISIBLE = Y;
-		FLAG = N;
-	}
-	LINE{
-		SIGNAL = "SELF_R0[6]";
 		INDEX = 4;
 		FORMAT = E;
 		SCALE = 1;
@@ -2482,7 +2482,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "SELF_R0[5]";
+		SIGNAL = "SELF_R0[6]";
 		INDEX = 5;
 		FORMAT = E;
 		SCALE = 1;
@@ -2490,7 +2490,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "SELF_R0[4]";
+		SIGNAL = "SELF_R0[5]";
 		INDEX = 6;
 		FORMAT = E;
 		SCALE = 1;
@@ -2498,7 +2498,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "SELF_R0[3]";
+		SIGNAL = "SELF_R0[4]";
 		INDEX = 7;
 		FORMAT = E;
 		SCALE = 1;
@@ -2506,7 +2506,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "SELF_R0[2]";
+		SIGNAL = "SELF_R0[3]";
 		INDEX = 8;
 		FORMAT = E;
 		SCALE = 1;
@@ -2514,7 +2514,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "SELF_R0[1]";
+		SIGNAL = "SELF_R0[2]";
 		INDEX = 9;
 		FORMAT = E;
 		SCALE = 1;
@@ -2522,7 +2522,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "SELF_R0[0]";
+		SIGNAL = "SELF_R0[1]";
 		INDEX = 10;
 		FORMAT = E;
 		SCALE = 1;
@@ -2530,8 +2530,16 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "IR";
+		SIGNAL = "SELF_R0[0]";
 		INDEX = 11;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "IR";
+		INDEX = 12;
 		FORMAT = T;
 		SCALE = 1;
 		VISIBLE = Y;
@@ -2539,14 +2547,6 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 	}
 	LINE{
 		SIGNAL = "IR[7]";
-		INDEX = 12;
-		FORMAT = E;
-		SCALE = 1;
-		VISIBLE = Y;
-		FLAG = N;
-	}
-	LINE{
-		SIGNAL = "IR[6]";
 		INDEX = 13;
 		FORMAT = E;
 		SCALE = 1;
@@ -2554,7 +2554,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "IR[5]";
+		SIGNAL = "IR[6]";
 		INDEX = 14;
 		FORMAT = E;
 		SCALE = 1;
@@ -2562,7 +2562,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "IR[4]";
+		SIGNAL = "IR[5]";
 		INDEX = 15;
 		FORMAT = E;
 		SCALE = 1;
@@ -2570,7 +2570,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "PULSE";
+		SIGNAL = "IR[4]";
 		INDEX = 16;
 		FORMAT = E;
 		SCALE = 1;
@@ -2578,8 +2578,16 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "SW";
+		SIGNAL = "PULSE";
 		INDEX = 17;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SW";
+		INDEX = 18;
 		FORMAT = T;
 		SCALE = 1;
 		VISIBLE = Y;
@@ -2587,14 +2595,6 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 	}
 	LINE{
 		SIGNAL = "SW[2]";
-		INDEX = 18;
-		FORMAT = E;
-		SCALE = 1;
-		VISIBLE = Y;
-		FLAG = N;
-	}
-	LINE{
-		SIGNAL = "SW[1]";
 		INDEX = 19;
 		FORMAT = E;
 		SCALE = 1;
@@ -2602,7 +2602,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "SW[0]";
+		SIGNAL = "SW[1]";
 		INDEX = 20;
 		FORMAT = E;
 		SCALE = 1;
@@ -2610,7 +2610,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "T3";
+		SIGNAL = "SW[0]";
 		INDEX = 21;
 		FORMAT = E;
 		SCALE = 1;
@@ -2618,8 +2618,16 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "W";
+		SIGNAL = "T3";
 		INDEX = 22;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "W";
+		INDEX = 23;
 		FORMAT = T;
 		SCALE = 1;
 		VISIBLE = Y;
@@ -2627,14 +2635,6 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 	}
 	LINE{
 		SIGNAL = "W[3]";
-		INDEX = 23;
-		FORMAT = E;
-		SCALE = 1;
-		VISIBLE = Y;
-		FLAG = N;
-	}
-	LINE{
-		SIGNAL = "W[2]";
 		INDEX = 24;
 		FORMAT = E;
 		SCALE = 1;
@@ -2642,7 +2642,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "W[1]";
+		SIGNAL = "W[2]";
 		INDEX = 25;
 		FORMAT = E;
 		SCALE = 1;
@@ -2650,7 +2650,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "Z";
+		SIGNAL = "W[1]";
 		INDEX = 26;
 		FORMAT = E;
 		SCALE = 1;
@@ -2658,7 +2658,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "count";
+		SIGNAL = "flag";
 		INDEX = 27;
 		FORMAT = T;
 		SCALE = 1;
@@ -2666,7 +2666,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "count[2]";
+		SIGNAL = "flag[2]";
 		INDEX = 28;
 		FORMAT = E;
 		SCALE = 1;
@@ -2674,7 +2674,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "count[1]";
+		SIGNAL = "flag[1]";
 		INDEX = 29;
 		FORMAT = E;
 		SCALE = 1;
@@ -2682,7 +2682,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "count[0]";
+		SIGNAL = "flag[0]";
 		INDEX = 30;
 		FORMAT = E;
 		SCALE = 1;
@@ -2690,7 +2690,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "flag";
+		SIGNAL = "count";
 		INDEX = 31;
 		FORMAT = T;
 		SCALE = 1;
@@ -2698,7 +2698,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "flag[2]";
+		SIGNAL = "count[3]";
 		INDEX = 32;
 		FORMAT = E;
 		SCALE = 1;
@@ -2706,7 +2706,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "flag[1]";
+		SIGNAL = "count[2]";
 		INDEX = 33;
 		FORMAT = E;
 		SCALE = 1;
@@ -2714,7 +2714,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "flag[0]";
+		SIGNAL = "count[1]";
 		INDEX = 34;
 		FORMAT = E;
 		SCALE = 1;
@@ -2722,7 +2722,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "EI";
+		SIGNAL = "count[0]";
 		INDEX = 35;
 		FORMAT = E;
 		SCALE = 1;
@@ -2730,7 +2730,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "ABUS";
+		SIGNAL = "EI";
 		INDEX = 36;
 		FORMAT = E;
 		SCALE = 1;
@@ -2738,7 +2738,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "ARINC";
+		SIGNAL = "ABUS";
 		INDEX = 37;
 		FORMAT = E;
 		SCALE = 1;
@@ -2746,7 +2746,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "CIN";
+		SIGNAL = "ARINC";
 		INDEX = 38;
 		FORMAT = E;
 		SCALE = 1;
@@ -2754,7 +2754,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "DRW";
+		SIGNAL = "CIN";
 		INDEX = 39;
 		FORMAT = E;
 		SCALE = 1;
@@ -2762,7 +2762,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "LAR";
+		SIGNAL = "DRW";
 		INDEX = 40;
 		FORMAT = E;
 		SCALE = 1;
@@ -2770,7 +2770,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "LDC";
+		SIGNAL = "LAR";
 		INDEX = 41;
 		FORMAT = E;
 		SCALE = 1;
@@ -2778,7 +2778,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "LDZ";
+		SIGNAL = "LDC";
 		INDEX = 42;
 		FORMAT = E;
 		SCALE = 1;
@@ -2786,7 +2786,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "LIR";
+		SIGNAL = "LDZ";
 		INDEX = 43;
 		FORMAT = E;
 		SCALE = 1;
@@ -2794,7 +2794,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "LONG";
+		SIGNAL = "LIR";
 		INDEX = 44;
 		FORMAT = E;
 		SCALE = 1;
@@ -2802,7 +2802,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "LPC";
+		SIGNAL = "LONG";
 		INDEX = 45;
 		FORMAT = E;
 		SCALE = 1;
@@ -2810,7 +2810,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "M";
+		SIGNAL = "LPC";
 		INDEX = 46;
 		FORMAT = E;
 		SCALE = 1;
@@ -2818,7 +2818,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "MBUS";
+		SIGNAL = "M";
 		INDEX = 47;
 		FORMAT = E;
 		SCALE = 1;
@@ -2826,7 +2826,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "MEMW";
+		SIGNAL = "MBUS";
 		INDEX = 48;
 		FORMAT = E;
 		SCALE = 1;
@@ -2834,7 +2834,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "PCADD";
+		SIGNAL = "MEMW";
 		INDEX = 49;
 		FORMAT = E;
 		SCALE = 1;
@@ -2842,7 +2842,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "PCINC";
+		SIGNAL = "PCADD";
 		INDEX = 50;
 		FORMAT = E;
 		SCALE = 1;
@@ -2850,8 +2850,16 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "S";
+		SIGNAL = "PCINC";
 		INDEX = 51;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "S";
+		INDEX = 52;
 		FORMAT = T;
 		SCALE = 1;
 		VISIBLE = Y;
@@ -2859,14 +2867,6 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 	}
 	LINE{
 		SIGNAL = "S[3]";
-		INDEX = 52;
-		FORMAT = E;
-		SCALE = 1;
-		VISIBLE = Y;
-		FLAG = N;
-	}
-	LINE{
-		SIGNAL = "S[2]";
 		INDEX = 53;
 		FORMAT = E;
 		SCALE = 1;
@@ -2874,7 +2874,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "S[1]";
+		SIGNAL = "S[2]";
 		INDEX = 54;
 		FORMAT = E;
 		SCALE = 1;
@@ -2882,7 +2882,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "S[0]";
+		SIGNAL = "S[1]";
 		INDEX = 55;
 		FORMAT = E;
 		SCALE = 1;
@@ -2890,7 +2890,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "SBUS";
+		SIGNAL = "S[0]";
 		INDEX = 56;
 		FORMAT = E;
 		SCALE = 1;
@@ -2898,8 +2898,16 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "SEL";
+		SIGNAL = "SBUS";
 		INDEX = 57;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SEL";
+		INDEX = 58;
 		FORMAT = T;
 		SCALE = 1;
 		VISIBLE = Y;
@@ -2907,14 +2915,6 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 	}
 	LINE{
 		SIGNAL = "SEL[3]";
-		INDEX = 58;
-		FORMAT = E;
-		SCALE = 1;
-		VISIBLE = Y;
-		FLAG = N;
-	}
-	LINE{
-		SIGNAL = "SEL[2]";
 		INDEX = 59;
 		FORMAT = E;
 		SCALE = 1;
@@ -2922,7 +2922,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "SEL[1]";
+		SIGNAL = "SEL[2]";
 		INDEX = 60;
 		FORMAT = E;
 		SCALE = 1;
@@ -2930,7 +2930,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "SEL[0]";
+		SIGNAL = "SEL[1]";
 		INDEX = 61;
 		FORMAT = E;
 		SCALE = 1;
@@ -2938,7 +2938,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "SELCTL";
+		SIGNAL = "SEL[0]";
 		INDEX = 62;
 		FORMAT = E;
 		SCALE = 1;
@@ -2946,7 +2946,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "SHORT";
+		SIGNAL = "SELCTL";
 		INDEX = 63;
 		FORMAT = E;
 		SCALE = 1;
@@ -2954,7 +2954,7 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "STOP";
+		SIGNAL = "SHORT";
 		INDEX = 64;
 		FORMAT = E;
 		SCALE = 1;
@@ -2962,8 +2962,595 @@ VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
 		FLAG = N;
 	}
 	LINE{
-		SIGNAL = "count[3]";
+		SIGNAL = "STOP";
 		INDEX = 65;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+}
+
+VECTOR("D:/Code/Github/HD-CPU/exp3_1register/db/HDCPU.sim.cvwf")
+{
+	ZOOM{
+		ZBEGIN = 0;
+		ZEND = 8860465;
+		NUMERATOR = 1143;
+		DENOMINATOR = 8860465;
+		TOP_INDEX = 46;
+	}
+	CLOCK{
+		PERIOD = 10000;
+		OFFSET = 0;
+		DUTY_CYCLE = 50;
+	}
+	RANDOM_VALUE{
+		INTERVAL_TYPE = HALF_GRID;
+	}
+	LINE{
+		SIGNAL = "CLR";
+		INDEX = 0;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "C";
+		INDEX = 1;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "Z";
+		INDEX = 2;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SELF_R0";
+		INDEX = 3;
+		FORMAT = T;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SELF_R0[7]";
+		INDEX = 4;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SELF_R0[6]";
+		INDEX = 5;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SELF_R0[5]";
+		INDEX = 6;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SELF_R0[4]";
+		INDEX = 7;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SELF_R0[3]";
+		INDEX = 8;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SELF_R0[2]";
+		INDEX = 9;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SELF_R0[1]";
+		INDEX = 10;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SELF_R0[0]";
+		INDEX = 11;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "IR";
+		INDEX = 12;
+		FORMAT = T;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "IR[7]";
+		INDEX = 13;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "IR[6]";
+		INDEX = 14;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "IR[5]";
+		INDEX = 15;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "IR[4]";
+		INDEX = 16;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "PULSE";
+		INDEX = 17;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SW";
+		INDEX = 18;
+		FORMAT = T;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SW[2]";
+		INDEX = 19;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SW[1]";
+		INDEX = 20;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SW[0]";
+		INDEX = 21;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "T3";
+		INDEX = 22;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "W";
+		INDEX = 23;
+		FORMAT = T;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "W[3]";
+		INDEX = 24;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "W[2]";
+		INDEX = 25;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "W[1]";
+		INDEX = 26;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "flag";
+		INDEX = 27;
+		FORMAT = T;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "flag[2]";
+		INDEX = 28;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "flag[1]";
+		INDEX = 29;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "flag[0]";
+		INDEX = 30;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "count";
+		INDEX = 31;
+		FORMAT = T;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "count[3]";
+		INDEX = 32;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "count[2]";
+		INDEX = 33;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "count[1]";
+		INDEX = 34;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "count[0]";
+		INDEX = 35;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "ccount";
+		INDEX = 36;
+		FORMAT = T;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "ccount[3]";
+		INDEX = 37;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "ccount[2]";
+		INDEX = 38;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "ccount[1]";
+		INDEX = 39;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "ccount[0]";
+		INDEX = 40;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "EI";
+		INDEX = 41;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "ABUS";
+		INDEX = 42;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "ARINC";
+		INDEX = 43;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "CIN";
+		INDEX = 44;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "DRW";
+		INDEX = 45;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "LAR";
+		INDEX = 46;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "LDC";
+		INDEX = 47;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "LDZ";
+		INDEX = 48;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "LIR";
+		INDEX = 49;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "LONG";
+		INDEX = 50;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "LPC";
+		INDEX = 51;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "M";
+		INDEX = 52;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "MBUS";
+		INDEX = 53;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "MEMW";
+		INDEX = 54;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "PCADD";
+		INDEX = 55;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "PCINC";
+		INDEX = 56;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "S";
+		INDEX = 57;
+		FORMAT = T;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "S[3]";
+		INDEX = 58;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "S[2]";
+		INDEX = 59;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "S[1]";
+		INDEX = 60;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "S[0]";
+		INDEX = 61;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SBUS";
+		INDEX = 62;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SEL";
+		INDEX = 63;
+		FORMAT = T;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SEL[3]";
+		INDEX = 64;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SEL[2]";
+		INDEX = 65;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SEL[1]";
+		INDEX = 66;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SEL[0]";
+		INDEX = 67;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SELCTL";
+		INDEX = 68;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "SHORT";
+		INDEX = 69;
+		FORMAT = E;
+		SCALE = 1;
+		VISIBLE = Y;
+		FLAG = N;
+	}
+	LINE{
+		SIGNAL = "STOP";
+		INDEX = 70;
 		FORMAT = E;
 		SCALE = 1;
 		VISIBLE = Y;
