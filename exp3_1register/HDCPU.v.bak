@@ -27,15 +27,17 @@ module HDCPU(
     output reg SBUS,
     output reg MBUS,
     output reg SHORT,
-    output reg LONG
+    output reg LONG,
+    output reg[3:0] count,
+    output reg[3:0] ccount,
+    output reg[7:0] SELF_R0,
     );
 
     reg EI,EEI;
     reg SST0;
     reg ST0,MIDDLE,jmp_flag,jjmp_flag;
-    reg [3:0] count,ccount;
     reg [2:0] flag,fflag;
-    reg [7:0] SELF_IR,SELF_R0;
+    reg [7:0] SELF_IR;
     reg [7:0] SSELF_IR,SSELF_R0;
     always @(negedge T3, negedge CLR)
     begin
@@ -53,7 +55,7 @@ module HDCPU(
             flag = fflag;
             count = ccount;
             SELF_IR = SSELF_IR;
-            SSELF_R0 = SSELF_IR;
+            SELF_R0 = SSELF_IR;
             jmp_flag = jjmp_flag;
             if (SST0 == 1'b1) begin
                 ST0 = SST0; // ��SST0 == 1������ST0    = 1
@@ -68,7 +70,7 @@ module HDCPU(
         {LDC, LDZ, CIN, M, ABUS, DRW, PCINC, LPC, LAR, PCADD, ARINC, SELCTL, MEMW, STOP, LIR, SBUS, MBUS, SHORT, LONG, S, SEL, SST0} = 0;
 
         if (!CLR) begin
-            count = 0;
+            ccount = 0;
             fflag = 0;
             EEI = 0;
             SSELF_IR = 0;
@@ -116,23 +118,41 @@ module HDCPU(
                     SEL[0] = W[1];
                 end
                 3'b000:
-                if(ST0==0)begin 
-                        LPC = W[1];
-                        SBUS = W[1];
-                        SST0 = W[1];
-                        SHORT = W[1];
-                        STOP = W[1];
-                    end
+                if(ST0==0)begin           
+                    SELCTL = 1;
+                    SEL[3] = 1;
+                    SEL[2] = 1;
+                    SBUS = W[1];
+                    DRW = W[1]; 
+                    STOP = W[1];
+                        
+                    ABUS = W[2];
+                    S = 4'b1010;
+                    M = W[2];
+                    SEL[1] = 1;
+                    SEL[0] = 1;
+                    LPC = W[2];
+                    SST0 = W[2];
+                end
                 else 
                 begin
                     case (flag)
                         3'b000: begin
                             if (PULSE && !EI) begin
                                 EEI = 1;
+                                SELCTL = 1;
+                                SEL[3] = 1;
+                                SEL[2] = 1;
                                 SBUS = W[1];
-                                LPC = W[1];
-                                SHORT = W[1];
+                                DRW = W[1]; 
                                 STOP = W[1];
+                                
+                                ABUS = W[2];
+                                S = 4'b1010;
+                                M = W[2];
+                                SEL[1] = 1;
+                                SEL[0] = 1;
+                                LPC = W[2];
                             end
                             else begin
                                 LIR   = W[1];
@@ -141,7 +161,7 @@ module HDCPU(
                                     if (!EI)begin
                                         SELCTL = 1;
                                         SEL[3] = 1;
-                                        SEL[2] = 0;
+                                        SEL[2] = 1;
                                         S= 4'b0000;
                                         ABUS = 1;
                                         DRW = 1;
@@ -157,8 +177,6 @@ module HDCPU(
                                             DRW  = W[2];
                                             LDZ  = W[2];
                                             LDC  = W[2];
-                                            SELF_C = 0;
-                                            SELF_Z = 0;
                                         end
                                         4'b0011,4'b1100,4'b1101: begin // AND
                                             M    = W[2];
@@ -170,8 +188,6 @@ module HDCPU(
                                             ABUS = W[2];
                                             DRW  = W[2];
                                             LDZ  = W[2];
-                                            SELF_C = 0;
-                                            SELF_Z = 0;
                                         end
                                         4'b0100: begin // INC
                                             S    = 0;
@@ -179,8 +195,6 @@ module HDCPU(
                                             DRW  = W[2];
                                             LDZ  = W[2];
                                             LDC  = W[2];
-                                            SELF_C = 0;
-                                            SELF_Z = 0;
                                         end
                                         4'b0101: begin // LD
                                             M    = W[2];
@@ -225,13 +239,9 @@ module HDCPU(
                                             DRW = W[2];
                                             LDZ = W[2];
                                             LDC = W[2];
-                                            jmp_flag = W[2];
+                                            jjmp_flag = W[2];
                                             fflag = W[2];
                                             ccount = 1;
-                                            if (W[2])begin
-                                                if (!SELF_C) SELF_C={1'b1,C};
-                                                if (!SELF_Z) SELF_Z={1'b1,Z};
-                                            end
                                         end
                                         4'b1011://IRET
                                         begin
@@ -242,6 +252,10 @@ module HDCPU(
                                             SEL[1] = 1;
                                             SEL[0] = 1;
                                             LPC = W[2];
+                                        end
+                                        4'b1101:
+                                        begin
+                                            EEI = 1;
                                         end
                                         4'b1010: begin // OUT
                                             M    = W[2];
@@ -257,13 +271,13 @@ module HDCPU(
                                 // <---SW == 000�����ִ�����
                             end
                         end
-                        //flag=1 保存R0至程序
-                        //flag=2 保存指令到R0，再从R0提取到程序中
+                        //flag=1 ����R0������
+                        //flag=2 ����ָ�R0���ٴ�R0��ȡ��������
                         3'b001,3'b010: begin
                             if (flag==1) SSELF_R0 = (SELF_R0 << 1) + C;
-                            else SSELF_IR = (SELF_R0 << 1) + C;
+                            else SSELF_IR = (SELF_IR << 1) + C;
                             if (count !=8) begin
-                                ccount = count + 1;
+                                ccount = count +W[1];
                                 SELCTL = W[1];
                                 SEL[3] = !W[1];
                                 SEL[2] = !W[1];
@@ -304,17 +318,25 @@ module HDCPU(
                                 else
                                 begin
                                     if (jmp_flag)begin
-                                        SHORT = W[1];
-                                        SELCTL = W[1];
-                                        SEL[3] = 1;
-                                        SEL[2] = 1;
-                                        SEL[1] = SELF_IR[3];
-                                        SEL[0] = SELF_IR[2];
-                                        S = 4'b1010;
-                                        ABUS = W[1];
-                                        DRW = W[1];
-                                        M = W[1];
-                                        fflag = 4;
+                                        if (SELF_IR[3:2])
+                                        begin
+                                            SHORT = W[1];
+                                            SELCTL = W[1];
+                                            SEL[3] = 1;
+                                            SEL[2] = 1;
+                                            SEL[1] = SELF_IR[3];
+                                            SEL[0] = SELF_IR[2];
+                                            S = 4'b1010;
+                                            ABUS = W[1];
+                                            DRW = W[1];
+                                            M = W[1];
+                                            fflag = 4;
+                                        end
+                                        else
+                                        begin//Rx=0������£����Ƚ���flag4��R0������������
+                                            SHORT = W[1];
+                                            fflag = 4;
+                                        end
                                     end
                                     else begin
                                         SHORT = W[1];
@@ -324,8 +346,8 @@ module HDCPU(
                                 end
                             end
                         end
-                        //flag=3 将IR的后四位打入R0，然后PC(R3)+=R0
-                        //flag=4 恢复R0
+                        //flag=3 ��IR�ĺ���λ����R0��Ȼ��PC(R3)+=R0
+                        //flag=4 �ָ�R0
                         3'b011,3'b100: begin
                             if (count !=8) begin
                                 ccount = count + W[1];
@@ -355,8 +377,20 @@ module HDCPU(
                                     fflag = 4;
                                 end
                                 else begin
+                                    if (jmp_flag && SELF_IR[3:2]==2'b00)
+                                    begin
+                                        SELCTL = W[1];
+                                        SEL[3] = 1;
+                                        SEL[2] = 1;
+                                        SEL[1] = 0;
+                                        SEL[0] = 0;
+                                        S = 4'b1010;
+                                        ABUS = W[1];
+                                        DRW = W[1];
+                                        M = W[1];
+                                    end
                                     jjmp_flag = 0;
-                                    EI = 0;
+                                    EEI = 0;
                                     fflag = 0;
                                 end
                             end

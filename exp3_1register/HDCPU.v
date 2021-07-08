@@ -27,15 +27,17 @@ module HDCPU(
     output reg SBUS,
     output reg MBUS,
     output reg SHORT,
-    output reg LONG
+    output reg LONG,
+    output reg[3:0] count,
+    output reg[3:0] ccount,
+    output reg[7:0] SELF_R0
     );
 
     reg EI,EEI;
     reg SST0;
     reg ST0,MIDDLE,jmp_flag,jjmp_flag;
-    reg [3:0] count,ccount;
     reg [2:0] flag,fflag;
-    reg [7:0] SELF_IR,SELF_R0;
+    reg [7:0] SELF_IR;
     reg [7:0] SSELF_IR,SSELF_R0;
     always @(negedge T3, negedge CLR)
     begin
@@ -53,7 +55,7 @@ module HDCPU(
             flag = fflag;
             count = ccount;
             SELF_IR = SSELF_IR;
-            SSELF_R0 = SSELF_IR;
+            SELF_R0 = SSELF_IR;
             jmp_flag = jjmp_flag;
             if (SST0 == 1'b1) begin
                 ST0 = SST0; // ï¿½ï¿½SST0 == 1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ST0    = 1
@@ -116,23 +118,41 @@ module HDCPU(
                     SEL[0] = W[1];
                 end
                 3'b000:
-                if(ST0==0)begin 
-                        LPC = W[1];
-                        SBUS = W[1];
-                        SST0 = W[1];
-                        SHORT = W[1];
-                        STOP = W[1];
-                    end
+                if(ST0==0)begin           
+                    SELCTL = 1;
+                    SEL[3] = 1;
+                    SEL[2] = 1;
+                    SBUS = W[1];
+                    DRW = W[1]; 
+                    STOP = W[1];
+                        
+                    ABUS = W[2];
+                    S = 4'b1010;
+                    M = W[2];
+                    SEL[1] = 1;
+                    SEL[0] = 1;
+                    LPC = W[2];
+                    SST0 = W[2];
+                end
                 else 
                 begin
                     case (flag)
                         3'b000: begin
                             if (PULSE && !EI) begin
                                 EEI = 1;
+                                SELCTL = 1;
+                                SEL[3] = 1;
+                                SEL[2] = 1;
                                 SBUS = W[1];
-                                LPC = W[1];
-                                SHORT = W[1];
+                                DRW = W[1]; 
                                 STOP = W[1];
+                                
+                                ABUS = W[2];
+                                S = 4'b1010;
+                                M = W[2];
+                                SEL[1] = 1;
+                                SEL[0] = 1;
+                                LPC = W[2];
                             end
                             else begin
                                 LIR   = W[1];
@@ -141,7 +161,7 @@ module HDCPU(
                                     if (!EI)begin
                                         SELCTL = 1;
                                         SEL[3] = 1;
-                                        SEL[2] = 0;
+                                        SEL[2] = 1;
                                         S= 4'b0000;
                                         ABUS = 1;
                                         DRW = 1;
@@ -233,6 +253,10 @@ module HDCPU(
                                             SEL[0] = 1;
                                             LPC = W[2];
                                         end
+                                        4'b1101:
+                                        begin
+                                            EEI = 1;
+                                        end
                                         4'b1010: begin // OUT
                                             M    = W[2];
                                             S    = 4'b1010;
@@ -247,13 +271,13 @@ module HDCPU(
                                 // <---SW == 000ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ï¿½ï¿½
                             end
                         end
-                        //flag=1 ±£´æR0ÖÁ³ÌÐò
-                        //flag=2 ±£´æÖ¸Áîµ½R0£¬ÔÙ´ÓR0ÌáÈ¡µ½³ÌÐòÖÐ
+                        //flag=1 ï¿½ï¿½ï¿½ï¿½R0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                        //flag=2 ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½îµ½R0ï¿½ï¿½ï¿½Ù´ï¿½R0ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         3'b001,3'b010: begin
                             if (flag==1) SSELF_R0 = (SELF_R0 << 1) + C;
-                            else SSELF_IR = (SELF_R0 << 1) + C;
+                            else SSELF_IR = (SELF_IR << 1) + C;
                             if (count !=8) begin
-                                ccount = count + 1;
+                                ccount = count +W[1];
                                 SELCTL = W[1];
                                 SEL[3] = !W[1];
                                 SEL[2] = !W[1];
@@ -309,7 +333,7 @@ module HDCPU(
                                             fflag = 4;
                                         end
                                         else
-                                        begin//Rx=0µÄÇé¿öÏÂ£¬½«ÏÈ½øÐÐflag4½«R0·µ»¹ºóÔÙÖÃÈë
+                                        begin//Rx=0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½È½ï¿½ï¿½ï¿½flag4ï¿½ï¿½R0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                                             SHORT = W[1];
                                             fflag = 4;
                                         end
@@ -322,8 +346,8 @@ module HDCPU(
                                 end
                             end
                         end
-                        //flag=3 ½«IRµÄºóËÄÎ»´òÈëR0£¬È»ºóPC(R3)+=R0
-                        //flag=4 »Ö¸´R0
+                        //flag=3 ï¿½ï¿½IRï¿½Äºï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½R0ï¿½ï¿½È»ï¿½ï¿½PC(R3)+=R0
+                        //flag=4 ï¿½Ö¸ï¿½R0
                         3'b011,3'b100: begin
                             if (count !=8) begin
                                 ccount = count + W[1];
