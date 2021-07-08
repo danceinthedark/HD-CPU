@@ -1,7 +1,7 @@
-Analysis & Synthesis Status : Successful - Wed Jul 07 08:48:10 2021
+Analysis & Synthesis Status : Successful - Thu Jul 08 18:18:30 2021
 Quartus II Version : 9.1 Build 222 10/21/2009 SJ Full Version
 Revision Name : HDCPU
 Top-level Entity Name : HDCPU
 Family : MAX7000S
-Total macrocells : 35
-Total pins : 49
+Total macrocells : 57
+Total pins : 58

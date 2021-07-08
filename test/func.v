@@ -1,7 +1,7 @@
 /*
- æµ‹è¯•åŠŸèƒ½ï¼šæ•°æ®ä»ç¡¬ä»¶åˆ°è½¯ä»¶çš„è½¬æ¢
+ ²âÊÔ¹¦ÄÜ£ºÊı¾İ´ÓÓ²¼şµ½Èí¼şµÄ×ª»»
  */
-module HDCPU(input CLR,
+module func(input CLR,
             input T3,
             input C,
             input Z,
@@ -40,22 +40,7 @@ module HDCPU(input CLR,
     reg ST0  = 0;
     reg SST0 = 0;
     
-    always @(posedge T3, negedge CLR)
-    begin
-      if(!CLR)begin
-        if(SW==3'b111)begin
-          num<=0;
-        end
-        else begin
-          num <= num;
-        end
-    end
-    else if(T3) begin
-      if(setNum)begin
-            num[8-count]=C;
-      end
-    end
-    end
+    
     
     
     
@@ -63,11 +48,18 @@ module HDCPU(input CLR,
     begin
         if (!CLR) begin
             ST0 <= 0;
-            count<=0;
+            if(SW==3'b111)begin
+                num=0;
+            end
+            else begin
+                num = num;
+            end
+
+            count <=0;
         end
         else if (!T3) begin
         if (SST0 == 1'b1)
-            ST0 = SST0; // æœ‰SST0 == 1å°±ç«‹åˆ»ST0 = 1
+            ST0 = SST0; // ÓĞSST0 == 1¾ÍÁ¢¿ÌST0 = 1
         else if (SW == 3'b100 && ST0 && W[2])
             ST0      = 0;
             else ST0 = ST0;
@@ -81,7 +73,11 @@ module HDCPU(input CLR,
         else begin
             count = count;
         end
-        
+
+        if(setNum)begin
+            num[8-count]=C;
+        end
+
         end
 
     end
@@ -95,7 +91,7 @@ module HDCPU(input CLR,
             
             else begin
             case (SW)
-                3'b001: begin //å†™å­˜å‚¨å™¨
+                3'b001: begin //Ğ´´æ´¢Æ÷
                     LAR    <= W[1] && !ST0;
                     MEMW   <= W[1] && ST0;
                     ARINC  <= W[1] && ST0;
@@ -105,7 +101,7 @@ module HDCPU(input CLR,
                     SELCTL <= W[1];
                     SST0   <= W[1];
                 end
-                3'b010: begin //å†™å­˜å‚¨å™¨
+                3'b010: begin //Ğ´´æ´¢Æ÷
                     SBUS   <= W[1]&&!ST0;
                     LAR    <= W[1]&&!ST0;
                     SST0   <= W[1]&&!ST0;
@@ -115,7 +111,7 @@ module HDCPU(input CLR,
                     SHORT  <= W[1];
                     SELCTL <= W[1];
                 end
-                3'b011: begin //è¯»å¯„å­˜å™¨
+                3'b011: begin //¶Á¼Ä´æÆ÷
                     SELCTL <= W[1] || W[2];
                     STOP   <= W[1] || W[2];
                     SEL[3] <= W[2];
@@ -123,7 +119,7 @@ module HDCPU(input CLR,
                     SEL[1] <= W[2];
                     SEL[0] <= W[1] || W[2];
                 end
-                3'b100: begin //å†™å¯„å­˜å™¨
+                3'b100: begin //Ğ´¼Ä´æÆ÷
                     
                     SBUS   <= W[1]||W[2];
                     SELCTL <= W[1]||W[2];
@@ -135,10 +131,10 @@ module HDCPU(input CLR,
                     SEL[1] <= (!ST0&&W[1])||(ST0 && W[2]);
                     SEL[0] <= W[1];
                 end
-                3'b101:begin //æ˜¾ç¤ºå†…éƒ¨å˜é‡çš„å€¼
+                3'b101:begin //ÏÔÊ¾ÄÚ²¿±äÁ¿µÄÖµ
                     {LIR,STOP,MEMW,LAR,ARINC,LPC,PCINC,DRW} = num;
                 end
-                3'b110:begin //å°†R3çš„å€¼å­˜å…¥å†…éƒ¨
+                3'b110:begin //½«R3µÄÖµ´æÈëÄÚ²¿
                     SELCTL   <= W[1]&&(count <= 7);
                     SEL[3]   <= W[1]&&(count <= 7);
                     SEL[2]   <= W[1]&&(count <= 7);
@@ -152,15 +148,15 @@ module HDCPU(input CLR,
                     CIN      <= W[1]&&(count <= 7);
                     SHORT    <= W[1];
                     countAdd <= W[1]&&(count <= 7);
-                    countCLR <= W[1]&&(count==8);
-                    setNum  <=W[1]&&((1<=count)&&(count<=8));
+                    countCLR <= W[1]&&((1<=count)&&(count==8));
+                    setNum  <=W[1]&&((1<=count)&&(count==8));
                     STOP    <=W[1]&&(count==8);
 
                 end
                 3'b111:begin
                     
                 end
-                3'b000: //è¿è¡Œç¨‹åº
+                3'b000: //ÔËĞĞ³ÌĞò
                 if (ST0 == 0)begin
                     LPC   = W[1];
                     SBUS  = W[1];
@@ -170,7 +166,7 @@ module HDCPU(input CLR,
                 end
                 else
                 begin
-                    // å¼€å§‹æ‰§è¡ŒSW == 000çš„æƒ…å†µ--->
+                    // ¿ªÊ¼Ö´ĞĞSW == 000µÄÇé¿ö--->
                     LIR   = W[1];
                     PCINC = W[1];
                     case (IR)
@@ -233,7 +229,7 @@ module HDCPU(input CLR,
                         4'b1110: begin // STP
                             STOP = W[2];
                         end
-                        // é¢å¤–æŒ‡ä»¤
+                        // ¶îÍâÖ¸Áî
                         4'b1010: begin 
                      
                         end
@@ -245,7 +241,7 @@ module HDCPU(input CLR,
                         end
                         default: S = 4'b0000;
                     endcase
-                    // <---SW == 000çš„æƒ…å†µæ‰§è¡Œå®Œæ¯•
+                    // <---SW == 000µÄÇé¿öÖ´ĞĞÍê±Ï
                 end
                 // default:
             endcase

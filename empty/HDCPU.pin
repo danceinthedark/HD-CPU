@@ -118,27 +118,27 @@ SEL[2]                       : 50        : output : TTL               :         
 SEL[3]                       : 51        : output : TTL               :         :           : Y              
 SELCTL                       : 52        : output : TTL               :         :           : Y              
 VCCIO                        : 53        : power  :                   : 5.0V    :           :                
-count[1]                     : 54        : output : TTL               :         :           : N              
-count[2]                     : 55        : output : TTL               :         :           : N              
-count[3]                     : 56        : output : TTL               :         :           : N              
-x[0]                         : 57        : output : TTL               :         :           : N              
-x[1]                         : 58        : output : TTL               :         :           : N              
+count[3]                     : 54        : output : TTL               :         :           : N              
+num[7]                       : 55        : output : TTL               :         :           : N              
+setNum                       : 56        : output : TTL               :         :           : N              
+count[2]                     : 57        : output : TTL               :         :           : N              
+num[6]                       : 58        : output : TTL               :         :           : N              
 GND                          : 59        : gnd    :                   :         :           :                
-x[3]                         : 60        : output : TTL               :         :           : N              
-x[2]                         : 61        : output : TTL               :         :           : N              
+num[0]                       : 60        : output : TTL               :         :           : N              
+countCLR                     : 61        : output : TTL               :         :           : N              
 TCK                          : 62        : input  : TTL               :         :           : N              
-RESERVED                     : 63        :        :                   :         :           :                
-RESERVED                     : 64        :        :                   :         :           :                
-RESERVED                     : 65        :        :                   :         :           :                
+count[1]                     : 63        : output : TTL               :         :           : N              
+num[5]                       : 64        : output : TTL               :         :           : N              
+num[4]                       : 65        : output : TTL               :         :           : N              
 VCCIO                        : 66        : power  :                   : 5.0V    :           :                
-RESERVED                     : 67        :        :                   :         :           :                
-RESERVED                     : 68        :        :                   :         :           :                
-RESERVED                     : 69        :        :                   :         :           :                
-RESERVED                     : 70        :        :                   :         :           :                
+num[2]                       : 67        : output : TTL               :         :           : N              
+num[1]                       : 68        : output : TTL               :         :           : N              
+num[3]                       : 69        : output : TTL               :         :           : N              
+countAdd                     : 70        : output : TTL               :         :           : N              
 TDO                          : 71        : output : TTL               :         :           : N              
 GND                          : 72        : gnd    :                   :         :           :                
-RESERVED                     : 73        :        :                   :         :           :                
-RESERVED                     : 74        :        :                   :         :           :                
+ST1                          : 73        : output : TTL               :         :           : N              
+SST1                         : 74        : output : TTL               :         :           : N              
 RESERVED                     : 75        :        :                   :         :           :                
 RESERVED                     : 76        :        :                   :         :           :                
 RESERVED                     : 77        :        :                   :         :           :                
