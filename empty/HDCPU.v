@@ -44,7 +44,8 @@ module HDCPU(input CLR,
     begin
       if(!CLR)begin
         if(SW==3'b111)begin
-          num<=0;
+          //初始化值
+          num<=8'b10101010;
         end
         else begin
           num <= num;
@@ -171,8 +172,8 @@ module HDCPU(input CLR,
                 else
                 begin
                     // 开始执行SW == 000的情况--->
-                    LIR   = W[1];
-                    PCINC = W[1];
+                    LIR   = W[1]&&(IR!=4'b1010||(count==8));
+                    PCINC = W[1]&&(IR!=4'b1010||(count==8));
                     case (IR)
                         4'b0001: begin // ADD
                             S    = 4'b1001;
@@ -234,10 +235,27 @@ module HDCPU(input CLR,
                             STOP = W[2];
                         end
                         // 额外指令
-                        4'b1010: begin //把num输入到双操作数寄存器
-                          
+                        4'b1010: begin //把num输入到双操作数寄存器(A)
+                          S<={W[2],W[2],2'b00};
+                          ABUS<=W[2]&&(count<=7);
+                          DRW<=W[2]&&(count<=7);
+                          CIN<=!(W[2]&&num[7-count]);
+                          STOP<=W[2]&&(count==8);
+                          countAdd<=W[2]&&(count<=7);
+                          countCLR<=W[1]&&(count==8);
+                          SHORT<=(count==8);
                         end
-                        4'b1011: begin 
+                        4'b1011: begin  //把双操作数存到num (B)
+                        // S        <= {W[2],W[2],1'b0,1'b0};
+                        // ABUS     <= W[2]&&(count <= 7);
+                        // DRW      <= W[2]&&(count <= 7);
+                        // LDZ      <= W[2]&&(count <= 7);
+                        // LDC      <= W[2]&&(count <= 7);
+                        // CIN      <= W[2]&&(count <= 7);
+                        // countAdd <= W[2]&&(count <= 7);
+                        // countCLR <= W[2]&&(count==8);
+                        // setNum  <=W[2]&&((1<=count)&&(count<=8));
+                        // STOP    <=W[2]&&(count==8);
                
                         end
                         4'b1100: begin 
