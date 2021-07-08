@@ -99,3 +99,4 @@ set_global_assignment -name MISC_FILE "D:/Code/Github/HD-CPU/nopipe/HDCPU.dpf"
 set_global_assignment -name MISC_FILE "D:/Code/Github/HD-CPU/exp3/HDCPU.dpf"
 set_global_assignment -name VECTOR_WAVEFORM_FILE HDCPU.vwf
 set_global_assignment -name MISC_FILE "E:/dxw/教学课件/大二/大二下/计组课程设计/HardConnectWire/HD-CPU/exp3/HDCPU.dpf"
+set_global_assignment -name VECTOR_WAVEFORM_FILE Waveform1.vwf

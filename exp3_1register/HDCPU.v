@@ -28,16 +28,14 @@ module HDCPU(
     output reg MBUS,
     output reg SHORT,
     output reg LONG,
-    output reg[3:0] count,
-    output reg[3:0] ccount,
-    output reg[7:0] SELF_R0
+    output reg[3:0] count
     );
-
     reg EI,EEI;
     reg SST0;
     reg ST0,MIDDLE,jmp_flag,jjmp_flag;
+    reg[3:0] ccount;
     reg [2:0] flag,fflag;
-    reg [7:0] SELF_IR;
+    reg [7:0] SELF_IR,SELF_R0;
     reg [7:0] SSELF_IR,SSELF_R0;
     always @(negedge T3, negedge CLR)
     begin
@@ -55,7 +53,7 @@ module HDCPU(
             flag = fflag;
             count = ccount;
             SELF_IR = SSELF_IR;
-            SELF_R0 = SSELF_IR;
+            SELF_R0 = SSELF_R0;
             jmp_flag = jjmp_flag;
             if (SST0 == 1'b1) begin
                 ST0 = SST0; // ��SST0 == 1������ST0    = 1
@@ -213,35 +211,46 @@ module HDCPU(
                                             LONG = W[2];
                                             MEMW = W[3];
                                         end
-                                        4'b0111,4'b1000: begin // JC && JZ
-                                            PCADD = W[2];
-                                            if(!EI) begin
-                                                ABUS = W[2];
-                                                SEL[3] = !W[2];
-                                                SEL[2] = !W[2];
-                                                S = 4'b1100;
-                                                SELCTL = W[2];
-                                                CIN = W[2];
-                                                DRW = W[2];
-                                                LDZ = W[2];
-                                                LDC = W[2];
-                                                fflag = W[2];
-                                                ccount = 1;
+                                        4'b0111,4'b1000:// JC && JZ
+                                            if ((flag==4'b0111 && C) || (flag==4'b1000 && Z))
+                                            begin
+                                                PCADD = W[2];
+                                                if(!EI) begin
+                                                    ABUS = W[2];
+                                                    SEL[3] = !W[2];
+                                                    SEL[2] = !W[2];
+                                                    S = 4'b1100;
+                                                    SELCTL = W[2];
+                                                    CIN = W[2];
+                                                    DRW = W[2];
+                                                    LDZ = W[2];
+                                                    LDC = W[2];
+                                                    fflag = W[2];
+                                                    ccount = 1;
+                                                end
                                             end
-                                        end
                                         4'b1001: begin // JMP
+                                            M=W[2];
+                                            S=4'b1111;
                                             ABUS = W[2];
-                                            SEL[3] = 0;
-                                            SEL[2] = 0;
-                                            S = 4'b1100;
-                                            SELCTL = W[2];
-                                            CIN = W[2];
-                                            DRW = W[2];
-                                            LDZ = W[2];
-                                            LDC = W[2];
-                                            jjmp_flag = W[2];
-                                            fflag = W[2];
-                                            ccount = 1;
+                                            LPC = W[2];
+                                            if (!EI) begin
+                                                LONG = W[2];
+                                                if (W[3])begin
+                                                    ABUS = W[3];
+                                                    SEL[3] = 0;
+                                                    SEL[3] = 0;
+                                                    S = 4'b1100;
+                                                    SELCTL = W[3];
+                                                    CIN = W[3];
+                                                    DRW = W[3];
+                                                    LDZ = W[3];
+                                                    LDC = W[3];
+                                                    jjmp_flag = W[3];
+                                                    fflag = W[3];
+                                                    ccount = 1;
+                                                end
+                                            end
                                         end
                                         4'b1011://IRET
                                         begin
@@ -277,7 +286,7 @@ module HDCPU(
                             if (flag==1) SSELF_R0 = (SELF_R0 << 1) + C;
                             else SSELF_IR = (SELF_IR << 1) + C;
                             if (count !=8) begin
-                                ccount = count +W[1];
+                                ccount = count + W[1];
                                 SELCTL = W[1];
                                 SEL[3] = !W[1];
                                 SEL[2] = !W[1];
@@ -354,12 +363,12 @@ module HDCPU(
                                 SELCTL = 1;
                                 SEL[3] = 0;
                                 SEL[2] = 0;
-                                S = (W[1])?4'b1100:4'b0000;
+                                S = 4'b1100;
                                 ABUS = 1;
                                 DRW = 1;
-                                CIN = W[1];
-                                if (!((flag==3 && count>=4 && SELF_IR[7-count]) || 
-                                    (flag==4 && SELF_R0[7-count]))) SHORT=W[1];
+                                CIN = !((flag==3 && count>=4 && SELF_IR[7-count]) || 
+                                    (flag==4 && SELF_R0[7-count]));
+                                SHORT=W[1];
                             end
                             else begin
                                 SHORT = W[1];

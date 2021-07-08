@@ -29,13 +29,12 @@ module HDCPU(
     output reg SHORT,
     output reg LONG,
     output reg[3:0] count,
-    output reg[3:0] ccount,
-    output reg[7:0] SELF_R0,
+    output reg[7:0] SELF_R0
     );
-
     reg EI,EEI;
     reg SST0;
     reg ST0,MIDDLE,jmp_flag,jjmp_flag;
+    reg[3:0] ccount;
     reg [2:0] flag,fflag;
     reg [7:0] SELF_IR;
     reg [7:0] SSELF_IR,SSELF_R0;
@@ -55,7 +54,7 @@ module HDCPU(
             flag = fflag;
             count = ccount;
             SELF_IR = SSELF_IR;
-            SELF_R0 = SSELF_IR;
+            SELF_R0 = SSELF_R0;
             jmp_flag = jjmp_flag;
             if (SST0 == 1'b1) begin
                 ST0 = SST0; // ��SST0 == 1������ST0    = 1
@@ -213,22 +212,24 @@ module HDCPU(
                                             LONG = W[2];
                                             MEMW = W[3];
                                         end
-                                        4'b0111,4'b1000: begin // JC && JZ
-                                            PCADD = W[2];
-                                            if(!EI) begin
-                                                ABUS = W[2];
-                                                SEL[3] = !W[2];
-                                                SEL[2] = !W[2];
-                                                S = 4'b1100;
-                                                SELCTL = W[2];
-                                                CIN = W[2];
-                                                DRW = W[2];
-                                                LDZ = W[2];
-                                                LDC = W[2];
-                                                fflag = W[2];
-                                                ccount = 1;
+                                        4'b0111,4'b1000:// JC && JZ
+                                            if ((flag==4'b0111 && C) || (flag==4'b1000 && Z))
+                                            begin
+                                                PCADD = W[2];
+                                                if(!EI) begin
+                                                    ABUS = W[2];
+                                                    SEL[3] = !W[2];
+                                                    SEL[2] = !W[2];
+                                                    S = 4'b1100;
+                                                    SELCTL = W[2];
+                                                    CIN = W[2];
+                                                    DRW = W[2];
+                                                    LDZ = W[2];
+                                                    LDC = W[2];
+                                                    fflag = W[2];
+                                                    ccount = 1;
+                                                end
                                             end
-                                        end
                                         4'b1001: begin // JMP
                                             ABUS = W[2];
                                             SEL[3] = 0;
