@@ -238,7 +238,7 @@ module HDCPU(
                                                 LONG = W[2];
                                                 if (W[3])begin
                                                     ABUS = W[3];
-                                                    SEL[3] = 0;
+                                                    SEL[2] = 0;
                                                     SEL[3] = 0;
                                                     S = 4'b1100;
                                                     SELCTL = W[3];

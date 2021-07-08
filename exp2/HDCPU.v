@@ -106,7 +106,7 @@ module HDCPU(
                     case (IR)
                         4'b0000: begin
                             LIR   <= W[1];
-                            PCINC <= W[1];
+                            // PCINC <= W[1];
                             SHORT <= W[1];
                         end
                         4'b0001: begin // ADD
@@ -117,9 +117,9 @@ module HDCPU(
                             LDZ  <= W[1];
                             LDC  <= W[1];
 
-                            LIR   <= W[1];
+                            LIR   <= W[2];
                             PCINC <= W[1];
-                            SHORT <= W[1];
+                            // SHORT <= W[1];
                         end
                         4'b0010: begin // SUB
                             S    <= 4'b0110;
@@ -128,9 +128,9 @@ module HDCPU(
                             LDZ  <= W[1];
                             LDC  <= W[1];
 
-                            LIR   <= W[1];
+                            LIR   <= W[2];
                             PCINC <= W[1];
-                            SHORT <= W[1];
+                            // SHORT <= W[1];
                         end
                         4'b0011: begin // AND
                             M    <= W[1];
@@ -139,9 +139,9 @@ module HDCPU(
                             DRW  <= W[1];
                             LDZ  <= W[1];
 
-                            LIR   <= W[1];
+                            LIR   <= W[2];
                             PCINC <= W[1];
-                            SHORT <= W[1];
+                            // SHORT <= W[1];
                         end
                         4'b0100: begin // INC
                             S    <= 4'b0000;
@@ -150,9 +150,9 @@ module HDCPU(
                             LDZ  <= W[1];
                             LDC  <= W[1];
 
-                            LIR   <= W[1];
+                            LIR   <= W[2];
                             PCINC <= W[1];
-                            SHORT <= W[1];
+                            // SHORT <= W[1];
                         end
                         4'b0101: begin // LD
                             M    <= W[1];
@@ -163,7 +163,7 @@ module HDCPU(
                             MBUS <= W[2];
 
                             LIR   <= W[2];
-                            PCINC <= W[2];
+                            PCINC <= W[1];
                         end
                         4'b0110: begin // ST
                             M    <= W[1] || W[2];
@@ -173,31 +173,32 @@ module HDCPU(
                             MEMW <= W[2];
 
                             LIR   <= W[2];
-                            PCINC <= W[2];
+                            PCINC <= W[1];
                         end
                         4'b0111: begin // JC
                             if (C == 1) begin
-                                PCADD <= W[1];
-                                LIR   <= W[2];
-                                PCINC <= W[2];
+                                PCADD <= W[2];
+                                LONG  <= W[2];
+                                LIR   <= W[3];
+                                PCINC <= W[1];
                             end
                             else begin
-                                LIR   <= W[1];
+                                LIR   <= W[2];
                                 PCINC <= W[1];
-                                SHORT <= W[1];
+                                // SHORT <= W[1];
                             end
                         end
                         4'b1000: begin // JZ
                             if (Z == 1) begin
-                                PCADD <= W[1];
-
-                                LIR   <= W[2];
-                                PCINC <= W[2];
+                                PCADD <= W[2];
+                                LONG  <= W[2];
+                                LIR   <= W[3];
+                                PCINC <= W[1];
                             end
                             else begin
-                                LIR   <= W[1];
+                                LIR   <= W[2];
                                 PCINC <= W[1];
-                                SHORT <= W[1];
+                                // SHORT <= W[1];
                             end
                         end
                         4'b1001: begin // JMP
@@ -205,9 +206,7 @@ module HDCPU(
                             S    <= {W[1], W[1], W[1], W[1]};
                             ABUS <= W[1];
                             LPC  <= W[1];
-
                             LIR   <= W[2];
-                            PCINC <= W[2];
                         end
                         4'b1110: begin // STP
                             STOP <= W[1];
@@ -218,9 +217,9 @@ module HDCPU(
                             S    <= 4'b1010;
                             ABUS <= W[1];
 
-                            LIR   <= W[1];
+                            LIR   <= W[2];
                             PCINC <= W[1];
-                            SHORT <= W[1];
+                            // SHORT <= W[1];
                         end
                         4'b1011: begin // XOR
                             M    <= W[1];
@@ -229,9 +228,9 @@ module HDCPU(
                             DRW  <= W[1];
                             LDZ  <= W[1];
 
-                            LIR   <= W[1];
+                            LIR   <= W[2];
                             PCINC <= W[1];
-                            SHORT <= W[1];
+                            // SHORT <= W[1];
                         end
                         4'b1100: begin // OR
                             M    <= W[1];
@@ -240,9 +239,9 @@ module HDCPU(
                             DRW  <= W[1];
                             LDZ  <= W[1];
 
-                            LIR   <= W[1];
+                            LIR   <= W[2];
                             PCINC <= W[1];
-                            SHORT <= W[1];
+                            // SHORT <= W[1];
                         end
                     endcase
                     // <---SW == 000的情况执行完毕
